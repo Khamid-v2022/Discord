@@ -1,0 +1,429 @@
+@use "../../style/mixins/skew.scss" as *;
+@use "../../style/mixins/dskew.scss" as *;
+
+#mylink {
+  background: url("../../res/imgs/mylinks.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+  &::after {
+    z-index: -1;
+    background: linear-gradient(
+      23deg,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(16, 19, 28, 0.6783088235294117) 100%
+    );
+    top: 0px;
+    left: 0px;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    content: "";
+    backdrop-filter: blur(5px);
+  }
+
+  .content {
+    display: flex;
+    flex-direction: row;
+
+    #links_data {
+      width: 100%;
+      padding: 15px;
+      .top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        h2 {
+          color: #fff;
+        }
+
+        .search {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 30vw;
+          padding: 10px 16px;
+          perspective: 500px;
+          img {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            margin-right: 10px;
+          }
+          input {
+            width: 100%;
+            border: none;
+            background-color: transparent;
+            outline: none;
+            height: 30px;
+            font-family: "Russo One", sans-serif;
+          }
+          @include dSkewBg(rgba(143, 139, 139, 0.47), rgba(255, 255, 255, 0.1));
+        }
+
+        .newlink {
+          button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            @include skewBg(#c68200, #fcb500);
+            font-family: "Russo One", sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            img {
+              width: 25px;
+              margin-right: 10px;
+            }
+            &:hover {
+              transform: translateY(-5%);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .table {
+    width: 100%;
+    table {
+      margin-top: 30px;
+      width: 100%;
+      border-collapse: collapse;
+      thead {
+        tr {
+          margin: 8px 0px;
+          text-align: left;
+          th {
+            padding: 8px;
+            color: rgba(185, 183, 183, 0.47);
+          }
+        }
+      }
+      tbody {
+        color: #fff;
+        tr {
+          text-align: left;
+          @include skewBg(rgba(143, 139, 139, 0.47), rgba(255, 255, 255, 0.1));
+
+          .green {
+            color: #76c31c;
+          }
+          .yellow {
+            color: #ffc633;
+          }
+          .gray {
+            color: rgba(185, 183, 183, 0.47);
+          }
+
+          .progress {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            .pr {
+              @include skewBg(#131821, #232b3a);
+              width: 80%;
+              .bar {
+                width: 70%;
+                height: 100%;
+                transform: skewX(-17deg);
+                border-radius: 8px;
+              }
+
+              .pr-green {
+                background-image: repeating-linear-gradient(
+                  -45deg,
+                  #72b328,
+                  #72b328 20px,
+                  #78d113 30px,
+                  #76c31c 40px
+                );
+              }
+              .pr-yellow {
+                background-image: repeating-linear-gradient(
+                  -45deg,
+                  #fcb500,
+                  #fcb500 20px,
+                  #ffc633 30px,
+                  #f1c40f 40px
+                );
+              }
+              .pr-gray {
+                background-image: repeating-linear-gradient(
+                  -45deg,
+                  #aca9a9,
+                  #aca9a9 20px,
+                  #888888 30px,
+                  #999999 40px
+                );
+              }
+            }
+          }
+
+          .actions {
+            padding: 0px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+            button {
+              cursor: pointer;
+              background-color: transparent;
+              border: none;
+              outline: none;
+              padding: 10px 15px 7px;
+              img {
+                width: 12px;
+              }
+            }
+
+            #pause {
+              @include skewBg(#aa2a18, #d63838);
+            }
+            #resume {
+              @include skewBg(#66aa18, #76c31c);
+            }
+            #reload {
+              @include skewBg(#c68200, #fcb500);
+            }
+          }
+        }
+      }
+
+      tr {
+        margin: 10px 0px;
+        display: grid;
+        grid-template-columns: 7% 25% 10% 30% 15% 10%;
+        align-items: center;
+        td {
+          padding: 10px;
+          &:first-child {
+            padding: 0px;
+            width: 100px;
+            span {
+              padding: 8px;
+              @include skewBg(#66aa18, #76c31c);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+[role="tooltip"].mylinks-content {
+  max-width: 150px;
+  background-color: rgba(143, 139, 139, 0.47);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  padding: 8px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 10px;
+
+  .popup-arrow {
+    color: rgba(143, 139, 139, 0.47);
+  }
+}
+
+.mylinks-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.mylinks-content {
+  backdrop-filter: blur(10px);
+  width: 400px;
+  padding: 15px;
+  background-color: rgba(48, 48, 48, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+
+  .modal {
+    .head {
+      background: url("../../res/imgs/arc.svg");
+      background-size: cover;
+      padding: 20px;
+      background-position: center;
+      background-repeat: no-repeat;
+      width: 100%;
+      h3 {
+        color: #fff;
+        text-align: center;
+      }
+    }
+    .content {
+      padding: 15px;
+      p {
+        color: rgba(255, 255, 255, 0.3);
+        width: 120px;
+        margin: 0px auto 10px;
+        display: flex;
+        font-size: 12px;
+        img {
+          width: 15px;
+          margin-left: 5px;
+        }
+      }
+
+      .input_group {
+        padding: 5px;
+        width: 100%;
+        @include skewBg(rgba(68, 68, 68, 0.47), rgba(255, 255, 255, 0.1));
+        input {
+          color: #fff;
+          width: 100%;
+          padding: 5px;
+          outline: none;
+          background: transparent;
+          border: none;
+        }
+      }
+
+      .campaign {
+        display: flex;
+        flex-direction: row;
+        align-items: start;
+        justify-content: space-between;
+        margin-top: 20px;
+        text-align: center;
+        white-space: nowrap;
+        p {
+          margin: 10px 0px;
+          font-size: 10px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          img {
+            width: 12px;
+          }
+        }
+        & > div {
+          width: 45%;
+        }
+        h5 {
+          color: #fff;
+        }
+        .coins {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .selection {
+            width: 100%;
+            @include skewBg(rgba(68, 68, 68, 0.47), rgba(255, 255, 255, 0.1));
+            padding: 8px 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-evenly;
+
+            button {
+              background-color: transparent;
+              border: none;
+              outline: none;
+              cursor: pointer;
+              img {
+                width: 25px;
+              }
+            }
+            input {
+              background-color: transparent;
+              border: none;
+              outline: none;
+              width: 50px;
+              text-align: center;
+              color: #fff;
+            }
+          }
+        }
+
+        .diamond {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          .selection {
+            width: 100%;
+            @include skewBg(rgba(68, 68, 68, 0.47), rgba(255, 255, 255, 0.1));
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            label {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              color: #fff;
+              cursor: pointer;
+              img {
+                width: 20px;
+                margin-left: 10px;
+              }
+            }
+            input[type="checkbox"] {
+              cursor: pointer;
+              /*if not using autoprefixer */
+              -webkit-appearance: none;
+              appearance: none;
+              /* For iOS < 15 to remove gradient background */
+              background-color: #fff;
+              /* Not removed via appearance */
+              margin: 0;
+              // custom style
+              background-color: #c68200;
+              border: 1px solid #fcb500;
+              width: 18px;
+              height: 18px;
+              border-radius: 3px;
+              // to make the :before center
+              display: grid;
+              place-content: center;
+              &::before {
+                text-align: center;
+                content: "✓";
+                width: 18px;
+                height: 18px;
+                transform: scale(0);
+                transition: 120ms transform ease-in-out;
+                box-shadow: inset 1em 1em #fcb500;
+                font-weight: bold;
+                color: #fff;
+                border-radius: 3px;
+              }
+
+              &:checked::before {
+                transform: scale(1);
+              }
+            }
+          }
+        }
+      }
+
+      .submit {
+        display: inline-block;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        @include skewBg(#c68200, #fcb500);
+        font-family: "Russo One", sans-serif;
+        color: #fff;
+        padding: 10px 15px;
+        cursor: pointer;
+        margin: 30px 0px 10px;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  .close {
+    display: inline-block;
+    color: red;
+  }
+}

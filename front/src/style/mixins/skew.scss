@@ -1,0 +1,20 @@
+@mixin skewBg($bgCol, $bCol) {
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    z-index: -1;
+    background-color: $bgCol;
+    border: 2px solid $bCol;
+    transform: skewX(-17deg);
+    position: absolute;
+    content: "";
+    left: 0px;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+  }
+}
