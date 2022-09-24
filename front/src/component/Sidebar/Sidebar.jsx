@@ -18,21 +18,35 @@ import Popup from "reactjs-popup";
 import { useDispatch } from "react-redux";
 import { update } from "../../redux/reducers/guidePopup";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
+  const [user, setUser] = useState({ avtar: avatarImg });
+  const [isLogin, setIsLogin] = useState(false);
   const dispatch = useDispatch();
 
   const popupGuide = () => {
     dispatch(update());
   };
 
+  useEffect(() => {
+    async function checkUser() {
+      const response = await axios.get("/api/user/getuser");
+      if (response.status != 401) {
+        console.log("checkuser",response)
+        setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
+        setIsLogin(true);
+      }
+    }
+    checkUser();
+  }, []);
+
   return (
     <div id="sidebar">
-      <LoggedOut />
-      {/* <LoggedIn /> */}
+      {isLogin ? <LoggedIn user={user} /> : <LoggedOut />}
 
       <nav>
-        <NavLink to="/">
+        <NavLink to="/home">
           <img src={earnImg} alt="Earn Coins" />
           <span>Earn Coins</span>
         </NavLink>
@@ -57,13 +71,13 @@ export default function Sidebar() {
   );
 }
 
-function LoggedIn() {
+function LoggedIn({user}) {
   return (
     <div className="avatar">
-      <img src={avatarImg} alt="avatar" />
+      <img src={user.avtar} alt="avatar" />
       <Popup
         className="sidebar"
-        trigger={open => (
+        trigger={(open) => (
           <button>
             <img src={arrowImg} alt="arrow" />
           </button>
@@ -79,9 +93,9 @@ function LoggedIn() {
           <button className="dollar">
             <Dollar />
           </button>
-          <button className="logout">
+          <a href="/logout" className="logout">
             <img src={logoutImg} alt="logout" />
-          </button>
+          </a>
         </div>
       </Popup>
     </div>

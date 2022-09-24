@@ -5,15 +5,46 @@ import "../style/fonts.scss";
 import Guid from "./Guide/Guid";
 import MyLinks from "./MyLinks/MyLinks";
 import Replenish from "./Replenish/Replenish";
+import { useLayoutEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import { updateBalance } from "../redux/reducers/userBalance.js";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+// import Checkout from "./Checkout/checkout";
+import Home from "./Home/home";
 
 export default function App() {
+  const { pathname } = useLocation();
+  let navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  console.log("Path", pathname);
+  useLayoutEffect(() => {
+    async function fetchBalance() {
+      try {
+        const response = await axios.get("/api/user/getbalance");
+        console.log(response);
+        dispatch(updateBalance(response.data));
+        // if (pathname === "/") {
+        //   navigate("/home");
+        // }
+      } catch (error) {
+        console.log(error);
+        // navigate("/");
+      }
+    }
+    fetchBalance();
+  }, []);
   return (
     <section id="app">
       <Guid />
       <Routes>
-        <Route path="/" element={<Homepage />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Homepage />} />
         <Route path="/mylinks" element={<MyLinks />} />
         <Route path="/replenish" element={<Replenish />} />
+        {/* <Route path="/checkout" element={<Checkout />} /> */}
       </Routes>
     </section>
   );

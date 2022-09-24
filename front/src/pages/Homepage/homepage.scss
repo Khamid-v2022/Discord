@@ -23,7 +23,16 @@
   .content {
     display: flex;
     flex-direction: row;
-
+    .h-content {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      height: 120px;
+      margin-top: 15px;
+      position: relative;
+      width: 100%;
+      z-index: 1;
+    }
     #server_joining {
       width: 40%;
       margin: 8% auto 0px;

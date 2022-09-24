@@ -4,6 +4,7 @@ import serverImg from "../../res/imgs/serverimg.png";
 import coinImg from "../../res/imgs/coin.png";
 
 import "./homepage.scss";
+
 export default function Homepage() {
   return (
     <section id="homepage">
