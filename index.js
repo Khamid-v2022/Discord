@@ -39,15 +39,19 @@ app.get("/login", (req, res) => {
   return res.redirect("/api/user/login");
 });
 
-
 app.get("/logout", (req, res) => {
   return res.redirect("/api/user/logout");
 });
 
 // static frontend
-app.use([auth, express.static(path.resolve(__dirname, "./src/views"))]);
+// app.use([auth, express.static(path.resolve(__dirname, "./src/views"))]);
+// app.get("*", (req, res) => {
+//   res.sendFile(path.resolve(__dirname, "./src/views", "index.html"));
+// });
+
+app.use([auth, express.static(path.resolve(__dirname, "./front/build"))]);
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./src/views", "index.html"));
+  res.sendFile(path.resolve(__dirname, "./front/build", "index.html"));
 });
 
 // cron scheduler

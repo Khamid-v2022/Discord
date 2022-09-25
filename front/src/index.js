@@ -12,9 +12,9 @@ import { Provider } from "react-redux";
 import axios from "axios";
 
 (async () => {
-//   const response1 = await axios.get("/api/payment/config");
-//   const pub_key = response1.data ? response1.data : "";
-//   const stripePromise = loadStripe(pub_key);
+  // const response1 = await axios.get("/api/payment/config");
+  // const pub_key = response1.data ? response1.data : "";
+  // const stripePromise = loadStripe(pub_key);
 
   ReactDOM.render(
     <React.StrictMode>

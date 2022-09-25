@@ -24,14 +24,12 @@ export default function App() {
     async function fetchBalance() {
       try {
         const response = await axios.get("/api/user/getbalance");
-        console.log(response);
         dispatch(updateBalance(response.data));
-        // if (pathname === "/") {
-        //   navigate("/home");
-        // }
+        if (pathname === "/") {
+          navigate("/home");
+        }
       } catch (error) {
-        console.log(error);
-        // navigate("/");
+        navigate("/");
       }
     }
     fetchBalance();
