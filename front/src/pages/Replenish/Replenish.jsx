@@ -2,13 +2,15 @@ import Sidebar from "../../component/Sidebar/Sidebar";
 import Header from "../../component/Header/Header";
 import Popup from "reactjs-popup";
 
-import coinImg from "../../res/imgs/coin.png";
+import CoinSvg from "../../res/svg/Coin";
+import DiamondSvg from "../../res/svg/Diamond";
 import diamondImg from "../../res/imgs/diamond.png";
 import dollarImg from "../../res/imgs/dollar.png";
 import arrowsImg from "../../res/imgs/arrows.png";
 import questionImg from "../../res/imgs/questionmark.png";
 import minusImg from "../../res/imgs/minus.png";
 import plusImg from "../../res/imgs/plus2.png";
+import toplineImg from "../../res/imgs/topline.png";
 
 import "./replenish.scss";
 export default function Replenish() {
@@ -34,18 +36,21 @@ function PageContent() {
       <h2>Get More Coins</h2>
       <div className="replenish_cards">
         <div className="basic">
+       
           <div className="head">
+            <img src={toplineImg} alt="topline" />
             <h3>Basic</h3>
+            <img src={toplineImg} alt="topline" />
           </div>
 
           <div className="content">
             <div className="coin">
-              <img src={coinImg} alt="coin" />
+              <CoinSvg />
               <span>100</span>
             </div>
 
             <div className="diamond">
-              <img src={diamondImg} alt="diamond" />
+              <DiamondSvg />
               <span>2</span>
             </div>
 
@@ -58,19 +63,21 @@ function PageContent() {
 
         <div className="standard">
           <div className="head">
+            <img src={toplineImg} alt="topline" />
             <h3>standard</h3>
+            <img src={toplineImg} alt="topline" />
           </div>
 
           <div className="content">
             <div className="coin">
               <div className="promotion">500+10%</div>
-              <img src={coinImg} alt="coin" />
+              <CoinSvg/>
               <span>550</span>
             </div>
 
             <div className="diamond">
               <div className="promotion">10+10%</div>
-              <img src={diamondImg} alt="diamond" />
+              <DiamondSvg />
               <span>11</span>
             </div>
 
@@ -83,19 +90,21 @@ function PageContent() {
 
         <div className="premium">
           <div className="head">
+            <img src={toplineImg} alt="topline" />
             <h3>premium</h3>
+            <img src={toplineImg} alt="topline" />
           </div>
 
           <div className="content">
             <div className="coin">
               <div className="promotion">1000+20%</div>
-              <img src={coinImg} alt="coin" />
+              <CoinSvg/>
               <span>1200</span>
             </div>
 
             <div className="diamond">
               <div className="promotion">20+20%</div>
-              <img src={diamondImg} alt="diamond" />
+              <DiamondSvg />
               <span>24</span>
             </div>
 
@@ -137,7 +146,9 @@ function PageContent() {
           </div>
 
           <div className="head">
+            <img src={toplineImg} alt="topline" />
             <h3>buy diamonds</h3>
+            <img src={toplineImg} alt="topline" />
           </div>
 
           <div className="content">
@@ -145,7 +156,8 @@ function PageContent() {
               <span>Conversion:</span>
               <h4>
                 <span>$1.5 = 1</span>
-                <img src={diamondImg} alt="diamond" />
+                {/* <img src={diamondImg} alt="diamond" /> */}
+                <DiamondSvg />
               </h4>
             </div>
 

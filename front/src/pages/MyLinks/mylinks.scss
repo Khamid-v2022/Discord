@@ -1,429 +1,1077 @@
-@use "../../style/mixins/skew.scss" as *;
-@use "../../style/mixins/dskew.scss" as *;
+*, *::after, *::before {
+  box-sizing: border-box;
+  font-weight: 400;
+}
 
 #mylink {
-  background: url("../../res/imgs/mylinks.png");
+  background: url("../../res/imgs/mylinks.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 100vh;
   position: relative;
   z-index: 1;
-  &::after {
-    z-index: -1;
-    background: linear-gradient(
-      23deg,
-      rgba(0, 0, 0, 1) 0%,
-      rgba(16, 19, 28, 0.6783088235294117) 100%
-    );
-    top: 0px;
-    left: 0px;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    content: "";
-    backdrop-filter: blur(5px);
-  }
+}
+#mylink::after {
+  z-index: -1;
+  background: linear-gradient(23deg, black 0%, rgba(5, 11, 21, .85) 100%);
+  top: 0px;
+  left: 0px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  // backdrop-filter: blur(1px);
+}
+#mylink .content {
+  display: flex;
+  flex-direction: row;
+}
+#mylink .content #links_data {
+  width: 100%;
+  padding: 15px;
+}
+#mylink .content #links_data .top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#mylink #links_data .top h2 {
+  margin-left: 30px;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 400;
+  width: 215px;
+}
+#mylink .content #links_data .top .search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30vw;
+  height: 54px;
+  // margin-left: 3%;
+  padding: 10px 16px;
+  perspective: 500px;
+  position: relative;
+  z-index: 1;
+}
+#mylink .content #links_data .top .search img {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 10px;
+  // position: absolute;
+  // left: 20%
+}
+#mylink .content #links_data .top .search input {
+  width: 100%;
+  // min-width: 250px;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  height: 30px;
+  font-family: "Russo One", sans-serif;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  color: white;
+}
+#mylink .content #links_data .top .search input:focus-within+img {
+  display: none !important;
+}
+#mylink .content #links_data .top .search::before {
+  z-index: -1;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  transform: rotateX(-30deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink #links_data .top .newlink button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  position: relative;
+  z-index: 1;
+  font-family: "Russo One", sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+  height: 54px;
+  width: 247px;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 22px;
+}
+#mylink .content #links_data .top .newlink button::before {
+  z-index: -1;
+  background-color: #c68200;
+  border: 2px solid #fcb500;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .content #links_data .top .newlink button:hover::before {
+  background-color: #fcb500;
+}
+#mylink .content #links_data .top .newlink button img {
+  height: 24px;
+  margin-right: 8px;
+}
+#mylink .content #links_data .top .newlink button:hover {
+  transform: translateY(-5%);
+}
+#mylink .table {
+  width: 97%;
+  margin-left: 30px;
+}
+#mylink .table table {
+  margin-top: 30px;
+  width: 100%;
+  border-collapse: collapse;
+}
+#mylink .table table thead tr {
+  margin: 8px 0px;
+  text-align: left;
+}
+#mylink .table table thead tr th {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #fff;
+  opacity: .32;
+  // padding: 8px;
+  // color: rgba(185, 183, 183, .47);
+}
+#mylink .table table tbody {
+  color: #fff;
+}
+#mylink .table table tbody tr {
+  text-align: left;
+  position: relative;
+  z-index: 1;
+  margin: 16px 0;
+  height: 54px;
+}
+#mylink .table table tbody tr::before {
+  z-index: -1;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .table table tbody tr:hover::before {
+  background-color: rgba(255, 255, 255, .1);
+}
 
-  .content {
-    display: flex;
-    flex-direction: row;
+#mylink .table table tbody tr:hover td:first-child span::before {
+  background-color: #76c31c;
+}
 
-    #links_data {
-      width: 100%;
-      padding: 15px;
-      .top {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
 
-        h2 {
-          color: #fff;
-        }
 
-        .search {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 30vw;
-          padding: 10px 16px;
-          perspective: 500px;
-          img {
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            margin-right: 10px;
-          }
-          input {
-            width: 100%;
-            border: none;
-            background-color: transparent;
-            outline: none;
-            height: 30px;
-            font-family: "Russo One", sans-serif;
-          }
-          @include dSkewBg(rgba(143, 139, 139, 0.47), rgba(255, 255, 255, 0.1));
-        }
+#mylink .table table tbody tr .green {
+  color: #76c31c;
+}
+#mylink .table table tbody tr .yellow {
+  color: #ffc633;
+}
+#mylink .table table tbody tr .gray {
+  color: rgba(185, 183, 183, .47);
+}
+#mylink .table table tbody tr .progress {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#mylink .table table tbody tr .progress .pr {
+  position: relative;
+  z-index: 1;
+  width: 80%;
+  height: 22px;
+  margin-right: 12px;
+}
+#mylink .table table tbody tr .progress .pr::before {
+  z-index: -1;
+  background-color: #131821;
+  border: 2px solid #232b3a;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .table table tbody tr .progress .pr:hover::before {
+  background-color: #232b3a;
+}
+#mylink .table table tbody tr .progress .pr .bar {
+  width: 70%;
+  height: 18px;
+  transform: skewX(-17deg);
+  border-radius: 8px;
+  margin-top: 1px;
+  margin-left: 2px;
+}
+#mylink .table table tbody tr .progress .pr .pr-green {
+  background-image: repeating-linear-gradient(-45deg,  #72b328,  #72b328 20px,  #78d113 30px,  #76c31c 40px);
+}
+#mylink .table table tbody tr .progress .pr .pr-yellow {
+  background-image: repeating-linear-gradient(-45deg,  #fcb500,  #fcb500 20px,  #ffc633 30px,  #f1c40f 40px);
+}
+#mylink .table table tbody tr .progress .pr .pr-gray {
+  background-image: repeating-linear-gradient(-45deg,  #aca9a9,  #aca9a9 20px,  #888888 30px,  #999999 40px);
+}
+#mylink .table table tbody tr .actions {
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#mylink .table table tbody tr .actions button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  height: 38px;
+  width: 48px;
+}
+#mylink .table table tbody tr .actions button img {
+  // transform: skewX(-17deg);
+  width: 17px;
+  margin-top: 2px;
+}
+#mylink .table table tbody tr .actions #pause {
+  position: relative;
+  z-index: 1;
+}
+#mylink .table table tbody tr .actions #pause::before {
+  z-index: -1;
+  background-color: #aa2a18;
+  border: 2px solid #d63838;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .table table tbody tr .actions #pause:hover::before {
+  background-color: #d63838;
+}
+#mylink .table table tbody tr .actions #resume {
+  position: relative;
+  z-index: 1;
+  // &:hover::before {
+  //   // webkit-transition: all .15s ease-in-out;
+  //   // transition: all .5s ease-in-out;
+  //   background-color: #76c31c;
+  // }
+}
+#mylink .table table tbody tr .actions #resume::before {
+  z-index: -1;
+  background-color: #66aa18;
+  border: 2px solid #76c31c;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .table table tbody tr .actions #resume:hover::before {
+  background-color: #76c31c;
+}
+#mylink .table table tbody tr .actions #reload {
+  position: relative;
+  z-index: 1;
+}
+#mylink .table table tbody tr .actions #reload::before {
+  z-index: -1;
+  background-color: #c68200;
+  border: 2px solid #fcb500;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .table table tbody tr .actions #reload:hover::before {
+  background-color: #fcb500;
+}
+#mylink .table table tr {
+  margin: 10px 0px;
+  display: grid;
+  grid-template-columns: 7% 25% 10% 30% 15% 10%;
+  align-items: center;
+}
+#mylink .table table tr td {
+  padding: 10px;
+  font-size: 18px;
+  line-height: 20px;
+}
+#mylink .table table tr td:first-child {
+  padding: 0px;
+  height: 54px;
+  width: 100px;
+}
+#mylink .table table tr td:first-child span {
+  padding: 0px 16px;
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 84px;
+  padding: 17px 22px;
+  font-size: 18px;
+  text-align: center;
+}
+#mylink .table table tr td:first-child span::before {
+  z-index: -1;
+  background-color: #254302a1;
+  border: 2px solid #76c31c;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .table table tr td:first-child span:hover::before {
+  background-color: #76c31c;
+}
+#mylink .notdata {
+  width: 100%}
+#mylink .notdata p {
+  margin-top: 10%;
+  text-align: center;
+  color: #fff;
+}
+#mylink .mtable .box {
+  padding: 15px;
+  margin: 15px 0;
+  border-radius: 8px;
+  position: relative;
+  z-index: 1;
+}
+#mylink .mtable .box::before {
+  z-index: -1;
+  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .mtable .box:hover::before {
+  background-color: rgba(255, 255, 255, .1);
+}
+#mylink .mtable .box:before {
+  transform: skewX(0deg);
+}
+#mylink .mtable .box .top {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+#mylink .mtable .box .top .index {
+  padding: 0px;
+  width: 100px;
+}
+#mylink .mtable .box .top .index span {
+  padding: 5px 16px;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+#mylink .mtable .box .top .index span::before {
+  z-index: -1;
+  background-color: #1E2E0D;
+  border: 2px solid #44592A;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .mtable .box .top .index span:hover::before {
+  background-color: #76c31c;
+}
+#mylink .mtable .box .top .actions {
+  padding: 0px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#mylink .mtable .box .top .actions button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 10px 15px 7px;
+  margin: 0px 5px;
+}
+#mylink .mtable .box .top .actions button img {
+  width: 12px;
+}
+#mylink .mtable .box .top .actions #pause {
+  position: relative;
+  z-index: 1;
+}
+#mylink .mtable .box .top .actions #pause::before {
+  z-index: -1;
+  background-color: #aa2a18;
+  border: 2px solid #d63838;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .mtable .box .top .actions #pause:hover::before {
+  background-color: #d63838;
+}
+#mylink .mtable .box .top .actions #resume {
+  position: relative;
+  z-index: 1;
+}
+#mylink .mtable .box .top .actions #resume::before {
+  z-index: -1;
+  background-color: #66aa18;
+  border: 2px solid #76c31c;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .mtable .box .top .actions #resume:hover::before {
+  background-color: #76c31c;
+}
+#mylink .mtable .box .top .actions #reload {
+  position: relative;
+  z-index: 1;
+}
+#mylink .mtable .box .top .actions #reload::before {
+  z-index: -1;
+  background-color: #c68200;
+  border: 2px solid #fcb500;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .mtable .box .top .actions #reload:hover::before {
+  background-color: #fcb500;
+}
+#mylink .mtable .box .progress {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+#mylink .mtable .box .progress .pr {
+  height: 32px;
+  position: relative;
+  z-index: 1;
+  width: 100%}
+#mylink .mtable .box .progress .pr::before {
+  z-index: -1;
+  background-color: #131821;
+  border: 2px solid #232b3a;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+#mylink .mtable .box .progress .pr:hover::before {
+  background-color: #232b3a;
+}
+#mylink .mtable .box .progress .pr .bar {
+  width: 70%;
+  height: 28px;
+  margin-top: 2px;
+  transform: skewX(-17deg);
+  border-radius: 8px;
+}
+#mylink .mtable .box .progress .pr .pr-green {
+  background-image: repeating-linear-gradient(-45deg,  #72b328,  #72b328 20px,  #78d113 30px,  #76c31c 40px);
+}
+#mylink .mtable .box .progress .pr .pr-yellow {
+  background-image: repeating-linear-gradient(-45deg,  #fcb500,  #fcb500 20px,  #ffc633 30px,  #f1c40f 40px);
+}
+#mylink .mtable .box .progress .pr .pr-gray {
+  background-image: repeating-linear-gradient(-45deg,  #aca9a9,  #aca9a9 20px,  #888888 30px,  #999999 40px);
+}
+#mylink .mtable .box .link {
+  overflow: scroll;
+  margin-top: 16px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  color: rgba(185, 183, 183, .47);
+}
+#mylink .mtable .box .link a {
+  color: #fff;
+  margin-top: 8px;
+  font-size: 15px;
+}
+#mylink .mtable .box .bottom {
+  margin-top: 20px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  overflow: scroll;
+}
+#mylink .mtable .box .bottom div {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  margin: 0px 10px 0px 0px;
+  color: #fff;
+}
+#mylink .mtable .box .bottom div span {
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 400;
+}
+#mylink .mtable .box .bottom div span:first-child {
+  color: rgba(185, 183, 183, .47);
+}
+#mylink .mtable .box .green {
+  color: #76c31c;
+}
+#mylink .mtable .box .yellow {
+  color: #ffc633;
+}
+#mylink .mtable .box .gray {
+  color: rgba(185, 183, 183, .47);
+}
 
-        .newlink {
-          button {
-            background-color: transparent;
-            border: none;
-            outline: none;
-            @include skewBg(#c68200, #fcb500);
-            font-family: "Russo One", sans-serif;
-            color: #fff;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            padding: 10px 15px;
-            cursor: pointer;
-            img {
-              width: 25px;
-              margin-right: 10px;
-            }
-            &:hover {
-              transform: translateY(-5%);
-            }
-          }
-        }
-      }
-    }
-  }
 
-  .table {
-    width: 100%;
-    table {
-      margin-top: 30px;
-      width: 100%;
-      border-collapse: collapse;
-      thead {
-        tr {
-          margin: 8px 0px;
-          text-align: left;
-          th {
-            padding: 8px;
-            color: rgba(185, 183, 183, 0.47);
-          }
-        }
-      }
-      tbody {
-        color: #fff;
-        tr {
-          text-align: left;
-          @include skewBg(rgba(143, 139, 139, 0.47), rgba(255, 255, 255, 0.1));
-
-          .green {
-            color: #76c31c;
-          }
-          .yellow {
-            color: #ffc633;
-          }
-          .gray {
-            color: rgba(185, 183, 183, 0.47);
-          }
-
-          .progress {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            .pr {
-              @include skewBg(#131821, #232b3a);
-              width: 80%;
-              .bar {
-                width: 70%;
-                height: 100%;
-                transform: skewX(-17deg);
-                border-radius: 8px;
-              }
-
-              .pr-green {
-                background-image: repeating-linear-gradient(
-                  -45deg,
-                  #72b328,
-                  #72b328 20px,
-                  #78d113 30px,
-                  #76c31c 40px
-                );
-              }
-              .pr-yellow {
-                background-image: repeating-linear-gradient(
-                  -45deg,
-                  #fcb500,
-                  #fcb500 20px,
-                  #ffc633 30px,
-                  #f1c40f 40px
-                );
-              }
-              .pr-gray {
-                background-image: repeating-linear-gradient(
-                  -45deg,
-                  #aca9a9,
-                  #aca9a9 20px,
-                  #888888 30px,
-                  #999999 40px
-                );
-              }
-            }
-          }
-
-          .actions {
-            padding: 0px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-evenly;
-            button {
-              cursor: pointer;
-              background-color: transparent;
-              border: none;
-              outline: none;
-              padding: 10px 15px 7px;
-              img {
-                width: 12px;
-              }
-            }
-
-            #pause {
-              @include skewBg(#aa2a18, #d63838);
-            }
-            #resume {
-              @include skewBg(#66aa18, #76c31c);
-            }
-            #reload {
-              @include skewBg(#c68200, #fcb500);
-            }
-          }
-        }
-      }
-
-      tr {
-        margin: 10px 0px;
-        display: grid;
-        grid-template-columns: 7% 25% 10% 30% 15% 10%;
-        align-items: center;
-        td {
-          padding: 10px;
-          &:first-child {
-            padding: 0px;
-            width: 100px;
-            span {
-              padding: 8px;
-              @include skewBg(#66aa18, #76c31c);
-            }
-          }
-        }
-      }
-    }
+#popup-root:hover {
+  [role=tooltip].popup-content.mylinks-content {
+    display: none;
   }
 }
 
-[role="tooltip"].mylinks-content {
+
+[role=tooltip].mylinks-content {
   max-width: 150px;
-  background-color: rgba(143, 139, 139, 0.47);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, .1);
   padding: 8px;
   font-size: 12px;
   color: #fff;
   border-radius: 10px;
-
-  .popup-arrow {
-    color: rgba(143, 139, 139, 0.47);
-  }
+  text-align: center;
 }
-
+[role=tooltip].mylinks-content .popup-arrow {
+  color: rgba(255, 255, 255, .1);
+}
 .mylinks-overlay {
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, .7);
+  padding: 16px;
 }
-
 .mylinks-content {
   backdrop-filter: blur(10px);
-  width: 400px;
   padding: 15px;
-  background-color: rgba(48, 48, 48, 0.2);
-  border: 2px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(48, 48, 48, .2);
+  border: 2px solid rgba(255, 255, 255, .1);
   border-radius: 15px;
+  width: 576px;
+}
+.mylinks-content .modal .head {
+  background: url("../../res/imgs/arc.svg");
+  background-size: cover;
+  padding: 20px;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100%}
+.mylinks-content .modal .head h3 {
+  color: #fff;
+  text-align: center;
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 400;
+}
 
-  .modal {
-    .head {
-      background: url("../../res/imgs/arc.svg");
-      background-size: cover;
-      padding: 20px;
-      background-position: center;
-      background-repeat: no-repeat;
-      width: 100%;
-      h3 {
-        color: #fff;
-        text-align: center;
-      }
-    }
+
+
+.mylinks-content .modal .content {
+  padding: 24px 15px 12px;
+}
+.mylinks-content .modal .content p {
+  color: rgba(255, 255, 255, .3);
+  width: 124px;
+  margin: 0px auto 12px;
+  display: flex;
+  font-size: 15px;
+  line-height: 20px;
+}
+.mylinks-content .modal .content p img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
+.mylinks-content .modal .content .input_group {
+  padding: 10px;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  height: 50px;
+}
+.mylinks-content .modal .content .input_group::before {
+  z-index: -1;
+  background-color: rgba(68, 68, 68, .47);
+  border: 2px solid rgba(255, 255, 255, .1);
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.mylinks-content .modal .content .input_group:hover::before {
+  background-color: rgba(255, 255, 255, .1);
+}
+.mylinks-content .modal .content .input_group input {
+  color: #fff;
+  width: 100%;
+  padding: 5px;
+  outline: none;
+  background: transparent;
+  border: none;
+  text-align: center;
+  font-size: 20px;
+  line-height: 24px;
+}
+.mylinks-content .modal .content .campaign {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: space-between;
+  margin-top: 50px;
+  text-align: center;
+  white-space: nowrap;
+}
+.mylinks-content .modal .content .campaign p {
+  margin: 4px 0px 12px;
+  font-size: 15px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.mylinks-content .modal .content .campaign p img {
+  width: 14px;
+  height: 14px;
+}
+.mylinks-content .modal .content .campaign>div {
+  width: 45%}
+.mylinks-content .modal .content .campaign h5 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 400;
+}
+.mylinks-content .modal .content .campaign .coins {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mylinks-content .modal .content .campaign .coins .selection {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  z-index: 1;
+  padding: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+.mylinks-content .modal .content .campaign .coins .selection::before {
+  z-index: -1;
+  background-color: rgba(68, 68, 68, .47);
+  border: 2px solid rgba(255, 255, 255, .1);
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.mylinks-content .modal .content .campaign .coins .selection:hover::before {
+  background-color: rgba(255, 255, 255, .1);
+}
+.mylinks-content .modal .content .campaign .coins .selection button {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+.mylinks-content .modal .content .campaign .coins .selection button img {
+  width: 25px;
+}
+.mylinks-content .modal .content .campaign .coins .selection input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  width: 50px;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  line-height: 24px
+}
+.mylinks-content .modal .content .campaign .diamond {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mylinks-content .modal .content .campaign .diamond .selection {
+  width: 100%;
+  height: 50px;
+  position: relative;
+  z-index: 1;
+  padding: 8px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.mylinks-content .modal .content .campaign .diamond .selection::before {
+  z-index: -1;
+  background-color: rgba(68, 68, 68, .47);
+  border: 2px solid rgba(255, 255, 255, .1);
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+}
+.mylinks-content .modal .content .campaign .diamond .selection:hover::before {
+  background-color: rgba(255, 255, 255, .1);
+}
+.mylinks-content .modal .content .campaign .diamond .selection label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  .title {
+    color:rgba(255, 255, 255, 0.24);
+    margin-right: 8px;
+  }
+}
+.mylinks-content .modal .content .campaign .diamond .selection label img {
+  width: 20px;
+  margin-left: 10px;
+}
+.mylinks-content .modal .content .campaign .diamond .selection input[type=checkbox] {
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  background-color: #c68200;
+  border: 1px solid #fcb500;
+  width: 18px;
+  height: 18px;
+  border-radius: 3px;
+  display: grid;
+  place-content: center;
+}
+.mylinks-content .modal .content .campaign .diamond .selection input[type=checkbox]::before {
+  text-align: center;
+  content: "✓";
+  width: 18px;
+  height: 18px;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #fcb500;
+  font-weight: bold;
+  color: #fff;
+  border-radius: 3px;
+}
+.mylinks-content .modal .content .campaign .diamond .selection input[type=checkbox]:checked::before {
+  transform: scale(1);
+}
+.mylinks-content .modal .content .submit {
+  display: inline-block;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  position: relative;
+  z-index: 1;
+  font-family: "Russo One", sans-serif;
+  color: #fff;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 34px 0px 10px;
+  width: 100%;
+  text-align: center;
+  height: 54px;
+  font-size: 18px;
+}
+.mylinks-content .modal .content .submit::before {
+  z-index: -1;
+  background-color: #c68200;
+  border: 2px solid #fcb500;
+  transform: skewX(-17deg);
+  position: absolute;
+  content: "";
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  webkit-transition: all 0.15s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+.mylinks-content .modal .content .submit:hover::before {
+  background-color: #fcb500;
+}
+.mylinks-content .close {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-weight: 100;
+  color: #888;
+  padding: 2px 7px;
+  display: block;
+  border: 1px solid #999;
+  border-radius: 100%}
+@media all and (max-width: 426px) {
+  .container {
+    padding: 0px 16px 25px
+  }
+
+  #mylink  {
     .content {
-      padding: 15px;
-      p {
-        color: rgba(255, 255, 255, 0.3);
-        width: 120px;
-        margin: 0px auto 10px;
-        display: flex;
-        font-size: 12px;
-        img {
-          width: 15px;
-          margin-left: 5px;
-        }
-      }
-
-      .input_group {
-        padding: 5px;
-        width: 100%;
-        @include skewBg(rgba(68, 68, 68, 0.47), rgba(255, 255, 255, 0.1));
-        input {
-          color: #fff;
-          width: 100%;
-          padding: 5px;
-          outline: none;
-          background: transparent;
-          border: none;
-        }
-      }
-
-      .campaign {
-        display: flex;
-        flex-direction: row;
-        align-items: start;
-        justify-content: space-between;
+      padding-bottom: 60px;
+      #links_data {
+        padding: 0;
         margin-top: 20px;
-        text-align: center;
-        white-space: nowrap;
-        p {
-          margin: 10px 0px;
-          font-size: 10px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: center;
-          img {
-            width: 12px;
+        .top {
+          // justify-content: start;
+          flex-wrap: wrap;
+          h2 {
+            order: 1;
+            font-size: 17px;
+            line-height: 24px;
+            margin-left: 0;
+            width: unset;
           }
-        }
-        & > div {
-          width: 45%;
-        }
-        h5 {
-          color: #fff;
-        }
-        .coins {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          .selection {
-            width: 100%;
-            @include skewBg(rgba(68, 68, 68, 0.47), rgba(255, 255, 255, 0.1));
-            padding: 8px 10px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-evenly;
-
+          .newlink {
+            order: 2;
+            height: 32px;
             button {
-              background-color: transparent;
-              border: none;
-              outline: none;
-              cursor: pointer;
+              padding: 8px 12px !important;
+              height: 32px;
+              width: 164px;
+              font-size: 12px;
+              line-height: 14px;
               img {
-                width: 25px;
+                width: 16px !important;
+                height: 16px;
+                margin-right: 7px !important;
               }
+            }
+          }
+
+          .search {
+            margin-top: 20px;
+            height: 32px;
+            order: 3;
+            margin-left: 0px !important;
+            width: 100% !important;
+            padding: 8px 10px !important;
+            perspective: none !important;
+            img {
+              width: 14px !important;
+              height: 14px !important;
+              left: 15% !important;
             }
             input {
-              background-color: transparent;
-              border: none;
-              outline: none;
-              width: 50px;
-              text-align: center;
-              color: #fff;
+              // height: 25px !important;
+              font-size: 12px;
             }
+          }
+          .search::before {
+            border: 2px solid rgba(255, 255, 255, 0.16);
+            transform: skewX(-10deg) !important;
           }
         }
 
-        .diamond {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          .selection {
-            width: 100%;
-            @include skewBg(rgba(68, 68, 68, 0.47), rgba(255, 255, 255, 0.1));
-            padding: 12px 10px;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-
-            label {
-              display: flex;
-              flex-direction: row;
-              align-items: center;
-              color: #fff;
-              cursor: pointer;
-              img {
-                width: 20px;
-                margin-left: 10px;
-              }
-            }
-            input[type="checkbox"] {
-              cursor: pointer;
-              /*if not using autoprefixer */
-              -webkit-appearance: none;
-              appearance: none;
-              /* For iOS < 15 to remove gradient background */
-              background-color: #fff;
-              /* Not removed via appearance */
-              margin: 0;
-              // custom style
-              background-color: #c68200;
-              border: 1px solid #fcb500;
-              width: 18px;
-              height: 18px;
-              border-radius: 3px;
-              // to make the :before center
-              display: grid;
-              place-content: center;
-              &::before {
-                text-align: center;
-                content: "✓";
-                width: 18px;
-                height: 18px;
-                transform: scale(0);
-                transition: 120ms transform ease-in-out;
-                box-shadow: inset 1em 1em #fcb500;
-                font-weight: bold;
-                color: #fff;
-                border-radius: 3px;
-              }
-
-              &:checked::before {
-                transform: scale(1);
-              }
+        .table {
+          display: none;
+        }
+        .mtable .box .top {
+          height: 32px;
+          .index {
+            height: 100%;
+            width: 62px;
+            position: relative;
+            text-align: center;
+            padding: 6px;
+            span {
+              position: unset;
+              font-size: 15px;
             }
           }
         }
-      }
-
-      .submit {
-        display: inline-block;
-        background-color: transparent;
-        border: none;
-        outline: none;
-        @include skewBg(#c68200, #fcb500);
-        font-family: "Russo One", sans-serif;
-        color: #fff;
-        padding: 10px 15px;
-        cursor: pointer;
-        margin: 30px 0px 10px;
-        width: 100%;
-        text-align: center;
       }
     }
+    
   }
 
-  .close {
-    display: inline-block;
-    color: red;
+
+  
+  .mylinks-content .modal .head h3 {
+    font-size: 20px;
   }
+  .mylinks-content .modal .content {
+    padding-top: 21px;
+  }
+
+  .mylinks-content .modal .content p {
+    margin-bottom: 9px;
+  }
+  .mylinks-content .modal .content .input_group {
+    height: 40px;
+  }
+  .mylinks-content .modal .content .input_group input{
+    padding:0;
+    font-size: 15px;
+  }
+  .mylinks-content .modal .content .campaign {
+    margin-top: 24px;
+  }
+
+  .mylinks-content .modal .content .campaign h5 {
+    font-size: 14px;
+  }
+  .mylinks-content .modal .content .campaign p {
+    font-size: 12px;
+    margin: 4px 0px 8px;
+  }
+  .mylinks-content .modal .content .campaign .coins .selection, .mylinks-content .modal .content .campaign .diamond .selection {
+    height: 40px;
+  }
+  .mylinks-content .modal .content .campaign .coins .selection input,
+  .mylinks-content .modal .content .campaign .diamond .selection label {
+    font-size: 16px;
+  }
+    
+  
+  .mylinks-content .campaign {
+    flex-direction: column !important;
+  }
+  .mylinks-content .campaign>div {
+    width: 100% !important;
+  }
+  .mylinks-content .campaign .diamond {
+    margin-top: 15px;
+  }
+  
 }

@@ -1,13 +1,12 @@
 import avatarImg from "../../res/imgs/avatar.png";
 import arrowImg from "../../res/imgs/arrowdown.png";
 import discordImg from "../../res/imgs/discord.png";
-import earnImg from "../../res/imgs/earn.png";
-import linkImg from "../../res/imgs/link.png";
-import guidImg from "../../res/imgs/star.png";
-import faqImg from "../../res/imgs/question.png";
+import EarnSVG from "../../res/svg/EarnCoins";
+import LinkSvg from "../../res/svg/Link";
+import GuidSvg from "../../res/svg/Guide";
+import FaqSvg from "../../res/svg/Faq";
 import logoutImg from "../../res/imgs/logout.png";
 import loginImg from "../../res/imgs/login.png";
-// svg
 import Dollar from "../../res/svg/Dollar";
 import User from "../../res/svg/User";
 
@@ -33,8 +32,9 @@ export default function Sidebar() {
     async function checkUser() {
       const response = await axios.get("/api/user/getuser");
       if (response.status != 401) {
-        console.log("checkuser",response)
-        setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
+        console.log("checkuser", response)
+        if(response.data.avatar)
+          setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
         setIsLogin(true);
       }
     }
@@ -47,19 +47,19 @@ export default function Sidebar() {
 
       <nav>
         <NavLink to="/home">
-          <img src={earnImg} alt="Earn Coins" />
+          <EarnSVG color={"#75D10A"} />
           <span>Earn Coins</span>
         </NavLink>
         <NavLink to="/mylinks">
-          <img src={linkImg} alt="My Links" />
+          <LinkSvg color={"#75D10A"} />
           <span>My Links</span>
         </NavLink>
         <NavLink to="#" onClick={popupGuide}>
-          <img src={guidImg} alt="Guide" />
+          <GuidSvg color={"#75D10A"} />
           <span>Guide</span>
         </NavLink>
         <NavLink to="/">
-          <img src={faqImg} alt="FAQ" />
+          <FaqSvg  color={"#75D10A"} />
           <span>FAQ</span>
         </NavLink>
       </nav>
@@ -90,9 +90,9 @@ function LoggedIn({user}) {
           <button className="user">
             <User />
           </button>
-          <button className="dollar">
+          <a className="dollar" href="/replenish">
             <Dollar />
-          </button>
+          </a>
           <a href="/logout" className="logout">
             <img src={logoutImg} alt="logout" />
           </a>

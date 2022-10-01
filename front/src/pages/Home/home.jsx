@@ -166,6 +166,7 @@ function MiddleCard() {
 function About() {
   return (
     <section id="about">
+      <MiddleCard />
       <div className="a-content">
         <div className="img">
           <img src={screenGroup} alt="screenGroup" />
@@ -186,8 +187,6 @@ function About() {
           </a>
         </div>
       </div>
-
-      <MiddleCard />
     </section>
   );
 }

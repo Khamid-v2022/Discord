@@ -4,6 +4,14 @@ html {
   // scroll-snap-type: y proximity;
   scroll-behavior: smooth;
 }
+button, a {
+    webkit-transition: all .15s ease-in-out;
+    transition: all .5s ease-in-out;
+    &:before {
+      webkit-transition: all .15s ease-in-out;
+      transition: all .5s ease-in-out;
+    }
+}
 
 #home {
   width: 100%;
@@ -23,8 +31,8 @@ html {
   }
 
   #main {
-    padding-top: 20px;
-    min-height: 100vh;
+    padding: 20px 0 70px;
+    // min-height: 100vh;
     width: 100%;
     background: url("../../res/imgs/homepage.jpg");
     z-index: 1;
@@ -32,11 +40,12 @@ html {
     background-repeat: no-repeat;
     position: relative;
     &::before {
-      background: radial-gradient(
-        50% 50% at 50% 50%,
-        rgba(10, 13, 21, 0) 0%,
-        #0a0d15 92.37%
-      );
+      // background: radial-gradient(
+      //   50% 50% at 50% 50%,
+      //   rgba(10, 13, 21, 0) 0%,
+      //   #0a0d15 92.37%
+      // );
+      background: radial-gradient(80% 45% at 50% 50%, rgba(0, 0, 0, 0) 0%, #000 100%);
       content: "";
       opacity: 0.8;
       width: 100%;
@@ -49,7 +58,7 @@ html {
     &::after {
       z-index: -1;
       background-color: #000000;
-      background: radial-gradient(70.65% 70.65% at 50% 50%, rgba(10, 13, 21, 0) 58.44%, #0A0D15 100%);
+      background: radial-gradient(70.65% 70.65% at 50% 50%, rgba(10, 13, 21, 0) 58.44%, #000 100%);
       top: 0px;
       left: 0px;
       position: absolute;
@@ -57,19 +66,20 @@ html {
       width: 100%;
       height: 100%;
       content: "";
-      backdrop-filter: blur(3px);
+      // backdrop-filter: blur(3px);
     }
 
     nav {
       background-color: rgba(16, 19, 28, 0.65);
       border: 2px solid rgba(255, 255, 255, 0.01);
       width: 80%;
+      // height: 72px;
       margin: 0px auto;
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 28px;
+      padding: 0px 28px;
       border-radius: 15px;
       .mobile-top-bar {
         display: flex;
@@ -83,7 +93,7 @@ html {
           align-items: center;
           color: #fff;
           img {
-            width: 60px;
+            width: 70px;
           }
           h3 {
             font-size: 18px;
@@ -118,13 +128,19 @@ html {
         align-items: center;
         text-decoration: none;
         @include skewBg(#66AA18, #76C31C);
-        padding: 9px 16px 7px;
+        height: 40px;
+        width: 188px;
+        justify-content: center;
         margin-right: 20px;
         color: #fff;
         font-size: 14px;
         img {
           margin-right: 8px;
           height: 24px;
+        }
+        &:hover {
+          @include skewBg(#76C31C, #76C31C);
+          transform: translateY(-10%);
         }
       }
 
@@ -175,12 +191,15 @@ html {
           align-items: center;
           font-size: 18px;
           img {
-            margin-left: 10px;
             margin-right: 8px;
             height: 24px;
           }
           color: #fff;
-          padding: 13px 16px 8px;
+          justify-content: center;
+          &:hover {
+            @include skewBg(#fcb500, #fcb500);
+            transform: translateY(-10%);
+          }
         }
       }
       .img {
@@ -194,8 +213,7 @@ html {
   }
 
   #about {
-    padding-top: 20px;
-    min-height: calc(100vh);
+    padding: 70px 0;
     width: 100%;
     background-image: url("../../res/imgs/home_2.JPG");
     // background-position-y: -0px;
@@ -208,7 +226,7 @@ html {
       background: radial-gradient(
         50% 50% at 50% 50%,
         rgba(10, 13, 21, 0) 0%,
-        #0a0d15 225%
+        #000 225%
       );
       content: "";
       opacity: 0.8;
@@ -222,7 +240,7 @@ html {
 
     &::after {
       z-index: -1;
-      background: radial-gradient(70.65% 70.65% at 50% 50%, rgba(10, 13, 21, 0) 58.44%, #0A0D15 100%);
+      // background: radial-gradient(70.65% 70.65% at 50% 50%, rgba(10, 13, 21, 0) 58.44%, #0A0D15 100%);
       top: 0px;
       left: 0px;
       position: absolute;
@@ -230,12 +248,13 @@ html {
       width: 100%;
       height: 100%;
       content: "";
-      backdrop-filter: blur(3px);
+      box-shadow: rgb(14 13 13 / 25%) 0px 30px 60px -12px inset, rgb(0 0 0) 0px 18px 36px -18px inset
+      // backdrop-filter: blur(3px);
     }
 
     .a-content {
       width: 80%;
-      margin: 357px auto 0;
+      margin: 200px auto 0;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -275,7 +294,10 @@ html {
             height: 24px;
           }
           color: #fff;
-          padding: 13px 16px 8px
+          &:hover {
+            @include skewBg(#fcb500, #fcb500);
+            transform: translateY(-10%);
+          }
         }
       }
       .img {
@@ -293,14 +315,11 @@ html {
       z-index: 1;
       position: relative;
       overflow: hidden;
+      margin: 0 auto;
 
       border-radius: 15px;
       height: 180px;
       width: 80%;
-      position: absolute;
-      left: 50%;
-      top: -50px;
-      transform: translate(-50%);
 
       display: flex;
       flex-direction: row;
@@ -365,8 +384,7 @@ html {
   }
 
   #benefits {
-    padding-top: 20px;
-    min-height: calc(100vh + 100px);
+    padding: 70px 0;
     width: 100%;
     background-image: url("../../res/imgs/home_3_1.jpg");
     z-index: 1;
@@ -377,7 +395,7 @@ html {
       background: radial-gradient(
         50% 50% at 50% 50%,
         rgba(10, 13, 21, 0) 0%,
-        #0a0d15 92.37%
+        #000 92.37%
       );
       content: "";
       opacity: 0.8;
@@ -390,7 +408,7 @@ html {
     }
     &::after {
       z-index: -1;
-      background: radial-gradient(70.65% 70.65% at 50% 50%, rgba(10, 13, 21, 0) 58.44%, #0A0D15 100%);;
+      background: radial-gradient(70.65% 70.65% at 50% 50%, rgba(10, 13, 21, 0) 28.44%, #000 65%);
       top: 0px;
       left: 0px;
       position: absolute;
@@ -398,12 +416,13 @@ html {
       width: 100%;
       height: 100%;
       content: "";
-      backdrop-filter: blur(3px);
+      box-shadow: rgb(42 42 66 / 25%) 0px 30px 60px -12px inset, rgb(0 0 0) 0px 18px 36px -18px inset;
+      // backdrop-filter: blur(3px);
     }
 
     .b-content {
       width: 80%;
-      margin: 114px auto 0;
+      margin: 70px auto 0;
       text-align: center;
       .details {
         h2 {
@@ -436,7 +455,11 @@ html {
         align-items: start;
         justify-content: center;
         // overflow: hidden;
-
+        .topline {
+          img {
+            rotate: 180deg;
+          }
+        }
         .users {
           &::before {
             background-repeat: no-repeat;
@@ -564,8 +587,7 @@ html {
   }
 
   #reviews {
-    padding-top: 20px;
-    min-height: calc(100vh);
+    padding: 100px 0 300px;
     width: 100%;
     background-image: url("../../res/imgs/home_4.jpg");
     z-index: 1;
@@ -576,7 +598,7 @@ html {
       background: radial-gradient(
         50% 50% at 50% 50%,
         rgba(10, 13, 21, 0) 0%,
-        #0a0d15 92.37%
+        #000 92.37%
       );
       content: "";
       opacity: 0.8;
@@ -598,12 +620,13 @@ html {
       width: 100%;
       height: 100%;
       content: "";
-      backdrop-filter: blur(3px);
+      box-shadow: rgb(0 0 0 / 66%) 0px 30px 60px -12px inset, rgb(0 0 0 / 30%) 0px 18px 36px -18px inset;
+      // backdrop-filter: blur(3px);
     }
 
     .r-content {
       width: 80%;
-      margin: 200px auto 0;
+      margin: 0px auto;
       text-align: center;
       display: flex;
       flex-direction: row;
@@ -636,13 +659,16 @@ html {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 13px 16px 8px;
           font-size: 18px;
           img {
             margin-right: 8px;
             height: 24px;
           }
           color: #fff;
+          &:hover {
+            @include skewBg(#fcb500, #fcb500);
+            transform: translateY(-10%);
+          }
         }
       }
       .img {
@@ -656,15 +682,16 @@ html {
   }
 
   section {
-    height: 100vh;
+    // height: 100vh;
     scroll-snap-align: start;
   }
 
   footer {
     width: 100%;
+    height: 104px;
     background-color: #151923;
     .f-content {
-      padding: 20px 15px;
+      padding: 16px 15px;
       width: 80%;
       margin: 0px auto;
 
@@ -685,7 +712,7 @@ html {
           align-items: center;
 
           img {
-            width: 50px;
+            width: 70px;
           }
         }
       }
@@ -740,7 +767,7 @@ html {
         margin-left: 5%;
         display: block;
         background-color: #10131C;
-        padding: 2px 16px;
+        padding: 3px 16px;
         .mobile-top-bar {
           width: 100%;
         }
@@ -758,6 +785,7 @@ html {
         #connect.d-inline-flex {
           margin-right: 0px;
           justify-content: center;
+          width: 100%;
         }
         .brand {
           div {

@@ -4,7 +4,7 @@ import serverImg from "../../res/imgs/serverimg.png";
 import coinImg from "../../res/imgs/coin.png";
 
 import "./homepage.scss";
-
+import { useEffect, useState } from "react";
 export default function Homepage() {
   return (
     <section id="homepage">
@@ -21,35 +21,70 @@ export default function Homepage() {
   );
 }
 
+let cb;
 function PageContent() {
-  return (
-    <section id="server_joining">
-      <div className="thumbnail">
-        <img src={serverImg} alt="server" />
-      </div>
+  let [progressBar, setProgressBar] = useState(35);
+  let [stopWatchT, setStopWatchT] = useState(25);
+  const [invite, setInvite] = useState({
+    icon: serverImg,
+    server: "",
+    link: "",
+    name: "Server Comming...",
+    linkId: "",
+    remaining: "",
+  });
 
-      <div className="details">
-        <p>You've been inviting to join</p>
-        <h1>Fortnite Discord</h1>
-      </div>
 
-      <div className="progress">
-        <div className="progressbar">
-          <div className="bar"></div>
+
+    return (
+      <section id="server_joining">
+        <div className="thumbnail">
+          {invite.icon ? (
+            <img src={invite.icon} alt="server" />
+          ) : (
+            <div style={{ color: "white", padding: "18px", width: "60%" }}>
+              No PFP Found!
+            </div>
+          )}
         </div>
+
+        <div className="details">
+          <p>You've been invited to join</p>
+          <h1>Fortnite Discord</h1>
+          <p className="member-count">124,000 members</p>
+        </div>
+
+        <div className="progress">
+          <div className="progressbar">
+            <div
+              className="bar"
+              style={{ width: `${(progressBar / 60) * 100}%` }}
+            ></div>
+          </div>
         <p>
-          <span>24 sec</span> left to make a decision
+            <span>{stopWatchT} sec</span> left to make a decision
         </p>
-      </div>
+        </div>
 
-      <div className="actions">
-        <button className="skip">Skip to next one</button>
+        <div className="actions">
+          {stopWatchT ? (
+            <>
+              <button className="skip" >
+                Skip to next one
+              </button>
 
-        <button className="join">
-          <img src={coinImg} alt="coin" />
-          <span>Join and earn 1 coin</span>
-        </button>
-      </div>
-    </section>
-  );
+              <a className="join" href="/replenish">
+                <img src={coinImg} alt="coin" />
+                <span>Join and earn 1 coin</span>
+              </a>
+            </>
+          ) : (
+            <button className="join">
+              <span>Go Back</span>
+            </button>
+          )}
+        </div>
+      </section>
+    );
+
 }

@@ -1,15 +1,16 @@
 @use "../../style/mixins/skew.scss" as *;
-
+* {
+  box-sizing: border-box;
+}
 header {
   width: 100%;
-  height: 120px;
+  height: 188px;
   display: flex;
   flex-direction: row;
   align-items: center;
   position: relative;
-  margin-top: 15px;
   z-index: 1;
-  &::before{
+  &::before {
     z-index: -1;
     content: "";
     position: absolute;
@@ -18,67 +19,330 @@ header {
     background: url("../../res/imgs/arc.svg");
     background-repeat: no-repeat;
     background-position: center;
+    background-size: 75%;
   }
-
-  .social {
-    width: 100px;
+  .h-content {
     display: flex;
-    flex-direction: row;
+    width: 100%;
     align-items: center;
-    a {
-      display: inline-block;
-      margin: 0px 10px;
-      img {
-        display: inline-block;
-      }
-
-      &:hover {
-        transform: translateY(-10%);
-      }
+    justify-content: space-between;
+    .nonauth {
+      display: none;
     }
-  }
 
-  .assets {
-    margin: 0px auto;
-    width: 200px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    div {
+    .social {
+      width: 190px;
       display: flex;
       flex-direction: row;
       align-items: center;
-      margin: 0px 10px;
-      color: #fff;
-      img {
-        margin-right: 10px;
+      margin-left: 30px;
+      a {
+        display: inline-block;
+        margin: 0px 10px;
+        img {
+          display: inline-block;
+        }
+
+        &:hover {
+          transform: translateY(-10%);
+        }
       }
     }
 
-    .coins,
-    .diamonds {
-      padding: 8px 16px;
-      @include skewBg(rgba(143, 139, 139, 0.47), rgba(255, 255, 255, 0.1));
+    .assets {
+      margin: 0px auto;
+      // width: 21vw;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+
+      div {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 0px 10px;
+        color: #fff;
+        img {
+          width: 22px;
+          margin-right: 10px;
+        }
+      }
+
+      .coins,
+      .diamonds {
+        width: 100px;
+        height: 58px;
+        padding: 8px 16px;
+        justify-content: center;
+        @include skewBg(rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
+        h4 {
+          font-size: 18px;
+          font-weight: 400;
+        }
+      }
+
+      .replenish {
+        width: 200px;
+        height: 58px;
+        padding: 8px 16px;
+        @include skewBg(#66AA18, #76C31C);
+        justify-content: center;
+        webkit-transition: all .15s ease-in-out;
+        transition: all .5s ease-in-out;
+        h4 {
+          font-size: 18px;
+          font-weight: 400;
+        }
+        &:hover {
+          transform: translateY(-10%);
+        }
+        &:hover::before {
+          
+          background-color: #76C31C;
+        }
+      }
+      a {
+        text-decoration: none;
+      }
     }
 
-    .replenish {
-      padding: 8px 16px;
-      @include skewBg(#75c31c, #7bd812);
-    }
-    a{
-      text-decoration: none;
+    .top {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      width: 208px;
+      .avatar {
+        width: 50%;
+        display: none;
+      }
+
+      .nonauth {
+        width: 19%;
+        height: 55px;
+        border: 1px solid #23262d;
+        border-radius: 100%;
+        padding: 2px;
+        position: relative;
+        overflow: hidden;
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 100%;
+          height: 100%;
+          border-radius: 100%;
+          background-color: #66aa18;
+          border: 2px solid #76c31c;
+          outline: none;
+          cursor: pointer;
+
+          img {
+            width: 15px;
+          }
+        }
+      }
+
+      .brand {
+        width: 215px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: #fff;
+        justify-content: end;
+        img {
+          width: 98px;
+        }
+        h3 {
+          font-size: 18px;
+          font-weight: 400;
+        }
+      }
     }
   }
+}
 
-  .brand {
-    width: 215px;
+.header-arrow {
+  color: #1d2027;
+}
+
+.header-content {
+  margin: 0px auto;
+  background-color: #1d2027;
+  padding: 10px 0px;
+  border-radius: 8px;
+
+  .items {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     align-items: center;
-    color: #fff;
-    img {
-      width: 100px;
+    button,
+    a {
+      background-color: #282d37;
+      outline: none;
+      border: none;
+      padding: 5px 10px;
+      margin: 5px;
+      width: 80%;
+      border: 2px solid transparent;
+      border-radius: 5px;
+      cursor: pointer;
+      img {
+        width: 100%;
+      }
+    }
+
+    .user {
+      padding: 8px 10px;
+      &:hover {
+        background-color: #555353;
+        border-color: #fff;
+        svg {
+          path {
+            fill: #fff;
+          }
+        }
+      }
+    }
+    .dollar {
+      padding: 8px 10px;
+      &:hover {
+        svg {
+          path {
+            fill: #fff;
+          }
+        }
+        background-color: #66aa18;
+        border-color: #75c31c;
+      }
+    }
+    .logout {
+      display: block;
+      &:hover {
+        background-color: #d10000;
+        border-color: #ff0000;
+      }
+    }
+  }
+}
+
+//desktop responsiveness
+@media all and (max-width: 1024px) and (min-width: 724px) {
+  header {
+    .h-content {
+      .assets {
+        width: 28.5vw;
+      }
+    }
+  }
+}
+
+// mobile responsiveness
+@media all and (max-width: 426px) {
+  header {
+    font-weight: 300;
+    height: auto;
+    flex-direction: column !important;
+
+    &::before {
+      background-position-y: 140px;
+      background-size: 160%;
+    }
+
+    .h-content {
+      flex-direction: column-reverse !important;
+      .social {
+        display: none !important;
+      }
+
+      .assets {
+        width: 100% !important;
+        // margin-top: 30px;
+        padding-bottom: 30px;
+        justify-content: center !important;
+        div {
+          margin: 0px 7px;
+          img {
+            margin-right: 7px;
+            width: 12px;
+          }
+        }
+
+        .coins,
+        .diamonds {
+          width: 55px;
+          height: 32px;
+          h4 {
+            font-size: 10px;
+          }
+        }
+
+        .replenish {
+          padding: 7px 9px;
+          width: 110px;
+          height: 32px;
+          h4 {
+            font-size: 10px;
+          }
+        }
+      }
+
+      .top {
+        width: 100% !important;
+        margin: 15px 0 !important;
+        .brand {
+          h3 {
+            font-size: 15px;
+          }
+          img {
+            width: 75px;
+            margin-top: 5px;
+          }
+        }
+        .nonauth {
+          width: 48px !important;
+          height: 48px !important;
+          display: block !important;
+        }
+
+        .avatar {
+          display: block !important;
+          width: 48px !important;
+          height: 48px !important;
+          border: 2px solid #75c31c;
+          border-radius: 100%;
+          padding: 2px;
+          position: relative !important;
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 100%;
+          }
+          button {
+            background-color: transparent;
+            outline: none;
+            border: none;
+            position: absolute;
+            cursor: pointer;
+            width: 20px;
+            height: 18px;
+            border-radius: 100%;
+            bottom: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+
+        .brand {
+          width: 57% !important;
+          margin-right: -15px;
+        }
+      }
     }
   }
 }

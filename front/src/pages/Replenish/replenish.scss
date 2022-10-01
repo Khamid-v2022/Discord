@@ -1,5 +1,12 @@
 @use "../../style/mixins/skew.scss" as *;
-
+*, *::after, *::before {
+  box-sizing: border-box;
+  font-weight: 400;
+}
+// button, a {
+//   webkit-transition: all .15s ease-in-out;
+//   transition: all .5s ease-in-out;
+// }
 #replenish {
   background: url("../../res/imgs/replenish.png");
   background-size: cover;
@@ -20,32 +27,41 @@
   }
   #replenish_page {
     width: 100%;
+    padding: 45px 38px 45px 58px;
     h2 {
       color: #fff;
-      padding: 30px 25px 45px;
+      font-size: 32px;
+      line-height: 40px;
     }
     .replenish_cards {
       width: 100%;
+      margin-top: 78px;
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-evenly;
+      justify-content: space-between;
 
       .basic {
         &::before {
           background: url("../../res/imgs/replenish_basic.png");
+          background-size: cover;
+          background-repeat: no-repeat;
         }
       }
 
       .standard {
         &::before {
           background: url("../../res/imgs/replenish_standard.png");
+          background-size: cover;
+          background-repeat: no-repeat;
         }
       }
 
       .premium {
         &::before {
           background: url("../../res/imgs/replenish_premium.png");
+          background-size: cover;
+          background-repeat: no-repeat;
         }
       }
 
@@ -58,6 +74,7 @@
         flex-direction: column;
         align-items: center;
         padding: 0px;
+        margin: 0px 20px;
 
         .line {
           background-color: #4c4c4c;
@@ -81,12 +98,15 @@
       .diamonds {
         &::before {
           background: url("../../res/imgs/replenish_diamond.png");
+          background-size: cover;
+          background-repeat: no-repeat;
         }
         .head {
           h3 {
             background: linear-gradient(180deg, #ae0e0e 16.28%, #ff823c 87.21%);
             background-clip: text;
             -webkit-background-clip: text;
+            font-size: 30px;
           }
         }
 
@@ -103,31 +123,41 @@
         }
 
         .content {
+          padding-top: 40px;
           .txt {
             color: #c8aa6f59;
             display: flex;
             flex-direction: column;
             align-items: center;
+            font-size: 18px;
             h4 {
               margin-top: 10px;
+              font-size: 24px;
               display: flex;
               flex-direction: row;
               align-items: center;
               color: #c8aa6f;
-              img {
-                width: 25;
+              // img {
+              //   width: 28px;
+              //   margin-left: 5px;
+              // }
+              svg {
+                width: 28px;
+                height: 28px;
+                margin-left: 8px;
               }
             }
           }
           .conversion {
             width: 80%;
+            height: 54px;
             @include skewBg(rgba(68, 68, 68, 0.47), rgba(255, 255, 255, 0.1));
             padding: 8px 10px;
             display: flex;
             flex-direction: row;
             align-items: center;
             justify-content: space-evenly;
-            margin: 20px 0px;
+            margin: 40px 0px;
             button {
               background-color: transparent;
               border: none;
@@ -145,11 +175,15 @@
               width: 50px;
               text-align: center;
               color: #fff;
+              font-size: 20px;
             }
           }
 
           .submit {
             @include skewBg(#66aa18, #76c31c);
+            &:hover {
+              @include skewBg(#76c31c, #76c31c);
+            }
           }
         }
       }
@@ -163,8 +197,8 @@
         border-radius: 15px;
         padding: 50px 15px;
         position: relative;
-        transition: all 800ms ease-in-out;
-        transform: scale(0.95);
+        transition: all 500ms ease-in-out;
+        // transform: scale(0.95);
 
         &::before {
           content: "";
@@ -179,11 +213,12 @@
         }
 
         &::after {
-          background: linear-gradient(
-            23deg,
-            rgba(0, 0, 0, 1) 0%,
-            rgba(16, 19, 28, 0.6783088235294117) 100%
-          );
+          // background: linear-gradient(
+          //   23deg,
+          //   rgba(0, 0, 0, 1) 0%,
+          //   rgba(16, 19, 28, 0.6783088235294117) 100%
+          // );
+          background: rgba(16, 19, 28, 87%);
           content: "";
           width: 100%;
           height: 100%;
@@ -193,7 +228,8 @@
           bottom: 0px;
           position: absolute;
           z-index: -1;
-          backdrop-filter: blur(1px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          // backdrop-filter: blur(1px);
         }
 
         &:hover {
@@ -205,21 +241,21 @@
           .coin {
             position: relative;
             .promotion {
-              font-size: 12px;
+              font-size: 18px;
               position: absolute;
               color: #c8aa6f59;
-              top: -50%;
-              right: 0%;
+              top: -33%;
+              right: 12%;
             }
           }
           .diamond {
             position: relative;
             .promotion {
-              font-size: 12px;
+              font-size: 18px;
               position: absolute;
               color: #c8aa6f59;
-              top: -50%;
-              right: 0%;
+              top: -33%;
+              right: -13%;
             }
           }
         }
@@ -234,38 +270,41 @@
         h3 {
           text-transform: uppercase;
           background: linear-gradient(180deg, #af4d16 16.28%, #ffc83c 87.21%);
-          font-size: 25px;
+          font-size: 40px;
           background-clip: text;
           -webkit-background-clip: text;
           color: transparent;
+          text-align: center;
         }
-
-        &::before {
-          content: "";
-          width: 75%;
-          height: 100%;
-          top: -75%;
-          left: 50%;
-          transform: translateX(-50%);
-          background-repeat: no-repeat;
-          background-size: contain;
-          // background-position: center;
-          position: absolute;
-          background: url("../../res/imgs/topline.png");
+        img:last-child {
+          rotate: 180deg;
         }
-        &::after {
-          content: "";
-          width: 75%;
-          height: 100%;
-          bottom: -75%;
-          left: 50%;
-          transform: translateX(-50%);
-          background-repeat: no-repeat;
-          background-size: contain;
-          // background-position: center;
-          position: absolute;
-          background: url("../../res/imgs/bottomline.png");
-        }
+        // &::before {
+        //   content: "";
+        //   width: 75%;
+        //   height: 100%;
+        //   top: -75%;
+        //   left: 50%;
+        //   transform: translateX(-50%);
+        //   background-repeat: no-repeat;
+        //   background-size: contain;
+        //   // background-position: center;
+        //   position: absolute;
+        //   background: url("../../res/imgs/topline.png");
+        // }
+        // &::after {
+        //   content: "";
+        //   width: 75%;
+        //   height: 100%;
+        //   bottom: -75%;
+        //   left: 50%;
+        //   transform: translateX(-50%);
+        //   background-repeat: no-repeat;
+        //   background-size: contain;
+        //   // background-position: center;
+        //   position: absolute;
+        //   background: url("../../res/imgs/bottomline.png");
+        // }
       }
 
       .content {
@@ -280,18 +319,21 @@
           margin: 20px 0px;
           display: flex;
           align-items: center;
-          img {
-            width: 25px;
-            margin-right: 5px;
-          }
+          // img {
+          //   width: 33px;
+          //   margin-right: 8px;
+          // }
           span {
             color: #c8aa6f;
-            font-size: 25px;
+            font-size: 48px;
+            margin-left: 8px;
           }
         }
 
         .submit {
           width: 80%;
+          height: 54px;
+          margin-top: 14px;
           background-color: transparent;
           border: none;
           outline: none;
@@ -304,9 +346,18 @@
           flex-direction: row;
           align-items: center;
           justify-content: center;
+          font-size: 18px;
+          &:before{
+            webkit-transition: all .15s ease-in-out;
+            transition: all .5s ease-in-out;
+          }
           img {
-            width: 20px;
+            width: 18px;
+            height: 18px;
             margin-right: 10px;
+          }
+          &:hover {
+            @include skewBg(#fcb500, #fcb500);
           }
         }
       }
@@ -317,16 +368,50 @@
 .replenish-overlay {
   background-color: transparent;
 }
+
 .replenish-content {
   max-width: 250px;
-  background-color: rgba(143, 139, 139, 0.47);
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  padding: 8px;
-  font-size: 12px;
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  padding: 10px;
+  font-size: 13px;
+  line-height: 18px;
   color: #fff;
   border-radius: 10px;
 
   .popup-arrow {
-    color: rgba(143, 139, 139, 0.47);
+    color: rgba(255, 255, 255, 0.16);
+  }
+}
+
+@media (max-width: 426px) {
+  .content .replenish_cards {
+    flex-direction: column!important;
+  }
+  .content .replenish_cards>div {
+    margin-bottom: 15px;
+    width: 100%!important;
+  }
+  #replenish #replenish_page {
+    padding: 0 0 50px;
+    h2 {
+      font-size: 25px;
+    }
+    .replenish_cards {
+      margin-top: 20px;
+    }
+  }
+  .content .replenish_cards .transfer {
+    flex-direction: row!important;
+    height: auto!important;
+    margin-bottom: 15px!important;
+    .line {
+      height: 1px!important;
+      width: 50%!important;
+    }
+    .img img {
+      -webkit-transform: rotate(90deg)!important;
+      transform: rotate(90deg)!important;
+    }
   }
 }

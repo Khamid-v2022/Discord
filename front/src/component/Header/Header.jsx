@@ -1,6 +1,7 @@
 import { NavLink } from "react-router-dom";
 import DiscordSvg from "../../res/svg/Discord";
 import InstagramSvg from "../../res/svg/Instagram";
+import TwitterSvg from "../../res/svg/Twitter";
 import coinImg from "../../res/imgs/coin.png";
 import diamondImg from "../../res/imgs/diamond.png";
 import plusImg from "../../res/imgs/plus.png";
@@ -22,6 +23,7 @@ export default function Header() {
   const [svgColors, setColor] = useState({
     discord: "#383F56",
     instagram: "#383F56",
+    twitter: "#383F56"
   });
   const [user, setUser] = useState({ avtar: avatarImg });
   const [isLogin, setIsLogin] = useState(false);
@@ -31,9 +33,10 @@ export default function Header() {
       const response = await axios.get("/api/user/getuser");
       if (response.status != 401) {
         console.log("checkuser", response);
-        setUser({
-          avtar: `https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`,
-        });
+        if(response.data.avatar)
+          setUser({
+            avtar: `https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`,
+          });
         setIsLogin(true);
       }
     }
@@ -72,6 +75,17 @@ export default function Header() {
             }}
           >
             <InstagramSvg color={svgColors.instagram} />
+          </NavLink>
+          <NavLink
+            to="#"
+            onMouseEnter={() => {
+              setColor({ ...svgColors, twitter: "#7bd812" });
+            }}
+            onMouseLeave={() => {
+              setColor({ ...svgColors, twitter: "#383F56" });
+            }}
+          >
+            <TwitterSvg color={svgColors.twitter} />
           </NavLink>
         </div>
 
