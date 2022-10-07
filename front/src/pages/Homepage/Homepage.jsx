@@ -49,8 +49,8 @@ function PageContent() {
         return pb + 1;
       });
     } else {
-      console.log("setStopWatchT: ", stopWatchT);
-      console.log("setProgressBar: ", progressBar);
+      console.log("stop-watch: ", stopWatchT);
+      console.log("progressBar: ", progressBar);
       clearInterval(cb);
     }
   };
@@ -106,14 +106,13 @@ function PageContent() {
           });
           // running timer
           cb = setInterval(() => {
-            console.log("setStopWatchT: ", stopWatchT);
-            console.log("data.joiner.remaining: ", data.joiner.remaining);
+            console.log("stop_watch: ", stopWatchT);
+            console.log("joiner.remaining: ", data.joiner.remaining);
             timer();
           }, 1000);
         } else {
           // clearInterval(cb);
-          console.log("setStopWatchT: ", stopWatchT);
-          console.log("tim: ", "Your Time has been expired!");
+          console.log("stop_watch: ", stopWatchT);
         }
       } else {
         setJoining(false);

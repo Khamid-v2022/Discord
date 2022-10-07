@@ -7,7 +7,6 @@ export const guidepopup = createSlice({
   },
   reducers: {
     update: (state) => {
-      console.log("state", state.isOpen);
       state.isOpen = state.isOpen ? false : true;
     },
   },

@@ -75,9 +75,9 @@ function PageContent() {
 
   useEffect(() => {
     async function getlist() {
-      setData(sampleData);
-      // const response = await axios.get("/api/invite");
-      // setData(response.data);
+      // setData(sampleData);
+      const response = await axios.get("/api/invite");
+      setData(response.data);
     }
     getlist();
   }, []);
@@ -178,19 +178,19 @@ function Table({ data, setData, searchTerm }) {
 function TableRow({ item, setData, index }) {
   const dispatch = useDispatch();
   const updateHandler = async (_id, status) => {
-    // const response = await axios.post("/api/invite/update", {
-    //   _id,
-    //   status,
-    // });
-    // console.log(response);
-    // if (response.status != 400) {
-    //   setData(response.data);
-    //   // check balance
-    //   const response2 = await axios.get("/api/user/getbalance");
-    //   if (response2.status != 401) {
-    //     dispatch(updateBalance(response2.data));
-    //   }
-    // }
+    const response = await axios.post("/api/invite/update", {
+      _id,
+      status,
+    });
+    console.log(response);
+    if (response.status != 400) {
+      setData(response.data);
+      // check balance
+      const response2 = await axios.get("/api/user/getbalance");
+      if (response2.status != 401) {
+        dispatch(updateBalance(response2.data));
+      }
+    }
   };
 
   return (
@@ -348,19 +348,19 @@ function MTable({ data, setData, searchTerm }) {
 function MTableRow({ item, setData, index }) {
   const dispatch = useDispatch();
   const updateHandler = async (_id, status) => {
-    // const response = await axios.post("/api/invite/update", {
-    //   _id,
-    //   status,
-    // });
-    // console.log(response);
-    // if (response.status != 400) {
-    //   setData(response.data);
-    //   // check balance
-    //   const response2 = await axios.get("/api/user/getbalance");
-    //   if (response2.status != 401) {
-    //     dispatch(updateBalance(response2.data));
-    //   }
-    // }
+    const response = await axios.post("/api/invite/update", {
+      _id,
+      status,
+    });
+    console.log(response);
+    if (response.status != 400) {
+      setData(response.data);
+      // check balance
+      const response2 = await axios.get("/api/user/getbalance");
+      if (response2.status != 401) {
+        dispatch(updateBalance(response2.data));
+      }
+    }
   };
 
   return (
@@ -518,23 +518,23 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    // setOpen((o) => !o);
+    setOpen((o) => !o);
 
-    // if (data.link !== "" || data.target > 0) {
-    //   const response = await axios.post("/api/invite/add", data);
-    //   const resData = response.data;
-    //   console.log(response);
-    //   if (response.status === 201) {
-    //     // updating balance
-    //     dispatch(updateBalance(resData.earning));
+    if (data.link !== "" || data.target > 0) {
+      const response = await axios.post("/api/invite/add", data);
+      const resData = response.data;
+      console.log(response);
+      if (response.status === 201) {
+        // updating balance
+        dispatch(updateBalance(resData.earning));
 
-    //     setRows((prev) => {
-    //       return [...prev, resData.invite];
-    //     });
-    //   }
-    // } else {
-    //   alert("Please try again with correct details.");
-    // }
+        setRows((prev) => {
+          return [...prev, resData.invite];
+        });
+      }
+    } else {
+      alert("Please try again with correct details.");
+    }
   };
   return (
     <div>
@@ -554,10 +554,6 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
         className="mylinks"
       >
         <div className="modal">
-          {/* <a className="close" onClick={() => setOpen((o) => !o)}>
-            x
-          </a> */}
-
           <div className="head">
             <h3>Add Discord Link</h3>
           </div>

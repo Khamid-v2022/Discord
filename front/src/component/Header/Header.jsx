@@ -32,7 +32,7 @@ export default function Header() {
     async function checkUser() {
       const response = await axios.get("/api/user/getuser");
       if (response.status != 401) {
-        console.log("checkuser", response);
+
         if(response.data.avatar)
           setUser({
             avtar: `https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`,
@@ -122,7 +122,6 @@ export default function Header() {
 }
 
 function LoggedIn({ user }) {
-  console.log("USER:-", user)
   return (
     <div className="avatar">
       <img src={user.avtar} alt="avatar" />

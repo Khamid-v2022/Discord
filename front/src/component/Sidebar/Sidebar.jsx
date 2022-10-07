@@ -32,7 +32,6 @@ export default function Sidebar() {
     async function checkUser() {
       const response = await axios.get("/api/user/getuser");
       if (response.status != 401) {
-        console.log("checkuser", response)
         if(response.data.avatar)
           setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
         setIsLogin(true);

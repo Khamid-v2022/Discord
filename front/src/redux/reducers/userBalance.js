@@ -15,8 +15,6 @@ export const userBalance = createSlice({
   reducers: {
     updateBalance: (state, action) => {
       const balance = action.payload;
-        // console.log("action", action);
-        // console.log("state", state);
       //   chaning values
       state.purchased = balance.purchased;
       state.earned = balance.earned;
