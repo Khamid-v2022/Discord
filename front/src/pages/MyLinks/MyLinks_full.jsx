@@ -75,10 +75,10 @@ function PageContent() {
 
   useEffect(() => {
     async function getlist() {
-      setData(sampleData);
-      console.log(sampleData);
-      // const response = await axios.get("/api/invite");
-      // setData(response.data);
+      // setData(sampleData);
+      // console.log(sampleData);
+      const response = await axios.get("/api/invite");
+      setData(response.data);
     }
     getlist();
   }, []);

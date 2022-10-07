@@ -1,4 +1,32 @@
 @use "../../style/mixins/skew.scss" as *;
+.join {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  padding: 8px 20px;
+  @include skewBg(#c68200, #fcb500);
+  cursor: pointer;
+  font-family: "Russo One", sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+  img {
+    width: 20px;
+    margin-right: 10px;
+  }
+  width: 252px;
+  height: 54px;
+  font-size: 18px;
+  line-height: 22px;
+  justify-content: center;
+  font-weight: 400;
+  margin: 20px auto;
+  &:hover {
+    @include skewBg(#fcb500, #fcb500);
+  }
+}
 
 #homepage {
   background: url("../../res/imgs/homepage.jpg");
@@ -157,6 +185,9 @@
           line-height: 22px;
           justify-content: center;
           font-weight: 400;
+          &:hover {
+            @include skewBg(#fcb500, #fcb500);
+          }
         }
       }
     }
@@ -164,12 +195,11 @@
 }
 
 .start {
-  width: 250px;
-  margin: 15% auto 0;
+  margin: 20% auto 0;
   background-color: transparent;
   border: none;
   outline: none;
-  padding: 16px 20px;
+  padding: 16px 30px;
   @include skewBg(#c68200, #fcb500);
   cursor: pointer;
   font-family: "Russo One", sans-serif;
@@ -178,14 +208,22 @@
   flex-direction: row;
   align-items: center;
   text-decoration: none;
+  height: 54px;
+  justify-content: center;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
   img {
     width: 20px;
     margin-right: 10px;
   }
+  &:hover {
+    @include skewBg(#fcb500, #fcb500);
+  }
 }
 .status {
   text-align: center;
-  margin-top: 15%;
+  margin-top: 20%;
   color: #fff;
 }
 
