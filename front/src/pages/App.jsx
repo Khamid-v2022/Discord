@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { updateBalance } from "../redux/reducers/userBalance.js";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-// import Checkout from "./Checkout/checkout";
+import Checkout from "./Checkout/checkout";
 import Home from "./Home/home";
 
 export default function App() {
@@ -19,7 +19,6 @@ export default function App() {
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
-  console.log("Path", pathname);
   useLayoutEffect(() => {
     async function fetchBalance() {
       try {
@@ -42,7 +41,7 @@ export default function App() {
         <Route path="/home" element={<Homepage />} />
         <Route path="/mylinks" element={<MyLinks />} />
         <Route path="/replenish" element={<Replenish />} />
-        {/* <Route path="/checkout" element={<Checkout />} /> */}
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </section>
   );

@@ -4,7 +4,6 @@ import Popup from "reactjs-popup";
 
 import CoinSvg from "../../res/svg/Coin";
 import DiamondSvg from "../../res/svg/Diamond";
-import diamondImg from "../../res/imgs/diamond.png";
 import dollarImg from "../../res/imgs/dollar.png";
 import arrowsImg from "../../res/imgs/arrows.png";
 import questionImg from "../../res/imgs/questionmark.png";
@@ -13,6 +12,18 @@ import plusImg from "../../res/imgs/plus2.png";
 import toplineImg from "../../res/imgs/topline.png";
 
 import "./replenish.scss";
+import { useRef, useState } from "react";
+import axios from "axios";
+// import {
+//   // PaymentElement,
+//   CardNumberElement,
+//   CardCvcElement,
+//   CardExpiryElement,
+//   useStripe,
+//   useElements,
+// } from "@stripe/react-stripe-js";
+
+
 export default function Replenish() {
   return (
     <section id="replenish">
@@ -30,35 +41,103 @@ export default function Replenish() {
 }
 
 function PageContent() {
-  const contentStyle = { maxWidth: '250px' };
+  // const stripe = useStripe();
+  // const elements = useElements();
+
+  const [payment, setPayment] = useState({
+    coins: 0,
+    diamonds: 0,
+    amount: 0,
+    plan: "",
+  });
+  const payPopup = useRef();
+  const closePopup = () => payPopup.current.close();
+  const openPopup = () => payPopup.current.open();
+
+  const paynow = (e) => {
+    if (e.target.id === "basic") {
+      setPayment({
+        coins: 100,
+        diamonds: 5,
+        amount: 5,
+        plan: "Basic",
+      });
+      openPopup();
+    }
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    let url = `/api/payment/${payment.plan}`;
+
+    // if (!stripe || !elements) {
+    //   return;
+    // }
+
+    const response = await axios.post(url);
+    console.log(response);
+    const clientSecret = response.data.client_secret;
+
+    // confirm payment status
+    // const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+    //   payment_method: {
+    //     card: elements.getElement(),
+    //   },
+    // });
+
+    // console.log(paymentIntent)
+  };
+
+  // basic plan
+  // price_1KszAlEu7GyFTKQhdE3bM7on
+
+  // standard plan
+  // price_1KszCqEu7GyFTKQh9uDgekrg
+
+  // premium plan
+  // price_1KszDsEu7GyFTKQhIlVmh4IQ
+
+  const contentStyle = { maxWidth: "250px" };
+
   return (
     <section id="replenish_page">
       <h2>Get More Coins</h2>
       <div className="replenish_cards">
+        
         <div className="basic">
-       
           <div className="head">
             <img src={toplineImg} alt="topline" />
             <h3>Basic</h3>
             <img src={toplineImg} alt="topline" />
           </div>
 
-          <div className="content">
-            <div className="coin">
-              <CoinSvg />
-              <span>100</span>
-            </div>
+          <form
+            className="content"
+            action="/api/payment/checkoutsession"
+            method="POST"
+          >
+            <div className="content">
+              <input
+                type="hidden"
+                name="price_id"
+                value="price_1KszAlEu7GyFTKQhdE3bM7on"
+              />
+              <div className="coin">
+                <CoinSvg />
+                <span>100</span>
+              </div>
 
-            <div className="diamond">
-              <DiamondSvg />
-              <span>2</span>
-            </div>
+              <div className="diamond">
+                <DiamondSvg />
+                <span>2</span>
+              </div>
 
-            <button className="submit">
-              <img src={dollarImg} alt="dollar" />
-              <span>Buy $5</span>
-            </button>
-          </div>
+              <button className="submit" id="basic" onClick={paynow}>
+                <img src={dollarImg} alt="dollar" />
+                <span>Buy $5</span>
+              </button>
+            </div>
+          </form>
         </div>
 
         <div className="standard">
@@ -67,25 +146,35 @@ function PageContent() {
             <h3>standard</h3>
             <img src={toplineImg} alt="topline" />
           </div>
+          <form
+            className="content"
+            action="/api/payment/checkoutsession"
+            method="POST"
+          >
+            <div className="content">
+              <input
+                type="hidden"
+                name="price_id"
+                value="price_1KszCqEu7GyFTKQh9uDgekrg"
+              />
+              <div className="coin">
+                <div className="promotion">500+10%</div>
+                <CoinSvg/>
+                <span>550</span>
+              </div>
 
-          <div className="content">
-            <div className="coin">
-              <div className="promotion">500+10%</div>
-              <CoinSvg/>
-              <span>550</span>
+              <div className="diamond">
+                <div className="promotion">10+10%</div>
+                <DiamondSvg />
+                <span>11</span>
+              </div>
+
+              <button className="submit">
+                <img src={dollarImg} alt="dollar" />
+                <span>Buy $25</span>
+              </button>
             </div>
-
-            <div className="diamond">
-              <div className="promotion">10+10%</div>
-              <DiamondSvg />
-              <span>11</span>
-            </div>
-
-            <button className="submit">
-              <img src={dollarImg} alt="dollar" />
-              <span>Buy $25</span>
-            </button>
-          </div>
+          </form>
         </div>
 
         <div className="premium">
@@ -94,25 +183,35 @@ function PageContent() {
             <h3>premium</h3>
             <img src={toplineImg} alt="topline" />
           </div>
+          <form
+            className="content"
+            action="/api/payment/checkoutsession"
+            method="POST"
+          >
+            <div className="content">
+              <input
+                type="hidden"
+                name="price_id"
+                value="price_1KszDsEu7GyFTKQhIlVmh4IQ"
+              />
+              <div className="coin">
+                <div className="promotion">1000+20%</div>
+                <CoinSvg/>
+                <span>1200</span>
+              </div>
 
-          <div className="content">
-            <div className="coin">
-              <div className="promotion">1000+20%</div>
-              <CoinSvg/>
-              <span>1200</span>
+              <div className="diamond">
+                <div className="promotion">20+20%</div>
+                <DiamondSvg />
+                <span>24</span>
+              </div>
+
+              <button className="submit">
+                <img src={dollarImg} alt="dollar" />
+                <span>Buy $50</span>
+              </button>
             </div>
-
-            <div className="diamond">
-              <div className="promotion">20+20%</div>
-              <DiamondSvg />
-              <span>24</span>
-            </div>
-
-            <button className="submit">
-              <img src={dollarImg} alt="dollar" />
-              <span>Buy $50</span>
-            </button>
-          </div>
+          </form>
         </div>
 
         <div className="transfer">
@@ -178,6 +277,7 @@ function PageContent() {
           </div>
         </div>
       </div>
+
     </section>
   );
 }
