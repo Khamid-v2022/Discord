@@ -69,7 +69,7 @@ export async function DiscordResponse(req, res) {
         SameSite: true,
       });
 
-      res.redirect("/");
+      res.redirect("/home");
     } catch (error) {
       console.error(error.message);
       res.json({ message: error.message });
@@ -204,7 +204,10 @@ async function getBalance(req, res) {
   try {
     const discordUser = req.cookies.DiscordUser;
     const data = jwt.verify(discordUser, process.env.API_TOKEN);
-
+    
+    console.log("Discord User:", discordUser);
+    console.log("JWT Token:", data);
+    
     const response = await Earning.findOne({
       userid: data.userid,
     });
@@ -219,6 +222,9 @@ async function getBalance(req, res) {
 async function getUser(req, res) {
   try {
     const discordUser = req.cookies.DiscordUser;
+    
+    console.log(discordUser, process.env.API_TOKEN);
+    
     const data = jwt.verify(discordUser, process.env.API_TOKEN);
 
     const response = await User.findOne({

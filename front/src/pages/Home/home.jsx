@@ -1,7 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import logoImg from "../../res/imgs/Logo.png";
-import discordImg from "../../res/imgs/discord2.png";
 
 import HomeSvg from "../../res/svg/Home";
 import AboutSvg from "../../res/svg/About";
@@ -12,16 +10,16 @@ import InstagramSvg from "../../res/svg/Instagram";
 import TwitterSvg from "../../res/svg/Twitter";
 import MenuSvg from "../../res/svg/Menu";
 
+import logoImg from "../../res/imgs/Logo.png";
+import discordImg from "../../res/imgs/discord2.png";
 import groupIconImg from "../../res/imgs/icongroup.png";
 import leftGroupImg from "../../res/imgs/left_group.png";
 import rightGroupImg from "../../res/imgs/right_group.png";
 import screenGroup from "../../res/imgs/screengroup.png";
 import toplineImg from "../../res/imgs/topline.png";
-
 import usersImg from "../../res/imgs/users.png";
 import serversImg from "../../res/imgs/servers.png";
 import nftsImg from "../../res/imgs/nfts.png";
-
 import reviewImg from "../../res/imgs/reviews.png";
 import review1Img from "../../res/imgs/reviews_1.png";
 

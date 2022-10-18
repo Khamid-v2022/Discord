@@ -46,6 +46,7 @@ export default function Header() {
   let diamonds = 0;
   let stars = 0;
   const balance = useSelector((state) => state.userBalance);
+
   const { earned, purchased } = balance;
   diamonds = earned.diamonds + purchased.diamonds;
   stars = earned.stars + purchased.stars;

@@ -23,6 +23,7 @@ export default function Sidebar() {
   const [user, setUser] = useState({ avtar: avatarImg });
   const [isLogin, setIsLogin] = useState(false);
   const dispatch = useDispatch();
+  let navigate = useNavigate();
 
   const popupGuide = () => {
     dispatch(update());
@@ -35,6 +36,9 @@ export default function Sidebar() {
         if(response.data.avatar)
           setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
         setIsLogin(true);
+      }
+      else {
+        navigate("/");
       }
     }
     checkUser();

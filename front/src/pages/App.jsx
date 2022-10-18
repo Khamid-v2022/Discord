@@ -24,15 +24,16 @@ export default function App() {
       try {
         const response = await axios.get("/api/user/getbalance");
         dispatch(updateBalance(response.data));
-        if (pathname === "/") {
-          navigate("/home");
-        }
+        // if (pathname === "/") {
+        //   navigate("/home");
+        // }
       } catch (error) {
         navigate("/");
       }
     }
     fetchBalance();
   }, []);
+
   return (
     <section id="app">
       <Guid />
