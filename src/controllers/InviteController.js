@@ -12,7 +12,6 @@ async function AddLink(req, res) {
     const { fast } = req.body;
     // checking campaign type
     if (fast) {
-      console.log("Stars Campagin Started!");
       StarsCampain(req, res);
     } else {
       DiamondsCampain(req, res);
@@ -36,8 +35,6 @@ async function StarsCampain(req, res) {
     const earnedStars = await earnings.earned.stars;
     let userStars = 0;
     let inviteType = "";
-    // console.log("earnings", earnings.purchased.stars);
-    // console.log("total", target);
 
     if (purchasedStars > 0) {
       userStars = parseInt(purchasedStars);
@@ -49,40 +46,62 @@ async function StarsCampain(req, res) {
     console.log("mytarget", target);
     console.log("userStars", userStars);
 
-    if (userStars >= target) {
-      const remainingStars = userStars - target;
-      console.log("remainingStars", remainingStars);
-      const updateEarning = { "purchased.stars": remainingStars };
-      const result1 = await Earning.findOneAndUpdate(
-        { userid: earnings.userid },
-        updateEarning,
-        {
-          new: true,
+    const server = await getServerId(link);
+    console.log("SERVER:-------->", server);
+    if(server){
+      if (userStars >= target) {
+        // check duplicate link
+        const is_exist = await Invite.find({userid: earnings.userid, link:link, status:{ $ne: "Complete"} });
+        if(is_exist.length > 0){
+          res.status(200).json({
+            Message: "Invite Link duplicated!",
+          });
+          return;
         }
-      );
 
-      console.log(result1);
-      const server = await getServerId(link);
+        const remainingStars = userStars - target;
+        console.log("remainingStars", remainingStars);
+        const updateEarning = { "purchased.stars": remainingStars };
+        const result1 = await Earning.findOneAndUpdate(
+          { userid: earnings.userid },
+          updateEarning,
+          {
+            new: true,
+          }
+        );
 
-      const data = new Invite({
-        link,
-        userid: user.userid,
-        invitetype: inviteType,
-        target: {
-          total: target,
-          achieved: 0,
-        },
-        campaignType: fast,
-        serverId: server.id,
-        iconId: server.icon,
-        serverName: server.name,
-      });
+        console.log(result1);
+        // const server = await getServerId(link);
 
-      const result2 = await data.save();
-      res.status(201).json({ invite: result2, earning: result1 });
+        const data = new Invite({
+          link,
+          userid: user.userid,
+          invitetype: inviteType,
+          target: {
+            total: target,
+            achieved: 0,
+          },
+          cost: {
+            coins: target,
+            diamond: 0
+          },
+          campaignType: fast,
+          serverId: server.id,
+          iconId: server.icon,
+          serverName: server.name,
+        });
+
+        const result2 = await data.save();
+        res.status(201).json({ invite: result2, earning: result1 });
+      } else {
+        res.status(200).json({
+          Message: "You don't have enough balance to start this campaign!",
+        });
+      }
     } else {
+      console.log("STAR CHAMPION");
       res.status(200).json({
-        Message: "You don't have enough balance to start this campaign!",
+        Message: "You entered an invalid link!",
       });
     }
   } catch (error) {
@@ -110,8 +129,6 @@ async function DiamondsCampain(req, res) {
     let userStars = 0;
     let userDiamonds = 0;
     let inviteType = "";
-    // console.log("earnings", earnings.purchased.stars);
-    // console.log("total", target);
 
     if (purchasedStars > 0 && purchasedDiamonds > 0) {
       userStars = parseInt(purchasedStars);
@@ -129,41 +146,64 @@ async function DiamondsCampain(req, res) {
     console.log("mytarget", target);
     console.log("userStars", userStars);
 
-    if (userStars >= target && userDiamonds >= 1) {
-      const remainingStars = userStars - target;
-      const remainingDiamonds = userDiamonds - 1;
-      console.log("remainingStars", remainingStars);
-      const updateEarning = { "purchased.stars": remainingStars };
-      const result1 = await Earning.findOneAndUpdate(
-        { userid: earnings.userid },
-        updateEarning,
-        {
-          new: true,
+    const server = await getServerId(link);
+
+    if(server){
+      if (userStars >= target && userDiamonds >= 1) {
+        // check duplicate link
+        const is_exist = await Invite.find({userid: earnings.userid, link:link, status:{ $ne: "Complete"} });
+        if(is_exist.length > 0){
+          res.status(200).json({
+            Message: "Invite Link duplicated!",
+          });
+          return;
         }
-      );
 
-      console.log(result1);
-      const server = await getServerId(link);
+        const remainingStars = userStars - target;
+        const remainingDiamonds = userDiamonds - 1;
 
-      const data = new Invite({
-        link,
-        userid: user.userid,
-        invitetype: inviteType,
-        target: {
-          total: target,
-          achieved: 0,
-        },
-        campaignType: fast,
-        serverId: server.id,
-        iconId: server.icon,
-        serverName: server.name,
-      });
+        console.log("remainingStars", remainingStars);
 
-      const result2 = await data.save();
-      res.status(201).json({ invite: result2, earning: result1 });
+        const updateEarning = { "purchased.stars": remainingStars };
+        const result1 = await Earning.findOneAndUpdate(
+          { userid: earnings.userid },
+          updateEarning,
+          {
+            new: true,
+          }
+        );
+
+        console.log(result1);
+
+        const data = new Invite({
+          link,
+          userid: user.userid,
+          invitetype: inviteType,
+          target: {
+            total: target,
+            achieved: 0,
+          },
+          cost: {
+            coins: target,
+            diamond: 0
+          },
+          campaignType: fast,
+          serverId: server.id,
+          iconId: server.icon,
+          serverName: server.name,
+        });
+
+        const result2 = await data.save();
+        res.status(201).json({ invite: result2, earning: result1 });
+      } else {
+        res.status(200).json({
+          Message: "You don't have enough balance to start this campaign!",
+        });
+      }
     } else {
+      console.log("DIAMOND CHAMPION");
       res.status(200).json({
-        Message: "You don't have enough balance to start this campaign!",
+        Message: "You entered an invalid link!",
       });
     }
   } catch (error) {
@@ -218,7 +258,7 @@ async function GetLinks(req, res) {
     const discordUser = await req.cookies.DiscordUser;
     const data = jwt.verify(discordUser, process.env.API_TOKEN);
 
-    const inviteData = await Invite.find({ userid: data.userid });
+    const inviteData = await Invite.find({ userid: data.userid }).sort({ created_at: -1 });
     res.status(200).json(inviteData);
   } catch (error) {
     res.json(error);
@@ -461,6 +501,7 @@ async function getServerId(link) {
   } catch (error) {
     // link might be expired if it triggers errror
     console.log({ getServerId: error.message });
+    return false;
   }
 }
 

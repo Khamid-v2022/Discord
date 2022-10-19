@@ -67,7 +67,7 @@ const sampleData = [
 ];
 
 function PageContent() {
-  let { width, height } = useWindowDim();
+  let { width } = useWindowDim();
 
   const [open, setOpen] = useState(false);
   const closeModal = () => setOpen(false);
@@ -147,7 +147,7 @@ function Table({ data, setData, searchTerm }) {
           <tbody>
             {data
               .filter((item) => {
-                if (searchTerm == "") {
+                if (searchTerm === "") {
                   return item;
                 } else if (item.link.includes(searchTerm)) {
                   return item;
@@ -176,21 +176,26 @@ function Table({ data, setData, searchTerm }) {
 }
 
 function TableRow({ item, setData, index }) {
+  const [isSubmit, setSubmit] = useState(false);
+
   const dispatch = useDispatch();
   const updateHandler = async (_id, status) => {
+    setSubmit(true);
+
     const response = await axios.post("/api/invite/update", {
       _id,
       status,
     });
-    console.log(response);
-    if (response.status != 400) {
+
+    if (response.status !== 400) {
       setData(response.data);
       // check balance
       const response2 = await axios.get("/api/user/getbalance");
-      if (response2.status != 401) {
+      if (response2.status !== 401) {
         dispatch(updateBalance(response2.data));
-      }
+      } 
     }
+    setSubmit(false);
   };
 
   return (
@@ -252,6 +257,7 @@ function TableRow({ item, setData, index }) {
                 onClick={() => {
                   updateHandler(item._id, "Active");
                 }}
+                disabled={isSubmit ? true : false}
               >
                 <img src={resumeImg} alt="resume" />
               </button>
@@ -275,6 +281,7 @@ function TableRow({ item, setData, index }) {
                 onClick={() => {
                   updateHandler(item._id, "Inactive");
                 }}
+                disabled={isSubmit ? true : false}
               >
                 <img src={pauseImg} alt="pause" />
               </button>
@@ -298,6 +305,7 @@ function TableRow({ item, setData, index }) {
                 onClick={() => {
                   updateHandler(item._id, "Refunded");
                 }}
+                disabled={isSubmit ? true : false}
               >
                 <img src={reloadImg} alt="Refund" />
               </button>
@@ -306,7 +314,7 @@ function TableRow({ item, setData, index }) {
             position={`top center`}
             closeOnDocumentClick
           >
-            <span className="mytooltip">Refund 8 Coins and 0 Diamond</span>
+            <span className="mytooltip">Refund {item.target.total - item.target.achieved} Coins and 0 Diamond</span>
           </Popup>
         ) : (
           ""
@@ -324,7 +332,7 @@ function MTable({ data, setData, searchTerm }) {
       {data.length > 0 ? (
         data
           .filter((item) => {
-            if (searchTerm == "") {
+            if (searchTerm === "") {
               return item;
             } else if (item.link.includes(searchTerm)) {
               return item;
@@ -353,11 +361,11 @@ function MTableRow({ item, setData, index }) {
       status,
     });
     console.log(response);
-    if (response.status != 400) {
+    if (response.status !== 400) {
       setData(response.data);
       // check balance
       const response2 = await axios.get("/api/user/getbalance");
-      if (response2.status != 401) {
+      if (response2.status !== 401) {
         dispatch(updateBalance(response2.data));
       }
     }
@@ -509,33 +517,45 @@ function MTableRow({ item, setData, index }) {
 }
 
 function NewCampaign({ setOpen, open, closeModal, setRows }) {
+  const [errorMsg, setError] = useState("");
+  const [isSubmit, setSubmit] = useState(false);
+
   const dispatch = useDispatch();
   const [data, setData] = useState({
     link: "",
-    target: 0,
+    target: 1,
     fast: true,
   });
 
   const submitHandler = async (e) => {
+    setError("");
+    setSubmit(true);
     e.preventDefault();
-    setOpen((o) => !o);
+    
+    if(data.link.includes("https://discord.gg/") && data.target > 0){
+      // if (data.link !== "" || data.target > 0) {
+        const response = await axios.post("/api/invite/add", data);
+        const resData = response.data;
 
-    if (data.link !== "" || data.target > 0) {
-      const response = await axios.post("/api/invite/add", data);
-      const resData = response.data;
-      console.log(response);
-      if (response.status === 201) {
-        // updating balance
-        dispatch(updateBalance(resData.earning));
+        if (response.status === 201) {
+          // updating balance
+          dispatch(updateBalance(resData.earning));
 
-        setRows((prev) => {
-          return [...prev, resData.invite];
-        });
-      }
+          setRows((prev) => {
+            return [...prev, resData.invite];
+          });
+          setOpen((o) => !o);
+          setSubmit(false);
+        } else if(response.status === 200){
+          setError(response.data.Message);
+          setSubmit(false);
+        }
     } else {
-      alert("Please try again with correct details.");
+        setError("Please try again with correct details.");
+        setSubmit(false);
     }
   };
+  
   return (
     <div>
       <button
@@ -558,11 +578,34 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
             <h3>Add Discord Link</h3>
           </div>
 
+          <div className="error-msg">{errorMsg}</div>
           <form onSubmit={submitHandler}>
             <div className="content">
               <p>
                 <span>Discord Link</span>{" "}
-                <img src={questionImg} alt="question" />
+                <Popup
+                  className="sub-tooltip"
+                  trigger={(open) => (
+                    <img src={questionImg} alt="question" />
+                  )}
+                  on={["hover"]}
+                  position={`top left`}
+                  closeOnDocumentClick
+                >
+                  <span className="mytooltip">
+                    Only Discord Invite Links are allowed.<br/><br/>
+
+                    To get the Discord Invite Link:<br/>
+                    1. Click on your Discord Server Name<br/>
+                    2. Invite People<br/>
+                    3. Copy the Discord Invite Link<br/>
+                    <br/>
+                    Restrictions:<br/>
+                    Be sure that you "Edit Invite Link"<br/>
+                    1. Expire After: Never<br/>
+                    2. Max Number of Uses: No Limit<br/>
+                  </span>
+                </Popup>
               </p>
 
               <div className="input_group">
@@ -576,6 +619,7 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
                     });
                   }}
                 />
+
               </div>
 
               <div className="campaign">
@@ -590,7 +634,7 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
                       type="button"
                       onClick={() => {
                         setData((prev) => {
-                          return { ...prev, target: parseInt(prev.target) - 1 };
+                          return { ...prev, target: (parseInt(prev.target) - 1) > 1 ? parseInt(prev.target) - 1 : 1  };
                         });
                       }}
                     >
@@ -641,7 +685,7 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
                 </div>
               </div>
 
-              <button className="submit" type="submit">
+              <button className="submit" type="submit" disabled={isSubmit ? true : false}>
                 Add Discord Link
               </button>
             </div>

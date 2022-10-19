@@ -95,6 +95,16 @@ async function userLogin(oauthData) {
       });
 
       if (isExist) {
+        // update last login info
+        const updateUser = { "last_logged_at":  new Date().toJSON()};
+        const result1 = await User.findOneAndUpdate(
+          { userid: isExist.userid },
+          updateUser,
+          {
+            new: true,
+          }
+        );
+
         return isExist;
       } else {
         const userData = new User({
@@ -104,6 +114,7 @@ async function userLogin(oauthData) {
           banner: discordUser.banner,
           avatar: discordUser.avatar,
           refresh: oauthData.refresh_token,
+          last_logged_at: new Date().toJSON()
         });
         const result1 = await userData.save();
         const earnData = new Earning({ userid: discordUser.id });

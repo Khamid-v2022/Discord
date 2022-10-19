@@ -41,6 +41,10 @@ const userSchema=new Schema({
         type:String,
         default: "user"
     },
+    last_logged_at: {
+        type: Date,
+        default: Date.now
+    },
     created_at:{
         type: Date,
         default: Date.now

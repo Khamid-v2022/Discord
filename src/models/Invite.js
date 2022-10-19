@@ -42,6 +42,16 @@ const inviteSchema = new Schema({
       default: 0,
     },
   },
+  cost: {
+    coins: {
+      type: Number,
+      default: 0,
+    },
+    diamond: {
+      type: Number,
+      default: 0,
+    }
+  },
   created_at: {
     type: Date,
     default: Date.now,
