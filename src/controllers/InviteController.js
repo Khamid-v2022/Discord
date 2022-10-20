@@ -27,7 +27,6 @@ async function StarsCampain(req, res) {
 
     const userCookie = req.cookies.DiscordUser;
     const user = jwt.verify(userCookie, process.env.API_TOKEN);
-    console.log("userid", user.userid);
 
     // checking account balance of the user
     const earnings = await Earning.findOne({ userid: user.userid });
@@ -43,15 +42,13 @@ async function StarsCampain(req, res) {
       userStars = parseInt(earnedStars);
       inviteType = "earned";
     }
-    console.log("mytarget", target);
-    console.log("userStars", userStars);
 
     const server = await getServerId(link);
-    console.log("SERVER:-------->", server);
+    
     if(server){
       if (userStars >= target) {
         // check duplicate link
-        const is_exist = await Invite.find({userid: earnings.userid, link:link, status:{ $ne: "Complete"} });
+        const is_exist = await Invite.find({link:link, $or: [{status:{ $ne: "Complete"}}, {status:{ $ne: "Refunded"}}]});
         if(is_exist.length > 0){
           res.status(200).json({
             Message: "Invite Link duplicated!",
@@ -60,7 +57,6 @@ async function StarsCampain(req, res) {
         }
 
         const remainingStars = userStars - target;
-        console.log("remainingStars", remainingStars);
         const updateEarning = { "purchased.stars": remainingStars };
         const result1 = await Earning.findOneAndUpdate(
           { userid: earnings.userid },
@@ -69,9 +65,6 @@ async function StarsCampain(req, res) {
             new: true,
           }
         );
-
-        console.log(result1);
-        // const server = await getServerId(link);
 
         const data = new Invite({
           link,
@@ -99,13 +92,11 @@ async function StarsCampain(req, res) {
         });
       }
     } else {
-      console.log("STAR CHAMPION");
       res.status(200).json({
         Message: "You entered an invalid link!",
       });
     }
   } catch (error) {
-    console.log(error.message);
     res.status(400).json({ message: error.message });
   }
 }
@@ -118,7 +109,6 @@ async function DiamondsCampain(req, res) {
 
     const userCookie = req.cookies.DiscordUser;
     const user = jwt.verify(userCookie, process.env.API_TOKEN);
-    console.log("userid", user.userid);
 
     // checking account balance of the user
     const earnings = await Earning.findOne({ userid: user.userid });
@@ -143,8 +133,6 @@ async function DiamondsCampain(req, res) {
         // send him error for insufficient balance
       }
     }
-    console.log("mytarget", target);
-    console.log("userStars", userStars);
 
     const server = await getServerId(link);
 
@@ -162,8 +150,6 @@ async function DiamondsCampain(req, res) {
         const remainingStars = userStars - target;
         const remainingDiamonds = userDiamonds - 1;
 
-        console.log("remainingStars", remainingStars);
-
         const updateEarning = { "purchased.stars": remainingStars };
         const result1 = await Earning.findOneAndUpdate(
           { userid: earnings.userid },
@@ -172,8 +158,6 @@ async function DiamondsCampain(req, res) {
             new: true,
           }
         );
-
-        console.log(result1);
 
         const data = new Invite({
           link,
@@ -201,13 +185,11 @@ async function DiamondsCampain(req, res) {
         });
       }
     } else {
-      console.log("DIAMOND CHAMPION");
       res.status(200).json({
         Message: "You entered an invalid link!",
       });
     }
   } catch (error) {
-    console.log(error.message);
     res.status(400).json({ message: error.message });
   }
 }
@@ -238,7 +220,6 @@ async function UpdateCampaignStatus(req, res) {
         { $set: query },
         { new: true }
       );
-      console.log(result1);
     }
 
     const discordUser = await req.cookies.DiscordUser;
@@ -300,7 +281,6 @@ async function AssignInvite(req, res) {
  
       // callback to check user existence after 60 seconds
       new Cron("59 * * * * *", { maxRuns: 1 }, () => {
-        console.log("cron.schedule");
         checkAssigningStatus(
           _id,
           response._id,
@@ -316,7 +296,6 @@ async function AssignInvite(req, res) {
       });
     }
   } catch (error) {
-    console.log(error.message);
     res.status(401).json({ AssignInvite: error.message });
   }
 }
@@ -335,8 +314,6 @@ async function getInvite(lim, ski) {
       .limit(lim)
       .skip(ski);
 
-    // console.log({ getLink: invite[0] });
-    console.log({ "invite[0]": invite[0] });
     return invite[0];
   } catch (error) {
     console.log({ getLink: error.message });
@@ -349,7 +326,6 @@ async function checkLink(_id, oauthData) {
   let fLoop = true;
   do {
     const invite = await getInvite(limit, skip);
-    console.log("limit:-", limit);
 
     if (invite) {
       // checking if already joined?
@@ -374,12 +350,10 @@ async function checkLink(_id, oauthData) {
         },
       ]);
 
-      console.log("joiner", joiner);
       if (!joiner[0]?.remaining) {
         // if not already joined according to our db
         // check existence in discord server
         const isExist = await checkGuildMember(oauthData, invite.serverId);
-        console.log("checkGuildMember:-", isExist);
 
         if (isExist.user && isExist !== null) {
           // user exist in server fetch another link
@@ -388,11 +362,9 @@ async function checkLink(_id, oauthData) {
           fLoop = true;
         } else {
           fLoop = false;
-          console.log("else: ", { joiner, invite: invite });
           return { message: false, invite: invite, joiner };
         }
       } else {
-        console.log("joiner is empty");
         // user exist in server fetch another link
         limit = limit + 1;
         skip = skip + 1;
@@ -401,10 +373,6 @@ async function checkLink(_id, oauthData) {
     } else {
       // we dont have more campaigns
       fLoop = false;
-      console.log({
-        message: "We Dont have Invitations right now, try Again later",
-      });
-
       return {
         message: "We Dont have Invitations right now, try Again later",
         invite: "",
@@ -438,8 +406,6 @@ async function checkGuildMember(oauthData, gid) {
 }
 // checking join status after 60 seconds
 async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
-  console.log("checkAssigningStatus");
-  console.log("doc: ",doc);
   const isJoined = await checkGuildMember(oauthData, serverId);
   if (isJoined.user && isJoined !== null) {
     // if joined
@@ -454,9 +420,6 @@ async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
       { $inc: { "earned.stars": 1 } },
       { new: true }
     );
-
-    console.log("reward", reward);
-    console.log("linkJoin", linkJoin);
   } else {
     // failed to join
     const achieved = await inviteData.target.achieved;
@@ -474,9 +437,6 @@ async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
       { $set: { status: "Expired" } },
       { new: true }
     );
-
-    console.log("linkJoin", linkJoin);
-    console.log("invite", invite);
   }
 }
 // getting server id from invite link
@@ -489,7 +449,9 @@ async function getServerId(link) {
     const serverData = await fetch(
       `http://discord.com/api/invites/${inviteLinkId}`
     );
+
     console.log("serverData", serverData);
+
     const discordServer = await serverData.json();
     const server = {
       id: discordServer.guild.id,
@@ -508,9 +470,7 @@ async function getServerId(link) {
 async function checkstatus(req, res) {
   try {
     const id = req.query.id;
-    // console.log("id",id);
     const linkJoin = await Link.findOne({ _id: id.toString() });
-    // console.log("linkJoin",linkJoin);
     res.status(200).send(linkJoin);
   } catch (error) {
     res.status(401).json({ message: error.message });

@@ -190,7 +190,7 @@ function About() {
 }
 
 function Benefits() {
-  let { width, height } = useWindowDim();
+  let { width } = useWindowDim();
   return (
     <section id="benefits">
       <div className="b-content">

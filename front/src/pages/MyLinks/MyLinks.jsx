@@ -36,36 +36,6 @@ export default function MyLinks() {
   );
 }
 
-const sampleData = [
-  {
-    link: "https://Discord..",
-    status: "Complete",
-    target: {
-      achieved: 50,
-      total: 100
-    },
-    created_at: "2022-09-26"
-  },
-  {
-    link: "https://Discord..",
-    status: "Active",
-    target: {
-      achieved: 50,
-      total: 100
-    },
-    created_at: "2022-09-26"
-  },
-  {
-    link: "https://Discord..",
-    status: "Inactive",
-    target: {
-      achieved: 50,
-      total: 100
-    },
-    created_at: "2022-09-26"
-  }
-];
-
 function PageContent() {
   let { width } = useWindowDim();
 
@@ -75,7 +45,6 @@ function PageContent() {
 
   useEffect(() => {
     async function getlist() {
-      // setData(sampleData);
       const response = await axios.get("/api/invite");
       setData(response.data);
     }
