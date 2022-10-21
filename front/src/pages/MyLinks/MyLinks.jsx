@@ -565,14 +565,18 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
                     Only Discord Invite Links are allowed.<br/><br/>
 
                     To get the Discord Invite Link:<br/>
-                    1. Click on your Discord Server Name<br/>
-                    2. Invite People<br/>
-                    3. Copy the Discord Invite Link<br/>
+                    <ul>
+                      <li>Click on your Discord Server Name</li>
+                      <li>Invite People</li>
+                      <li>Copy the Discord Invite Link</li>
+                    </ul>
                     <br/>
                     Restrictions:<br/>
                     Be sure that you "Edit Invite Link"<br/>
-                    1. Expire After: Never<br/>
-                    2. Max Number of Uses: No Limit<br/>
+                    <ul>
+                      <li>Expire After: Never</li>
+                      <li>Max Number of Uses: No Limit</li>
+                    </ul>
                   </span>
                 </Popup>
               </p>

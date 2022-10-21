@@ -641,13 +641,19 @@
 
 [role=tooltip].sub-tooltip-content {
   max-width: 250px;
-  background-color: rgba(0, 0, 0, .8);;
+  background-color: rgba(0, 0, 0, .9);;
   border: 2px solid rgba(255, 255, 255, .1);
-  padding: 8px;
-  font-size: 12px;
+  padding: 10px;
+  font-size: 14px;
   color: #fff;
   border-radius: 10px;
   font-weight: 300;
+  ul {
+    list-style: decimal;
+    li {
+      margin-left: 20px;
+    }
+  }
 }
 
 [role=tooltip].mylinks-content {

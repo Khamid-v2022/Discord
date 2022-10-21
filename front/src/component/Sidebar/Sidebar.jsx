@@ -32,13 +32,14 @@ export default function Sidebar() {
   useEffect(() => {
     async function checkUser() {
       const response = await axios.get("/api/user/getuser");
-      if (response.status != 401) {
+      console.log(response);
+      if (response.status !== 401) {
         if(response.data.avatar)
           setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
         setIsLogin(true);
       }
       else {
-        navigate("/");
+        // navigate("/");
       }
     }
     checkUser();
@@ -49,11 +50,18 @@ export default function Sidebar() {
       {isLogin ? <LoggedIn user={user} /> : <LoggedOut />}
 
       <nav>
-        <NavLink to="/home">
+        <NavLink to="/home" 
+          className={({ isActive }) =>
+            isActive ? "active-nav nav-item" : "nav-item"
+          }
+        >
           <EarnSVG color={"#75D10A"} />
           <span>Earn Coins</span>
         </NavLink>
-        <NavLink to="/mylinks">
+        <NavLink to="/mylinks"
+          className={({ isActive }) =>
+          isActive ? "active-nav nav-item" : "nav-item"
+        }>
           <LinkSvg color={"#75D10A"} />
           <span>My Links</span>
         </NavLink>
@@ -61,7 +69,11 @@ export default function Sidebar() {
           <GuidSvg color={"#75D10A"} />
           <span>Guide</span>
         </NavLink>
-        <NavLink to="/">
+        <NavLink to="/"
+          end
+          className={({ isActive }) =>
+          isActive ? "active-nav nav-item" : "nav-item"
+        }>
           <FaqSvg  color={"#75D10A"} />
           <span>FAQ</span>
         </NavLink>
@@ -90,9 +102,9 @@ function LoggedIn({user}) {
         closeOnDocumentClick
       >
         <div className="items">
-          <button className="user">
+          <a className="user" href="/profile">
             <User />
-          </button>
+          </a>
           <a className="dollar" href="/replenish">
             <Dollar />
           </a>

@@ -83,6 +83,7 @@
       text-align: center;
       margin: 10px 0px;
       color: #383F56;
+      &.active-nav,
       &:hover,
       &:active {
         color: #fff;

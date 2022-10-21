@@ -1,6 +1,7 @@
 import express from "express";
 import { DiscordResponse } from "../middlewares/MyDiscord.js";
 import UserController from "../controllers/UserController.js";
+// import User from "../../front/src/res/svg/User.jsx";
 const router = express.Router();
 
 let cb = "";
@@ -27,6 +28,7 @@ router.get("/login", (req, res) => {
 router.get("/", UserController.DiscordResponse);
 
 router.get("/getuser", UserController.getUser);
+router.post("/updateuser", UserController.updateUser);
 router.get("/getbalance", UserController.getBalance);
 router.get("/guilds", UserController.getGuilds);
 router.post("/checkguildmember", UserController.checkGuildMember);

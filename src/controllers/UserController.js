@@ -95,10 +95,12 @@ async function userLogin(oauthData) {
       });
 
       if (isExist) {
-        // update last login info
-        const updateUser = { "last_logged_at":  new Date().toJSON()};
+        // update last login info, avatar
+        const updateUser = { "last_logged_at":  new Date().toJSON(), avatar: discordUser.avatar };
         const result1 = await User.findOneAndUpdate(
-          { userid: isExist.userid },
+          { 
+            userid: isExist.userid,
+          },
           updateUser,
           {
             new: true,
@@ -249,6 +251,26 @@ async function getUser(req, res) {
   }
 }
 
+async function updateUser(req, res){
+  try {
+    const { id, notify_email, marketing_email } = req.body;
+
+    const response = await User.findOneAndUpdate(
+      { _id: id },
+      { 
+        "notify_email": notify_email, 
+        "marketing_email": marketing_email 
+      },
+      { new: true }
+    );
+
+    res.status(200).send(response);
+  } catch (error) {
+    console.log({ message: error.message });
+    res.status(401).json({ message: error.message });
+  }
+}
+
 // for adminside
 async function getUserList(req, res) {
   try {
@@ -275,6 +297,7 @@ const UserController = {
   DiscordResponse,
   getUserList,
   getUser,
+  updateUser,
   getBalance,
 };
 

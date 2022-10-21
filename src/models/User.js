@@ -45,6 +45,14 @@ const userSchema=new Schema({
         type: Date,
         default: Date.now
     },
+    notify_email: {
+        type: Boolean,
+        default: false
+    },
+    marketing_email: {
+        type: Boolean,
+        default: false
+    },
     created_at:{
         type: Date,
         default: Date.now

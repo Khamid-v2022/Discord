@@ -5,6 +5,7 @@ import "../style/fonts.scss";
 import Guid from "./Guide/Guid";
 import MyLinks from "./MyLinks/MyLinks";
 import Replenish from "./Replenish/Replenish";
+import Profile from "./Profile/Profile";
 import { useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -28,7 +29,7 @@ export default function App() {
         //   navigate("/home");
         // }
       } catch (error) {
-        navigate("/");
+        // navigate("/");
       }
     }
     fetchBalance();
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/mylinks" element={<MyLinks />} />
         <Route path="/replenish" element={<Replenish />} />
         <Route path="/checkout" element={<Checkout />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </section>
   );
