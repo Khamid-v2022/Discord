@@ -43,13 +43,14 @@ export default function Replenish() {
 function PageContent() {
   // const stripe = useStripe();
   // const elements = useElements();
-
+  const [diamond, setDiamond] = useState(1);
   const [payment, setPayment] = useState({
     coins: 0,
     diamonds: 0,
     amount: 0,
     plan: "",
   });
+
   const payPopup = useRef();
   const closePopup = () => payPopup.current.close();
   const openPopup = () => payPopup.current.open();
@@ -58,7 +59,7 @@ function PageContent() {
     if (e.target.id === "basic") {
       setPayment({
         coins: 100,
-        diamonds: 5,
+        diamonds: 2,
         amount: 5,
         plan: "Basic",
       });
@@ -66,16 +67,22 @@ function PageContent() {
     }
   };
 
+  const diamondPay = async (e) => {
+    let update = {
+      diamonds: diamond,
+      amound: diamond * 1.5
+    }
+    let url = '/api/payment/diamond';
+
+    const response = await axios.post(url);
+    const clientSecret = response.data.client_secret;
+  }
+
   const submitHandler = async (e) => {
     e.preventDefault();
     let url = `/api/payment/${payment.plan}`;
-
-    // if (!stripe || !elements) {
-    //   return;
-    // }
-
+    
     const response = await axios.post(url);
-    console.log(response);
     const clientSecret = response.data.client_secret;
 
     // confirm payment status
@@ -84,8 +91,6 @@ function PageContent() {
     //     card: elements.getElement(),
     //   },
     // });
-
-    // console.log(paymentIntent)
   };
 
   // basic plan
@@ -249,32 +254,50 @@ function PageContent() {
             <h3>buy diamonds</h3>
             <img src={toplineImg} alt="topline" />
           </div>
+          {/* <form
+            className="content"
+            action="/api/payment/diamond"
+            method="POST"
+          > */}
+            <div className="content">
+              <div className="txt">
+                <span>Conversion:</span>
+                <h4>
+                  <span>$1.5 = 1</span>
+                  <DiamondSvg />
+                </h4>
+              </div>
 
-          <div className="content">
-            <div className="txt">
-              <span>Conversion:</span>
-              <h4>
-                <span>$1.5 = 1</span>
-                {/* <img src={diamondImg} alt="diamond" /> */}
-                <DiamondSvg />
-              </h4>
-            </div>
+              <div className="conversion">
+                <button type="button" onClick={() => {
+                  if(!parseInt(diamond)){
+                    setDiamond(1);
+                  }else{
+                    if(diamond >= 2){
+                      setDiamond(parseInt(diamond) - 1);
+                    }
+                  }
+                }}>
+                  <img src={minusImg} alt="leftArrow" />
+                </button>
+                <input type="number" value={diamond} onChange={e => setDiamond(e.target.value)}/>
+                <button type="button" onClick={() => {
+                  if(!parseInt(diamond)){
+                    setDiamond(1);
+                  }else{
+                    setDiamond(parseInt(diamond) + 1);
+                  }
+                }}>
+                  <img src={plusImg} alt="rightArrow" />
+                </button>
+              </div>
 
-            <div className="conversion">
-              <button>
-                <img src={minusImg} alt="leftArrow" />
+              <button className="submit" onClick={diamondPay}>
+                <img src={dollarImg} alt="dollar" />
+                <span>Buy ${diamond * 1.5}</span>
               </button>
-              <input type="number" />
-              <button>
-                <img src={plusImg} alt="rightArrow" />
-              </button>
             </div>
-
-            <button className="submit">
-              <img src={dollarImg} alt="dollar" />
-              <span>Buy $5</span>
-            </button>
-          </div>
+          {/* </form> */}
         </div>
       </div>
 

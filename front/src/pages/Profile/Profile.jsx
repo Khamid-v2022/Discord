@@ -61,7 +61,6 @@ function PageContent() {
     }
 
     const update = async () => {
-        // console.log("Update");
         let update = {
             id: user.id,
             notify_email: user.notify_email,

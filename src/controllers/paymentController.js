@@ -152,12 +152,40 @@ async function successfullPayment(req, res) {
 // TODO: have to set it up for diamond purchase
 async function diamond(req, res) {
   try {
-    const { amount } = req.body;
+    const { diamonds, amount } = req.body;
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amount * 100,
       currency: "usd",
       automatic_payment_methods: { enabled: true },
     });
+
+    // const discordUser = req.cookies.DiscordUser;
+    // const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+    // try {
+    //   // assigning package amount
+    //   const reward = await Earning.findOneAndUpdate(
+    //     { userCookie.userid },
+    //     {
+    //       $inc: { "purchased.diamonds": diamonds },
+    //     },
+    //     { new: true }
+    //   );
+  
+    //   // storing data
+    //   const packageDetails = new Payment({
+    //     trxid: transactionid,
+    //     userid: userid,
+    //     amount: dollar,
+    //     package: pkg,
+    //   });
+    //   const paymentResponse = await packageDetails.save();
+  
+    //   console.log("paymentResponse: ", paymentResponse);
+    //   console.log("purchased: ", reward);
+    // } catch (error) {
+    //   console.log("Fulfilling order: ", error.message);
+    // }
+
     res.json({ client_secret: paymentIntent.client_secret });
   } catch (error) {
     res.send({ message: error.message });
