@@ -39,7 +39,7 @@ export default function Sidebar() {
         setIsLogin(true);
       }
       else {
-        // navigate("/");
+        navigate("/");
       }
     }
     checkUser();

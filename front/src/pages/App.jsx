@@ -29,7 +29,7 @@ export default function App() {
         //   navigate("/home");
         // }
       } catch (error) {
-        // navigate("/");
+        navigate("/");
       }
     }
     fetchBalance();
