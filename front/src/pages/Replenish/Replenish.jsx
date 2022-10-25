@@ -52,7 +52,7 @@ function PageContent() {
   });
 
   const payPopup = useRef();
-  const closePopup = () => payPopup.current.close();
+  // const closePopup = () => payPopup.current.close();
   const openPopup = () => payPopup.current.open();
 
   const paynow = (e) => {

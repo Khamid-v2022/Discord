@@ -11,21 +11,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 export default function Profile() {
-  return (
-    <section id="profile">
-      <div className="container">
-        <div className="content">
-          <Sidebar />
-          <div className="main">
-            <Header />
-            <PageContent />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+    return (
+        <section id="profile">
+            <div className="container">
+                <div className="content">
+                    <Sidebar />
+                    <div className="main">
+                        <Header />
+                        <PageContent />
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
 }
-
 
 function PageContent() {
     const [user, setUser] = useState({
@@ -37,14 +36,6 @@ function PageContent() {
         notify_email: false,
         marketing_email: false
     });
-    // const [user, setUser] = useState({
-    //     avatar: avatarImg,
-    //     email: "khamid.webdev@gmail.com",
-    //     name: "James",
-    //     created_at: "2022-10-15T05:58:24.046Z",
-    //     notify_email: true,
-    //     marketing_email: false
-    // });
 
     const switch_notify = () => {
         setUser((prevState) => ({
@@ -78,7 +69,6 @@ function PageContent() {
     useEffect(() => {
         async function checkUser() {
             const response = await axios.get("/api/user/getuser");
-            console.log("User Info:", response);
             
             if (response.status !== 401) {
                 if(response.data.avatar)
@@ -94,7 +84,7 @@ function PageContent() {
             }
         }
         checkUser();
-      }, []);
+    }, []);
     
  
     return (

@@ -65,7 +65,6 @@ export async function DiscordResponse(req, res) {
       );
       res.cookie("DiscordUser", userToken, {
         httpOnly: true,
-        secure: process.env.ENVIRONMENT === "production",
         SameSite: true,
       });
 
@@ -95,7 +94,7 @@ async function userLogin(oauthData) {
       });
 
       if (isExist) {
-        // update last login info, avatar
+        // update last login info
         const updateUser = { "last_logged_at":  new Date().toJSON(), avatar: discordUser.avatar };
         const result1 = await User.findOneAndUpdate(
           { userid: isExist.userid },
@@ -104,7 +103,7 @@ async function userLogin(oauthData) {
             new: true,
           }
         );
-
+        
         return isExist;
       } else {
         const userData = new User({
@@ -233,7 +232,7 @@ async function getBalance(req, res) {
 async function getUser(req, res) {
   try {
     const discordUser = req.cookies.DiscordUser;
-    
+
     console.log(discordUser, process.env.API_TOKEN);
     
     const data = jwt.verify(discordUser, process.env.API_TOKEN);

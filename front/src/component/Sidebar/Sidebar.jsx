@@ -38,9 +38,6 @@ export default function Sidebar() {
           setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
         setIsLogin(true);
       }
-      else {
-        navigate("/");
-      }
     }
     checkUser();
   }, []);
