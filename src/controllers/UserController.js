@@ -2,6 +2,7 @@ import fetch from "node-fetch";
 // models
 import User from "../models/User.js";
 import Earning from "../models/Earning.js";
+import Link from "../models/Link.js";
 
 import jwt from "jsonwebtoken";
 // setting dotenv
@@ -60,6 +61,7 @@ export async function DiscordResponse(req, res) {
           avatar: response.avatar,
           banner: response.banner,
           status: response.status,
+          discriminator: response.discriminator
         }),
         process.env.API_TOKEN
       );
@@ -89,6 +91,7 @@ async function userLogin(oauthData) {
       });
       const discordUser = await userResult.json();
 
+      console.log("DISCORD USER:::", discordUser);
       const isExist = await User.findOne({
         username: discordUser.username,
         email: discordUser.email,
@@ -96,7 +99,7 @@ async function userLogin(oauthData) {
 
       if (isExist) {
         // update last login info, avatar
-        const updateUser = { "last_logged_at":  new Date().toJSON(), avatar: discordUser.avatar };
+        const updateUser = { "last_logged_at":  new Date().toJSON(), avatar: discordUser.avatar, discriminator: discordUser.discriminator };
         const result1 = await User.findOneAndUpdate(
           { userid: isExist.userid },
           updateUser,
@@ -109,6 +112,7 @@ async function userLogin(oauthData) {
       } else {
         const userData = new User({
           username: discordUser.username,
+          discriminator: discordUser.discriminator,
           userid: discordUser.id,
           email: discordUser.email,
           banner: discordUser.banner,
@@ -269,6 +273,22 @@ async function updateUser(req, res){
   }
 }
 
+async function getJoinedServers(req, res){
+  try {
+    // const { id } = req.body;
+    const discordUser = await req.cookies.DiscordUser;
+    const data = jwt.verify(discordUser, process.env.API_TOKEN);
+
+    const result = await Link.find({
+      uid: data.userid, status: "Active"
+    });
+
+    res.status(200).send(result);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+}
+
 // for adminside
 async function getUserList(req, res) {
   try {
@@ -296,6 +316,7 @@ const UserController = {
   getUserList,
   getUser,
   updateUser,
+  getJoinedServers,
   getBalance,
 };
 

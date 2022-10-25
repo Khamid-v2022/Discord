@@ -5,8 +5,12 @@ const userSchema=new Schema({
     username: {
         type: String,
         required: true,
-        uniqe: true,
+        // uniqe: true,
         sparse: true,
+    },
+    discriminator: {
+        type: String,
+        required: true,
     },
     userid: {
         type: String,
@@ -18,6 +22,7 @@ const userSchema=new Schema({
     email: {
         type: String,
         required: true,
+        uniqe: true,
     },
     banner: {
         type: String,

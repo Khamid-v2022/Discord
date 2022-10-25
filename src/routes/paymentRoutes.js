@@ -9,7 +9,7 @@ router.post("/webhook", PaymentController.webhook);
 
 router.post("/checkoutsession", PaymentController.checkoutSession);
 router.post("/success", PaymentController.successfullPayment);
-
+router.get("/getPaymentHistory", PaymentController.getPaymentHistory);
 router.post("/diamond", PaymentController.diamond);
 
 export default router;

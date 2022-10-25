@@ -6,14 +6,18 @@ import Guid from "./Guide/Guid";
 import MyLinks from "./MyLinks/MyLinks";
 import Replenish from "./Replenish/Replenish";
 import Profile from "./Profile/Profile";
+import Billing from "./Billing/Billing";
+
 import { useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { updateBalance } from "../redux/reducers/userBalance.js";
+import { updateUserinfo } from "../redux/reducers/userInfo.js";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import Checkout from "./Checkout/checkout";
 import Home from "./Home/home";
+import { useEffect } from "react";
 
 export default function App() {
   const { pathname } = useLocation();
@@ -23,13 +27,13 @@ export default function App() {
   useLayoutEffect(() => {
     async function fetchBalance() {
       try {
-        const response = await axios.get("/api/user/getbalance");
-        dispatch(updateBalance(response.data));
-        // if (pathname === "/") {
-        //   navigate("/home");
-        // }
+        const response2 = await axios.get("/api/user/getbalance");
+        dispatch(updateBalance(response2.data));
+        if (pathname === "/") {
+          navigate("/home");
+        }
       } catch (error) {
-        navigate("/");
+        // navigate("/");
       }
     }
     fetchBalance();
@@ -45,6 +49,7 @@ export default function App() {
         <Route path="/replenish" element={<Replenish />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/billing" element={<Billing />} />
       </Routes>
     </section>
   );

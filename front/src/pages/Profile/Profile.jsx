@@ -32,7 +32,7 @@ function PageContent() {
         avatar: avatarImg,
         email: "",
         name: "",
-        created_at: "T",
+        joinedServers: "",
         notify_email: false,
         marketing_email: false
     });
@@ -66,24 +66,30 @@ function PageContent() {
         }
     }
 
-    useEffect(() => {
-        async function checkUser() {
-            const response = await axios.get("/api/user/getuser");
+    useEffect(async () => {
+        let session = sessionStorage.getItem("userInfo");
+        if(session){
+            const user_info = JSON.parse(session);
+            setUser((prevState) => ({
+                ...prevState,
+                id: user_info.userInfo._id,
+                avatar:`https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
+                name: user_info.userInfo.username,
+                discriminator: user_info.userInfo.discriminator,
+                email: user_info.userInfo.email,
+                notify_email: user_info.userInfo.notify_email,
+                marketing_email: user_info.userInfo.marketing_email
+            }))
             
-            if (response.status !== 401) {
-                if(response.data.avatar)
-                    setUser({
-                        id: response.data._id,
-                        avatar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`,
-                        name: response.data.username,
-                        email: response.data.email,
-                        created_at: response.data.created_at,
-                        notify_email: response.data.notify_email,
-                        marketing_email: response.data.marketing_email
-                    })
-            }
+            // get Joined Server count
+
+            const response = await axios.get("/api/user/getJoinedServers");
+            setUser((prevState) => ({
+                ...prevState,
+                joinedServers: response.data.length
+            }))
+            // console.log(response);
         }
-        checkUser();
     }, []);
     
  
@@ -94,7 +100,7 @@ function PageContent() {
             <div className="thumbnail">
                 <img src={user.avatar} alt="server" />
                 <div className="profile-name">
-                    {user.name}
+                    {user.name}<span className="user-index">{user.discriminator ? "#" + user.discriminator : ""}</span>
                 </div>
             </div>
             
@@ -109,7 +115,7 @@ function PageContent() {
                 <div className="form-group">
                     <label htmlFor="joined">Server Joined</label>
                     <div className="input-group">
-                        <input placeholder="Joined Date" type="text" value={user.created_at.split("T")[0]} readOnly id="joined"/>
+                        <input placeholder="Joined Servers" type="text" value={user.joinedServers} readOnly id="joined"/>
                     </div>
                 </div>
 

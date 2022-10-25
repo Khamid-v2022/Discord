@@ -192,12 +192,29 @@ async function diamond(req, res) {
   }
 }
 
+async function getPaymentHistory(req, res){
+  try {
+    const discordUser = await req.cookies.DiscordUser;
+    const data = jwt.verify(discordUser, process.env.API_TOKEN);
+
+    const result = await Payment.find({
+      userid: data.userid
+    }).sort({ trx_time: -1 });
+
+    res.status(200).send(result);
+
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+}
+
 const PaymentController = {
   checkoutSession,
   config,
   successfullPayment,
   diamond,
   webhook,
+  getPaymentHistory
 };
 
 export default PaymentController;

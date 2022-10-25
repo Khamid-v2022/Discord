@@ -31,13 +31,35 @@ export default function Sidebar() {
 
   useEffect(() => {
     async function checkUser() {
-      const response = await axios.get("/api/user/getuser");
-      console.log(response);
-      if (response.status !== 401) {
-        if(response.data.avatar)
-          setUser({avtar:`https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`})
-        setIsLogin(true);
+      let userInfo = sessionStorage.getItem("userInfo");
+
+      if(!userInfo){
+        const response1 = await axios.get("/api/user/getuser");
+
+        if (response1.status !== 401) {
+          userInfo = {
+            isLogin: true,
+            userInfo: response1.data
+          };
+
+          sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
+
+          setUser({
+            avtar: `https://cdn.discordapp.com/avatars/${response1.data?.userid}/${response1.data?.avatar}.png?size=128`,
+          });
+          setIsLogin(true);
+        } else {
+          navigate("/");
+        }
+      } 
+      else {
+          const user_info = JSON.parse(userInfo);
+          setUser({
+            avtar: `https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
+          });
+          setIsLogin(true);
       }
+      
     }
     checkUser();
   }, []);
@@ -84,6 +106,14 @@ export default function Sidebar() {
 }
 
 function LoggedIn({user}) {
+  let navigate = useNavigate();
+
+  const logout = () => {
+    sessionStorage.removeItem('userInfo');
+    window.location.href = '/logout';
+    // navigate("/logout");
+  }
+
   return (
     <div className="avatar">
       <img src={user.avtar} alt="avatar" />
@@ -105,7 +135,10 @@ function LoggedIn({user}) {
           <a className="dollar" href="/replenish">
             <Dollar />
           </a>
-          <a href="/logout" className="logout">
+          {/* <a href="/logout" className="logout">
+            <img src={logoutImg} alt="logout" />
+          </a> */}
+          <a className="logout" onClick={() => logout()}>
             <img src={logoutImg} alt="logout" />
           </a>
         </div>

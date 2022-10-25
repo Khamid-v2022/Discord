@@ -30,13 +30,13 @@ export default function Header() {
 
   useEffect(() => {
     async function checkUser() {
-      const response = await axios.get("/api/user/getuser");
-      if (response.status != 401) {
+      let session = sessionStorage.getItem("userInfo");
 
-        if(response.data.avatar)
-          setUser({
-            avtar: `https://cdn.discordapp.com/avatars/${response.data?.userid}/${response.data?.avatar}.png?size=128`,
-          });
+      if(session){
+        const user_info = JSON.parse(session);
+        setUser({
+          avtar: `https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
+        });
         setIsLogin(true);
       }
     }
