@@ -9,6 +9,8 @@ router.post("/add", InviteController.AddLink);
 router.post("/update", InviteController.UpdateCampaignStatus);
 router.get("/assign", InviteController.AssignInvite);
 
+router.get("/getJoinedServers", InviteController.getJoinedServers);
+
 
 
 // router.get("/timer", InviteController.timer);

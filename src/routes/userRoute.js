@@ -29,7 +29,6 @@ router.get("/", UserController.DiscordResponse);
 
 router.get("/getuser", UserController.getUser);
 router.post("/updateuser", UserController.updateUser);
-router.get("/getJoinedServers",  UserController.getJoinedServers);
 router.get("/getbalance", UserController.getBalance);
 router.get("/guilds", UserController.getGuilds);
 router.post("/checkguildmember", UserController.checkGuildMember);

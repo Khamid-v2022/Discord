@@ -83,7 +83,7 @@ function PageContent() {
             
             // get Joined Server count
 
-            const response = await axios.get("/api/user/getJoinedServers");
+            const response = await axios.get("/api/invite/getJoinedServers");
             setUser((prevState) => ({
                 ...prevState,
                 joinedServers: response.data.length
@@ -113,18 +113,18 @@ function PageContent() {
                     </div>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="joined">Server Joined</label>
+                    <label htmlFor="joined"><a href="/history">Server Joined</a></label>
                     <div className="input-group">
                         <input placeholder="Joined Servers" type="text" value={user.joinedServers} readOnly id="joined"/>
                     </div>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group flex-row">
                     <label htmlFor="joined">Notifications Email</label>
                     <Switch onChange={switch_notify} checked={user.notify_email}/>               
                 </div>
 
-                <div className="form-group">
+                <div className="form-group flex-row">
                     <label htmlFor="joined">Marketing Emails</label>
                     <Switch onChange={switch_marketing} checked={user.marketing_email}/>   
                 </div>

@@ -1,15 +1,14 @@
 import Sidebar from "../../component/Sidebar/Sidebar";
 import Header from "../../component/Header/Header";
 
-import "./billing.scss";
+import "./history.scss";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 import useWindowDim from "../../hooks/useWindowDim";
 
-export default function Billing() {
+export default function History() {
     return (
-        <section id="billing">
+        <section id="history">
             <div className="container">
                 <div className="content">
                     <Sidebar />
@@ -24,6 +23,7 @@ export default function Billing() {
 }
 
 function PageContent() {
+
     let { width } = useWindowDim();
 
     const [list, setList] = useState([]);
@@ -31,16 +31,23 @@ function PageContent() {
 
     useEffect(async () => {
         setLoading(true);
-        const response = await axios.get("/api/payment/getPaymentHistory");
-        setList(response.data);    
+        
+        const response = await axios.get("/api/invite/getJoinedServers");
+        setList(response.data); 
+        console.log(response.data);
+        
         setLoading(false);
     }, []);
     
  
     return (
-        <section className="billing-content">
-            <h2>Billing</h2>
-            {width > 426 ? ( <Table data={list} loading={loading} /> ) : (<MTable data={list} loading={loading} />)}
+        <section className="history-content">
+            <h2>History</h2>
+            {width > 426 ? (
+                <Table data={list} loading={loading} />
+            ) : (
+                <MTable data={list} loading={loading} />
+            )}
         </section>
     );
 }
@@ -58,12 +65,10 @@ function Table({ data, loading}) {
                     <table>
                         <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Billing Date</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                                <th>Plan</th>
                                 <th></th>
+                                <th>Server Name</th>
+                                <th>Link</th>
+                                <th>Joined Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,6 +97,34 @@ function Table({ data, loading}) {
     )
 }
 
+function TableRow({ item, index}){
+    if(item.invite.length === 0)
+        return;
+    let date = new Date(item.join_date);
+    let options = {  
+        year: "numeric", month: "short", day: "numeric" 
+    };  
+    
+    const icon = item.invite[0].iconId ? `https://cdn.discordapp.com/icons/${item.invite[0]?.serverId}/${item.invite[0]?.iconId}.png?size=512` : false;
+    
+    return (
+        <tr>
+            <td>
+                { icon ? (<img src={icon} className="server-icon" />) : ("")}
+            </td>
+            <td>
+                { item.invite[0].serverName} 
+            </td>
+            <td>
+                <a href={ item.invite[0].link } target="_blank">{ item.invite[0].link }</a>
+            </td>
+            <td>
+                {date.toDateString("en-us", options)}
+            </td>
+        </tr>
+    )
+}
+
 function MTable({ data, loading}) {
     let index = data.length + 1;
     return (
@@ -105,11 +138,9 @@ function MTable({ data, loading}) {
                     <table>
                         <thead>
                             <tr>
-                                <th>Invoice</th>
-                                <th>Status</th>
-                                <th>Amount</th>
-                                <th>Plan</th>
                                 <th></th>
+                                <th>Server Name</th>
+                                <th>Joined Date</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -138,61 +169,26 @@ function MTable({ data, loading}) {
     )
 }
 
-function TableRow({ item, index}){
-
-    let date = new Date(item.trx_time);
-    let options = {  
-        year: "numeric", month: "short", day: "numeric" 
-    };  
-    return (
-        <tr>
-            <td>
-                <span>Invoice #{index} - <span className="gray-span">{date.toDateString("en-us", options)}</span> </span>
-            </td>
-            <td>{date.toDateString("en-us", options)}</td>
-            <td>
-                <span className="paid-status">
-                    Paid
-                </span>
-            </td>
-            <td>
-                <span className="gray-span">USD</span> ${item.amount}
-            </td>
-            <td>
-                {item.pakage}
-            </td>
-            <td>
-                <a href="#">Download</a>
-            </td>
-        </tr>
-    )
-}
-
-
 function MTableRow({ item, index}){
-
-    let date = new Date(item.trx_time);
+    if(item.invite.length === 0)
+        return;
+    let date = new Date(item.join_date);
     let options = {  
         year: "numeric", month: "short", day: "numeric" 
     };  
+    
+    const icon = item.invite[0].iconId ? `https://cdn.discordapp.com/icons/${item.invite[0]?.serverId}/${item.invite[0]?.iconId}.png?size=512` : false;
+    
     return (
         <tr>
             <td>
-                <span>Invoice #{index} - <span className="gray-span">{date.toDateString("en-us", options)}</span> </span>
+                { icon ? (<img src={icon} className="server-icon" />) : ("")}
             </td>
             <td>
-                <span className="paid-status">
-                    Paid
-                </span>
+                <a href={ item.invite[0].link } target="_blank">{ item.invite[0].serverName} </a>
             </td>
             <td>
-                <span className="gray-span">USD</span> ${item.amount}
-            </td>
-            <td>
-                {item.pakage}
-            </td>
-            <td>
-                <a href="#">Download</a>
+                {date.toDateString("en-us", options)}
             </td>
         </tr>
     )

@@ -2,7 +2,6 @@ import fetch from "node-fetch";
 // models
 import User from "../models/User.js";
 import Earning from "../models/Earning.js";
-import Link from "../models/Link.js";
 
 import jwt from "jsonwebtoken";
 // setting dotenv
@@ -273,22 +272,6 @@ async function updateUser(req, res){
   }
 }
 
-async function getJoinedServers(req, res){
-  try {
-    // const { id } = req.body;
-    const discordUser = await req.cookies.DiscordUser;
-    const data = jwt.verify(discordUser, process.env.API_TOKEN);
-
-    const result = await Link.find({
-      uid: data.userid, status: "Active"
-    });
-
-    res.status(200).send(result);
-  } catch (error) {
-    res.status(401).json({ message: error.message });
-  }
-}
-
 // for adminside
 async function getUserList(req, res) {
   try {
@@ -316,7 +299,6 @@ const UserController = {
   getUserList,
   getUser,
   updateUser,
-  getJoinedServers,
   getBalance,
 };
 

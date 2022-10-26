@@ -29,11 +29,11 @@
         width: 215px;
     }
     .thumbnail {
-        width: 150px;
+        text-align: center;
         margin: 0px auto;
         img {
-            height: 100%;
-            width: 100%;
+            height: 150px;
+            width: 150px;
             border-radius: 100%;
         }
         div.profile-name {
@@ -61,6 +61,10 @@
                 color: white;
                 font-size: 20px;
                 padding: 10px 0;
+                a {
+                    color: #66aa18;
+                    text-decoration: none;
+                }
             }
 
             .input-group{
@@ -143,6 +147,86 @@
             }
             &:hover {
                 opacity: 1;
+            }
+        }
+    }
+}
+
+@media all and (max-width: 426px) {
+
+    .profile-content {
+        width: 100%;
+        padding: 15px 0;
+        h2 {
+            font-size: 18px;
+            line-height: 24px;
+            margin-left: 0;
+            order: 1;
+            width: auto;
+        }
+        .thumbnail {
+            text-align: center;   
+            img {
+                width: 75px;
+                height: 75px;
+            }     
+            div.profile-name {
+                font-size: 16px;
+                .user-index {
+                    font-size: 14px;
+                    margin-left: 4px;
+                }
+            }
+        }
+    
+        .details {
+            width: 100%;
+            margin: 20px auto;
+    
+            .form-group {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 20px;
+                flex-direction: column;
+                label {
+                    min-width: unset;
+                    font-size: 14px;
+                    padding: 4px 0;
+                }
+    
+                .input-group{
+                    padding: 5px;
+                    position: relative;
+                    height: 30px;
+                    margin-left: 0px;
+                    margin-top: 10px;
+                    &:before {
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                    }
+                    input {
+                        padding: 0px;
+                        font-size: 14px;
+                        line-height: 10px;
+                    }
+                }
+            }
+            .form-group.flex-row {
+                flex-direction: row;
+            }
+        }
+    
+        .actions {
+            margin-bottom: 50px;
+            width: 100%;
+            .update-btn {
+                font-size: 15px;
+                height: 32px;
+                padding: 0px 15px;
+                opacity: 0.8;
+                &:before {
+                    border: 1px solid rgba(255, 255, 255, 0.12);
+                }
+              
             }
         }
     }

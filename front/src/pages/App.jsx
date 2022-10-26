@@ -7,6 +7,7 @@ import MyLinks from "./MyLinks/MyLinks";
 import Replenish from "./Replenish/Replenish";
 import Profile from "./Profile/Profile";
 import Billing from "./Billing/Billing";
+import History from "./History/History";
 
 import { useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -33,7 +34,7 @@ export default function App() {
           navigate("/home");
         }
       } catch (error) {
-        // navigate("/");
+        navigate("/");
       }
     }
     fetchBalance();
@@ -50,6 +51,7 @@ export default function App() {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/billing" element={<Billing />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </section>
   );

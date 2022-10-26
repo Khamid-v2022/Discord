@@ -23,6 +23,10 @@ const linkSchema = new Schema({
     type: Date,
     default: Date.now() + 1000 * 60, //60+ Seconds
   },
+  join_date: {
+    type: Date,
+    default: null
+  }
 });
 
 const Link = mongoose.model("link", linkSchema);

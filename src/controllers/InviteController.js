@@ -411,7 +411,7 @@ async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
     // if joined
     const linkJoin = await Link.findOneAndUpdate(
       { uid: _id, "_id": doc },
-      { $set: { status: "Complete" } },
+      { $set: { status: "Complete", join_date: Date.now() } },
       { new: true }
     );
     // giving reward to the user
@@ -477,12 +477,37 @@ async function checkstatus(req, res) {
   }
 }
 
+async function getJoinedServers(req, res){
+  try {
+    const discordUser = await req.cookies.DiscordUser;
+    const data = jwt.verify(discordUser, process.env.API_TOKEN);
+
+    const result = await Link.aggregate([ 
+      { "$match": { uid: data.userid, status: "Complete" }},
+      {
+        $lookup: {
+          from: 'invites',
+          localField: 'serverId',
+          foreignField: 'serverId',
+          as: 'invite',
+        }
+      }
+    ]);
+
+    res.status(200).send(result);
+    console.log("RESULT: ", result);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+}
+
 const InviteController = {
   GetLinks,
   AddLink,
   UpdateCampaignStatus,
   AssignInvite,
   checkstatus,
+  getJoinedServers
 };
 
 export default InviteController;

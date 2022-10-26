@@ -132,7 +132,7 @@ function LoggedIn({user}) {
           <a className="user" href="/profile">
             <User />
           </a>
-          <a className="dollar" href="/replenish">
+          <a className="dollar" href="/billing">
             <Dollar />
           </a>
           {/* <a href="/logout" className="logout">
