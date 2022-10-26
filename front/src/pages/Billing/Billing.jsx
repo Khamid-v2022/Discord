@@ -1,11 +1,19 @@
 import Sidebar from "../../component/Sidebar/Sidebar";
 import Header from "../../component/Header/Header";
+// import Invoice from "./Invoice";
 
 import "./billing.scss";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
 import useWindowDim from "../../hooks/useWindowDim";
+
+import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { PDFDownloadLink } from "@react-pdf/renderer";
+
+let options = {  
+    year: "numeric", month: "short", day: "numeric" 
+}; 
 
 export default function Billing() {
     return (
@@ -40,6 +48,12 @@ function PageContent() {
     return (
         <section className="billing-content">
             <h2>Billing</h2>
+            {/* <PDFDownloadLink
+                    document={<Invoices list={list} />}
+                    fileName={"Invoice.pdf" }
+            >
+                Download
+            </PDFDownloadLink> */}
             {width > 426 ? ( <Table data={list} loading={loading} /> ) : (<MTable data={list} loading={loading} />)}
         </section>
     );
@@ -139,11 +153,14 @@ function MTable({ data, loading}) {
 }
 
 function TableRow({ item, index}){
-
+    console.log(item);
     let date = new Date(item.trx_time);
-    let options = {  
-        year: "numeric", month: "short", day: "numeric" 
-    };  
+     
+
+    const downloadPdf = async () => {
+        console.log("download");
+    }
+
     return (
         <tr>
             <td>
@@ -162,7 +179,12 @@ function TableRow({ item, index}){
                 {item.pakage}
             </td>
             <td>
-                <a href="#">Download</a>
+                <PDFDownloadLink
+                    document={<Invoice data={item} index = {index} />}
+                    fileName={"Invoice #" + index + ".pdf" }
+                >
+                    Download
+                </PDFDownloadLink>
             </td>
         </tr>
     )
@@ -192,8 +214,70 @@ function MTableRow({ item, index}){
                 {item.pakage}
             </td>
             <td>
-                <a href="#">Download</a>
+                <PDFDownloadLink
+                    document={<Invoice data={item} />}
+                    fileName={"Invoice #" + index + ".pdf" }
+                >
+                    Download
+                </PDFDownloadLink>
             </td>
         </tr>
     )
 }
+
+
+const styles = StyleSheet.create({
+    page: {
+      backgroundColor: '#E4E4E4'
+    },
+    table: {
+      margin: 10,
+      padding: 10,
+      flexGrow: 1
+    },
+    section: {
+        padding: 15
+    },
+    row: {
+        display: "flex",
+        flexDirection: "row",
+    },
+    cell: {
+        padding: 4,
+        border: "1px solid gray"
+    }
+});
+  
+  // Create Document Component
+const Invoice = ({data, index}) => (
+    <Document>
+        <Page size="A4" style={styles.page}>
+            <View style={styles.section}>
+                <Text>Invoice #{index}</Text>
+                <Text>Amount: USD ${data.amount}</Text>
+                <Text>Billing Date: {new Date(data.trx_time).toDateString("en-us", options)}</Text>
+                <Text>Plan: {data.pakage}</Text>
+            </View>
+        </Page>
+    </Document>
+);
+
+const Invoices = ({list}) => (
+    <Document>
+        <Page size="A4" style={styles.page}>
+            {
+                list.map((item, index) => {
+                    <>
+                    {/* <View style={styles.row}> */}
+                        <Text style={styles.cell}>Invoice #{list.length - index}</Text>
+                        <Text style={styles.cell}>Amount: USD ${item.amount}</Text>
+                        <Text style={styles.cell}>Billing Date: {new Date(item.trx_time).toDateString("en-us", options)}</Text>
+                        <Text style={styles.cell}>Plan: {item.pakage}</Text>
+                    {/* </View> */}
+                    </>
+                })
+            }
+            
+        </Page>
+    </Document>
+);
