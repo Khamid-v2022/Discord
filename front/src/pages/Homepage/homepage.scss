@@ -52,6 +52,161 @@
     display: flex;
     flex-direction: row;
 
+    .table {
+      width: 97%;
+      margin-left: 30px;
+      
+      table {
+        margin-top: 30px;
+        width: 100%;
+        border-collapse: collapse;
+        tr {
+          align-items: center;
+          display: grid;
+          grid-template-columns: 10% 40% 30% 10% 10%;
+          td:first-child {
+            padding: 0px;
+            height: 54px;
+            width: 100px;
+          }
+        }
+        thead tr {
+          margin: 8px 0px;
+          text-align: left;
+          th {
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 20px;
+            color: #fff;
+            opacity: .32;
+          }
+        }
+
+        tbody {
+          color: #fff;
+          tr {
+            text-align: left;
+            position: relative;
+            z-index: 1;
+            margin: 16px 0;
+            height: 54px;
+
+            &::before{
+              z-index: -1;
+              background-color: rgba(255, 255, 255, 0.04);
+              border: 2px solid rgba(255, 255, 255, 0.08);
+              transform: skewX(-17deg);
+              position: absolute;
+              content: "";
+              left: 0px;
+              top: 0px;
+              right: 0px;
+              bottom: 0px;
+              width: 100%;
+              height: 100%;
+              border-radius: 8px;
+            }
+
+            &:hover::before {
+              background-color: rgba(255, 255, 255, .1);
+            }
+
+            &:hover td:first-child span::before {
+              background-color: #76c31c;
+            }
+
+            td:first-child span {
+              padding: 0px 16px;
+              position: relative;
+              z-index: 1;
+              display: block;
+              width: 84px;
+              padding: 17px 22px;
+              font-size: 18px;
+              text-align: center;
+              
+              &::before {
+                z-index: -1;
+                background-color: #254302a1;
+                border: 2px solid #76c31c;
+                transform: skewX(-17deg);
+                position: absolute;
+                content: "";
+                left: 0px;
+                top: 0px;
+                right: 0px;
+                bottom: 0px;
+                width: 100%;
+                height: 100%;
+                border-radius: 8px;
+              }
+
+              &:hover::before {
+                background-color: #76c31c;
+              }
+            }
+
+            td img.server-icon {
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              vertical-align:middle;
+              display: inline;
+              margin-left: 10px;
+            }
+            .green {
+              color: #76c31c;
+            }
+
+            .actions {
+              padding: 0px;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: space-evenly;
+              
+              button {
+                cursor: pointer;
+                background-color: transparent;
+                border: none;
+                outline: none;
+                padding: 0px 16px;
+                position: relative;
+                z-index: 1;
+                display: block;
+                width: 100%;
+                padding: 16px 22px;
+                font-size: 18px;
+                text-align: center;
+                color: white;
+                font-family: Russo One,sans-serif;
+                
+                &::before {
+                  z-index: -1;
+                  background-color: #254302a1;
+                  border: 2px solid #76c31c;
+                  transform: skewX(-17deg);
+                  position: absolute;
+                  content: "";
+                  left: 0px;
+                  top: 0px;
+                  right: 0px;
+                  bottom: 0px;
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 8px;
+                }
+  
+                &:hover::before {
+                  background-color: #76c31c;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
     #server_joining {
       width: 40%;
       min-width: 560px;

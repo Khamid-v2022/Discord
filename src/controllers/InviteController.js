@@ -48,7 +48,9 @@ async function StarsCampain(req, res) {
     if(server){
       if (userStars >= target) {
         // check duplicate link
-        const is_exist = await Invite.find({link:link, $or: [{status:{ $ne: "Complete"}}, {status:{ $ne: "Refunded"}}]});
+        const is_exist = await Invite.find({link:link, $or: [{status:{ $eq: "Active"}}, {status:{ $eq: "Inactive"}}, {status:{ $eq: "Paused"}}]});
+        console.log("EXIST:", is_exist);
+
         if(is_exist.length > 0){
           res.status(200).json({
             Message: "Invite Link duplicated!",
@@ -139,7 +141,8 @@ async function DiamondsCampain(req, res) {
     if(server){
       if (userStars >= target && userDiamonds >= 1) {
         // check duplicate link
-        const is_exist = await Invite.find({userid: earnings.userid, link:link, status:{ $ne: "Complete"} });
+        // const is_exist = await Invite.find({userid: earnings.userid, link:link, status:{ $ne: "Complete"} });
+        const is_exist = await Invite.find({link:link, $or: [{status:{ $eq: "Active"}}, {status:{ $eq: "Inactive"}}, {status:{ $eq: "Paused"}}]});
         if(is_exist.length > 0){
           res.status(200).json({
             Message: "Invite Link duplicated!",
@@ -246,6 +249,60 @@ async function GetLinks(req, res) {
   }
 }
 
+// // assigning link for 60 seconds
+// async function AssignInvite(req, res) {
+//   try {
+//     const oauthData = await req.cookies.access_token;
+//     // discrod userid from our db
+//     const discordUser = req.cookies.DiscordUser;
+//     const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+//     const _id = userCookie.userid;
+
+//     // res.send(invite);
+//     const { message, invite, joiner } = await checkLink(_id, oauthData);
+
+//     if (message) {
+//       res.status(204).json({ message });
+//     } else {
+//       const achieved = await invite.target.achieved;
+//       const newAchieved = achieved + 1;
+//       const updateInvite = { "target.achieved": newAchieved };
+//       // increasing acheivment of campaign
+//       const inviteData = await Invite.findOneAndUpdate(
+//         { _id: invite._id },
+//         { $set: updateInvite },
+//         { new: true }
+//       );
+
+//       // assigning link to user for 60 sec
+//       const linking = await new Link({
+//         uid: _id,
+//         inviteId: invite._id,
+//         serverId: invite.serverId,
+//       });
+//       const response = await linking.save();
+ 
+//       // callback to check user existence after 60 seconds
+//       new Cron("59 * * * * *", { maxRuns: 1 }, () => {
+//         checkAssigningStatus(
+//           _id,
+//           response._id,
+//           oauthData,
+//           invite.serverId,
+//           inviteData
+//         );
+//       });
+
+//       res.status(200).send({
+//         invite: inviteData,
+//         joiner: { ...response._doc, remaining: -59 },
+//       });
+//     }
+//   } catch (error) {
+//     res.status(401).json({ AssignInvite: error.message });
+//   }
+// }
+
 // assigning link for 60 seconds
 async function AssignInvite(req, res) {
   try {
@@ -255,48 +312,98 @@ async function AssignInvite(req, res) {
     const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
     const _id = userCookie.userid;
 
-    // res.send(invite);
-    const { message, invite, joiner } = await checkLink(_id, oauthData);
+    const id = req.query.id;
+    const invite = await Invite.findOne({  
+      _id: id.toString()
+    });
 
-    if (message) {
-      res.status(204).json({ message });
-    } else {
-      const achieved = await invite.target.achieved;
-      const newAchieved = achieved + 1;
-      const updateInvite = { "target.achieved": newAchieved };
-      // increasing acheivment of campaign
-      const inviteData = await Invite.findOneAndUpdate(
-        { _id: invite._id },
-        { $set: updateInvite },
-        { new: true }
-      );
+    console.log(invite);
+  
+    const achieved = await invite.target.achieved;
+    const newAchieved = achieved + 1;
+    const updateInvite = { "target.achieved": newAchieved };
+    // increasing acheivment of campaign
+    const inviteData = await Invite.findOneAndUpdate(
+      { _id: invite._id },
+      { $set: updateInvite },
+      { new: true }
+    );
 
-      // assigning link to user for 60 sec
-      const linking = await new Link({
-        uid: _id,
-        inviteId: invite._id,
-        serverId: invite.serverId,
-      });
-      const response = await linking.save();
+    // assigning link to user for 60 sec
+    const linking = await new Link({
+      uid: _id,
+      inviteId: invite._id,
+      serverId: invite.serverId,
+    });
+    const response = await linking.save();
  
-      // callback to check user existence after 60 seconds
-      new Cron("59 * * * * *", { maxRuns: 1 }, () => {
-        checkAssigningStatus(
-          _id,
-          response._id,
-          oauthData,
-          invite.serverId,
-          inviteData
-        );
-      });
+    // callback to check user existence after 60 seconds
+    new Cron("59 * * * * *", { maxRuns: 1 }, () => {
+      checkAssigningStatus(
+        _id,
+        response._id,
+        oauthData,
+        invite.serverId,
+        inviteData
+      );
+    });
 
-      res.status(200).send({
-        invite: inviteData,
-        joiner: { ...response._doc, remaining: -59 },
-      });
-    }
+    res.status(200).send({
+      invite: inviteData,
+      joiner: { ...response._doc, remaining: -59 },
+    });
   } catch (error) {
     res.status(401).json({ AssignInvite: error.message });
+  }
+}
+
+async function getAvailableServers(req, res) {
+  try {
+    const oauthData = await req.cookies.access_token;
+    // discrod userid from our db
+    const discordUser = req.cookies.DiscordUser;
+    const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+    const _id = userCookie.userid;
+
+    const invite = await Invite.find(
+      {
+        userid: { $ne: _id },
+        $expr: { $lt: ["$target.achieved", "$target.total"] },
+        status: "Active",
+      },
+      null,
+      { sort: { invitetype: -1 } }
+    )
+
+    let result = [];
+
+    if(invite.length > 0){
+      // remove servers already joined
+      const joined = await Link.find({
+        uid: _id,
+      })
+
+      if(joined.length > 0){
+        for( let i = 0; i < invite.length; i++ ) {
+          let flag = true;
+          for( let j = 0; j < joined.length; j++ ) {
+            if( invite[i].serverId == joined[j].serverId ){
+              flag = false;
+              break;
+            }
+          }
+
+          if(flag){
+            result.push(invite[i]);
+          }
+        }
+      }
+    }
+    
+    res.send(result);
+   
+  } catch (error) {
+    res.status(401).json({ "message": error.message });
   }
 }
 
@@ -388,6 +495,7 @@ async function checkGuildMember(oauthData, gid) {
       return null;
     } else {
       const data = jwt.verify(oauthData, process.env.API_TOKEN);
+
       const userResult = await fetch(
         `https://discord.com/api/users/@me/guilds/${gid}/member`,
         {
@@ -397,7 +505,7 @@ async function checkGuildMember(oauthData, gid) {
         }
       );
       const guild = await userResult.json();
-
+     
       return guild;
     }
   } catch (error) {
@@ -407,6 +515,7 @@ async function checkGuildMember(oauthData, gid) {
 // checking join status after 60 seconds
 async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
   const isJoined = await checkGuildMember(oauthData, serverId);
+
   if (isJoined.user && isJoined !== null) {
     // if joined
     const linkJoin = await Link.findOneAndUpdate(
@@ -503,6 +612,7 @@ async function getJoinedServers(req, res){
 
 const InviteController = {
   GetLinks,
+  getAvailableServers,
   AddLink,
   UpdateCampaignStatus,
   AssignInvite,

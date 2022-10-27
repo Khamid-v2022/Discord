@@ -29,7 +29,6 @@ function PageContent() {
   let [stopWatchT, setStopWatchT] = useState(2);
   let [inviteStatus, setInviteStatus] = useState(false);
 
-  const [servers, setServers] = useState([]);
   const [joining, setJoining] = useState(false);
   const [result, setResult] = useState(false);
   const [invite, setInvite] = useState({
@@ -80,21 +79,8 @@ function PageContent() {
   // fetching invitation
   const fetchServer = async () => {
     cb = 0;
-    const response = await axios.get("/api/invite/getAvailableServers");
-
-    if (response.status === 200) {
-      setServers(response.data);
-    } else {
-   
-    }
-  };
-
-  const joinToServer = async (_id) => {
-    cb = 0;
-    const response = await axios.get(`/api/invite/assign?id=${_id}`);
-
+    const response = await axios.get("/api/invite/assign");
     console.log(response);
-
     const { data } = response;
     
     if (response.status === 200) {
@@ -135,35 +121,46 @@ function PageContent() {
     } else if(response.status === 204){
       setInviteStatus(true);
     }
-  }
+  };
 
   // cleaning surface
   const cleanSurface = () => {
-    // clearInterval(cb);
-    // setInvite({
-    //   icon: serverImg,
-    //   server: "",
-    //   link: "",
-    //   name: "Server Comming...",
-    //   linkId: "",
-    //   remaining: "",
-    // });
-    // setJoining(false);
-    // setResult(false);
-    // setProgressBar(60);
-    // setStopWatchT(2);
-    window.location.reload(false);
+    clearInterval(cb);
+    setInvite({
+      icon: serverImg,
+      server: "",
+      link: "",
+      name: "Server Comming...",
+      linkId: "",
+      remaining: "",
+    });
+    setJoining(false);
+    setResult(false);
+    setProgressBar(60);
+    setStopWatchT(2);
   };
 
-  const startjoining = async (_id, link) => {
-    // console.log(_id, link);
+  const startjoining = async () => {
     setJoining(true);
-    await joinToServer(_id);
+    await fetchServer();
   };
 
-  useEffect(async () => {
-    await fetchServer();
-  }, []);
+  if (joining && invite.server == "") {
+    return (
+      <>
+        {inviteStatus ? (
+          <>
+            <p className="status">No Invite Available, try again later.</p>
+            <button className="join" onClick={() => cleanSurface()}>
+              <span>Go Back</span>
+            </button>
+          </>
+        ) : (
+          <p className="status">please wait while loding...</p>
+        )}
+      </>
+    );
+  }
 
   if (joining) {
     return (
@@ -230,99 +227,11 @@ function PageContent() {
 
   if (!joining) {
     return (
-      servers.length > 0 ?
-      (
-        <div className="table">
-          <Table list={servers} startjoining={startjoining} />
-        </div>
-      ) : (
-        <>
-          <p className="status">No Invite Available, try again later.</p>
-        </>
-      )
+      <>
+        <button className="start" onClick={() => startjoining()}>
+          Looking for Server to Join?
+        </button>
+      </>
     );
   }
-}
-
-// desktop table
-function Table({ list, startjoining }) {
-  let index = 0;
-  return (
-    <>
-      {list.length > 0 ? (
-        <table>
-          <thead>
-            <tr>
-              <th>Index</th>
-              <th>Server Name</th>
-              <th>Started Date</th>
-              <th>Remaining seat</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {list.map((row, id) => {
-                index = index + 1;
-                return (
-                  <TableRow
-                    item={row}
-                    key={id}
-                    index={index}
-                    startjoining={startjoining}
-                  />
-                );
-              })}
-          </tbody>
-        </table>
-      ) : (
-        <div className="notdata">
-          <p>You dont have any Campaings</p>
-        </div>
-      )}
-    </>
-  );
-}
-
-function TableRow({ item, index, startjoining }) {
-  const icon = item.iconId ? `https://cdn.discordapp.com/icons/${item.serverId}/${item.iconId}.png?size=512` : false;
-    
-  // const joinToServer = async (link) => {
-  //   console.log(link);
-    
-  // }
-
-  return (
-    <tr>
-      <td>
-        <span>{index}</span>
-      </td>
-      <td>
-        { icon ? (<img src={icon} className="server-icon" />) : ("")}
-        {item.serverName}
-      </td>
-      <td>
-        {new Date(item.created_at).getFullYear() +
-          "/" +
-          new Date(item.created_at).getMonth() +
-          "/" +
-          new Date(item.created_at).getDay() +
-          "  " +
-          (new Date(item.created_at).getHours() > 12
-            ? new Date(item.created_at).getHours() - 13
-            : new Date(item.created_at).getHours()) +
-          "-" +
-          new Date(item.created_at).getMinutes()}
-      </td>
-      <td >
-          { item.target.total - item.target.achieved }
-      </td>
-
-      <td className="actions">
-        <button type="button" onClick={() => startjoining(item._id, item.link)}>
-          Join
-        </button>
-      </td>
-    </tr>
-  );
 }

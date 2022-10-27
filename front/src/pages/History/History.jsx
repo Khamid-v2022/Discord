@@ -34,7 +34,6 @@ function PageContent() {
         
         const response = await axios.get("/api/invite/getJoinedServers");
         setList(response.data); 
-        console.log(response.data);
         
         setLoading(false);
     }, []);

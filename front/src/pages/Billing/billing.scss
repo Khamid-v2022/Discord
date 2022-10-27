@@ -39,6 +39,12 @@
         border-collapse: collapse;
         margin-top: 30px;
         width: 100%;
+        tr {
+            align-items: center;
+            display: grid;
+            grid-template-columns: 10% 15% 20% 13% 15% 15% 12%;
+            margin: 10px 0;
+        }
         thead {
             tr {
                 margin: 8px 0;
@@ -55,31 +61,108 @@
 
         tbody {
             color: #fff;
-            position: relative;
-            background-color: hsla(0,0%,100%,.04);
-            border: 2px solid hsla(0,0%,100%,.08);
-            border-radius: 8px;
-            bottom: 0;
-            content: "";
-            height: 100%;
-            left: 0;
-            right: 0;
-            top: 0;
-            width: 100%;
             tr {
                 height: 54px;
                 margin: 16px 0;
+                position: relative;
                 text-align: left;
                 z-index: 1;
+
+                &:before {
+                    background-color: hsla(0,0%,100%,.04);
+                    border: 2px solid hsla(0,0%,100%,.08);
+                    border-radius: 8px;
+                    bottom: 0;
+                    content: "";
+                    height: 100%;
+                    left: 0;
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    -webkit-transform: skewX(-17deg);
+                    transform: skewX(-17deg);
+                    width: 100%;
+                    z-index: -1;
+                }
+
                 td {
                     font-size: 18px;
                     line-height: 20px;
-                    padding: 10px;
-                    a {
-                        color: #66aa18;
+
+                    &:first-child {
+                        height: 54px;
+                        padding: 0;
+                        width: 100px;
+                        span {
+                            display: block;
+                            font-size: 18px;
+                            padding: 17px 22px;
+                            position: relative;
+                            text-align: center;
+                            width: 84px;
+                            z-index: 1;
+
+                            &:before {
+                                background-color: rgba(37,67,2,.631);
+                                border: 2px solid #76c31c;
+                                border-radius: 8px;
+                                bottom: 0;
+                                content: "";
+                                height: 100%;
+                                left: 0;
+                                position: absolute;
+                                right: 0;
+                                top: 0;
+                                -webkit-transform: skewX(-17deg);
+                                transform: skewX(-17deg);
+                                width: 100%;
+                                z-index: -1;
+                            }
+                        }
+                    }
+
+                    // a {
+                    //     color: #66aa18;
+                    //     text-decoration: none;
+                    //     &:hover {
+                    //         color: #76c31c;
+                    //     }
+                    // }
+
+                    a.download-btn {
+                        align-items: center;
+                        background-color: transparent;
+                        border: none;
+                        color: #fff;
+                        cursor: pointer;
+                        display: flex;
+                        flex-direction: row;
+                        font-family: Russo One,sans-serif;
+                        font-size: 18px;
+                        height: 54px;
+                        justify-content: center;
+                        line-height: 22px;
+                        outline: none;
+                        padding: 10px 15px;
+                        position: relative;
+                        width: 100%;
+                        z-index: 1;
                         text-decoration: none;
-                        &:hover {
-                            color: #76c31c;
+                        &:before {
+                            background-color: #c68200;
+                            border: 2px solid #fcb500;
+                            border-radius: 8px;
+                            bottom: 0;
+                            content: "";
+                            height: 100%;
+                            left: 0;
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            -webkit-transform: skewX(-17deg);
+                            transform: skewX(-17deg);
+                            width: 100%;
+                            z-index: -1;
                         }
                     }
 
@@ -111,6 +194,9 @@
         table {
             margin-top: 20px;
             width: 100%;
+            tr {
+                grid-template-columns: 20% 21% 13% 13% 15% 20%;
+            }
             thead {
                 tr {
                     margin: 8px 0;
@@ -124,13 +210,20 @@
             }
 
             tbody {
-                border: 1px solid hsla(0,0%,100%,.08);
                 tr {
                     margin: 8px 0;
                     td {
                         font-size: 12px;
                         line-height: 10px;
-                        padding: 5px;
+                        padding: 0px 2px;
+                        &:first-child {
+                            height: unset;
+                            width: unset;
+                        }
+
+                        a.download-btn {
+                            font-size: 12px;
+                        }
                     }
                 }
             }

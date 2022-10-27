@@ -55,12 +55,14 @@ function PageContent() {
                 Download
             </PDFDownloadLink> */}
             {width > 426 ? ( <Table data={list} loading={loading} /> ) : (<MTable data={list} loading={loading} />)}
+            {/* <Table data={list} loading={loading} /> */}
         </section>
     );
 }
 
 function Table({ data, loading}) {
     let index = data.length + 1;
+    let index1 = 0;
     return (
         <>
         {   loading ? (
@@ -72,11 +74,12 @@ function Table({ data, loading}) {
                     <table>
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Invoice</th>
                                 <th>Billing Date</th>
                                 <th>Status</th>
                                 <th>Amount</th>
-                                <th>Plan</th>
+                                <th>Package</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -84,11 +87,13 @@ function Table({ data, loading}) {
                             {
                                 data.map((row, id) => {
                                     index = index - 1;
+                                    index1++;
                                     return (
                                         <TableRow
                                             item = {row}
                                             key = {id}
                                             index = {index}
+                                            index1 = {index1}
                                         />
                                     )
                                 })
@@ -120,6 +125,7 @@ function MTable({ data, loading}) {
                         <thead>
                             <tr>
                                 <th>Invoice</th>
+                                <th>Billing Date</th>
                                 <th>Status</th>
                                 <th>Amount</th>
                                 <th>Plan</th>
@@ -152,19 +158,18 @@ function MTable({ data, loading}) {
     )
 }
 
-function TableRow({ item, index}){
-    console.log(item);
+function TableRow({ item, index, index1}){
     let date = new Date(item.trx_time);
      
-
     const downloadPdf = async () => {
         console.log("download");
     }
 
     return (
         <tr>
+            <td><span>{index1}</span></td>
             <td>
-                <span>Invoice #{index} - <span className="gray-span">{date.toDateString("en-us", options)}</span> </span>
+                <span>Invoice #{index}</span>
             </td>
             <td>{date.toDateString("en-us", options)}</td>
             <td>
@@ -182,6 +187,7 @@ function TableRow({ item, index}){
                 <PDFDownloadLink
                     document={<Invoice data={item} index = {index} />}
                     fileName={"Invoice #" + index + ".pdf" }
+                    className="download-btn"
                 >
                     Download
                 </PDFDownloadLink>
@@ -200,7 +206,10 @@ function MTableRow({ item, index}){
     return (
         <tr>
             <td>
-                <span>Invoice #{index} - <span className="gray-span">{date.toDateString("en-us", options)}</span> </span>
+                Invoice #{index}
+            </td>
+            <td>
+                {date.toDateString("en-us", options)}
             </td>
             <td>
                 <span className="paid-status">
@@ -208,7 +217,7 @@ function MTableRow({ item, index}){
                 </span>
             </td>
             <td>
-                <span className="gray-span">USD</span> ${item.amount}
+                ${item.amount}
             </td>
             <td>
                 {item.pakage}
@@ -217,6 +226,7 @@ function MTableRow({ item, index}){
                 <PDFDownloadLink
                     document={<Invoice data={item} />}
                     fileName={"Invoice #" + index + ".pdf" }
+                    className="download-btn"
                 >
                     Download
                 </PDFDownloadLink>

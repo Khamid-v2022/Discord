@@ -13,12 +13,10 @@ import { useLayoutEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { updateBalance } from "../redux/reducers/userBalance.js";
-import { updateUserinfo } from "../redux/reducers/userInfo.js";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import Checkout from "./Checkout/checkout";
 import Home from "./Home/home";
-import { useEffect } from "react";
 
 export default function App() {
   const { pathname } = useLocation();
