@@ -18,6 +18,17 @@ const paymentSchema = new Schema({
     type: String,
     required: true,
   },
+  stars:{
+    type: Number,
+    default: 0
+  },
+  diamonds:{
+    type: Number,
+    default: 0
+  },
+  note: {
+    type: String
+  },
   trx_time: {
     type: Date,
     default: Date.now(),

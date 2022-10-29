@@ -520,18 +520,22 @@ async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
   const isJoined = await checkGuildMember(oauthData, serverId);
 
   if (isJoined.user && isJoined !== null) {
-    // if joined
-    // const linkJoin = await Link.findOneAndUpdate(
-    //   { uid: _id, "_id": doc },
-    //   { $set: { status: "Complete", join_date: Date.now() } },
-    //   { new: true }
-    // );
-    // // giving reward to the user
-    // const reward = await Earning.findOneAndUpdate(
-    //   { userid: _id },
-    //   { $inc: { "earned.stars": 1 } },
-    //   { new: true }
-    // );
+    const linkJoin = Link.findOne({ uid: _id, "_id": doc });
+    if(linkJoin.status != "Complete"){
+      // if joined
+      const linkJoin = await Link.findOneAndUpdate(
+        { uid: _id, "_id": doc },
+        { $set: { status: "Complete", join_date: Date.now() } },
+        { new: true }
+      );
+      // giving reward to the user
+      const reward = await Earning.findOneAndUpdate(
+        { userid: _id },
+        { $inc: { "earned.stars": 1 } },
+        { new: true }
+      );
+    }
+    
   } else {
     // failed to join
     const achieved = await inviteData.target.achieved;
@@ -592,14 +596,19 @@ async function checkstatus(req, res) {
 
 async function checkIsJoined(req, res){
   const oauthData = await req.cookies.access_token;
+  const discordUser = req.cookies.DiscordUser;
+  const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+  const _id = userCookie.userid;
+
   const serverId = req.query.id;
+
   const isJoined = await checkGuildMember(oauthData, serverId);
   
   try {
-    if (isJoined.user && isJoined !== null) {
+    if (isJoined !== null && isJoined.user ) {
       // if joined
       const linkJoin = await Link.findOneAndUpdate(
-        { uid: _id, "_id": doc },
+        { uid: _id, serverId: serverId },
         { $set: { status: "Complete", join_date: Date.now() } },
         { new: true }
       );

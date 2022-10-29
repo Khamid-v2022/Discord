@@ -89,6 +89,9 @@ const fulfillOrder = async (session) => {
       userid: userid,
       amount: dollar,
       package: pkg,
+      stars: stars,
+      diamonds: diamonds,
+      note: "paid by user"
     });
     const paymentResponse = await packageDetails.save();
 
@@ -177,6 +180,8 @@ async function diamond(req, res) {
     //     userid: userid,
     //     amount: dollar,
     //     package: pkg,
+    // stars: stars,
+    //   diamonds: diamonds
     //   });
     //   const paymentResponse = await packageDetails.save();
   

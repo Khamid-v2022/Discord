@@ -61,49 +61,45 @@ function PageContent() {
       `/api/invite/checkstatus?id=${invite.linkId}`
     );
     
-    console.log("Check result:", response);
-    
     if (response.status === 200) {
       if (response.data.status === "Complete") {
         setResult(true);
         clearInterval(cb);
-        console.log("WOW~~ done");
       }
     } else {
       console.log(response);
     }
   };
 
-   // checking status real-time every 5s
+   // checking status real-time every 15s
   const checkresult_realtime = async () => {
     if(invite.serverId !== ""){
       const response = await axios.get(
         `/api/invite/checkIsJoined?id=${invite.serverId}`
       );
       
-      console.log("Check result:", response);
       if(response.status === 200) {
         setResult(true);
         clearInterval(cb);
-        console.log("WOW~~ done");
+        
+        cleanSurface();
+        fetchServer();
       }
     }
   };
 
   // stoping timer at 0
   if (stopWatchT === 0) {
-    console.log("STOP HERE");
-
     checkresult();
     clearInterval(cb);
   }
 
   // fetching invitation
   const fetchServer = async () => {
+    setInviteStatus(false);
+
     cb = 0;
     const response = await axios.get("/api/invite/assign");
-
-    console.log("ASSIGN:", response);
 
     const { data } = response;
     
@@ -169,14 +165,12 @@ function PageContent() {
   // fetchServer();
 
   useEffect(async () => {
-    console.log("start");
     await fetchServer();
   }, []);
 
   useEffect(() => {
-    if(stopWatchT % 12 === 0){
-      // checking if joined to current server for every 5s
-      console.log("checking ");
+    if(stopWatchT % 15 === 0){
+      // checking if joined to current server for every 15s
       checkresult_realtime();
     }
   }, [stopWatchT])
@@ -225,7 +219,10 @@ function PageContent() {
         <div className="actions">
           {stopWatchT ? (
             <>
-              <button className="skip" onClick={() => cleanSurface()}>
+              <button className="skip" onClick={() => {
+                  cleanSurface(); 
+                  fetchServer();
+                }}>
                 Skip to next one
               </button>
 
@@ -235,7 +232,10 @@ function PageContent() {
               </a>
             </>
           ) : (
-            <button className="join" onClick={() => cleanSurface()}>
+            <button className="join" onClick={() => {
+              cleanSurface();
+              fetchServer();
+            }}>
               <span>Go Back</span>
             </button>
           )}
