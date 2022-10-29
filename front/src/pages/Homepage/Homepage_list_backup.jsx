@@ -29,6 +29,8 @@ function PageContent() {
   let [stopWatchT, setStopWatchT] = useState(2);
   let [inviteStatus, setInviteStatus] = useState(false);
 
+  const [servers, setServers] = useState([]);
+  const [joining, setJoining] = useState(false);
   const [result, setResult] = useState(false);
   const [invite, setInvite] = useState({
     icon: serverImg,
@@ -37,8 +39,6 @@ function PageContent() {
     name: "Server Comming...",
     linkId: "",
     remaining: "",
-    serverId: "",
-    is_load: false
   });
 
   let timer = () => {
@@ -49,8 +49,9 @@ function PageContent() {
       setProgressBar((pb) => {
         return pb + 1;
       });
-   
     } else {
+      console.log("stop-watch: ", stopWatchT);
+      console.log("progressBar: ", progressBar);
       clearInterval(cb);
     }
   };
@@ -60,40 +61,18 @@ function PageContent() {
     const response = await axios.get(
       `/api/invite/checkstatus?id=${invite.linkId}`
     );
-    
-    console.log("Check result:", response);
-    
+
     if (response.status === 200) {
       if (response.data.status === "Complete") {
         setResult(true);
-        clearInterval(cb);
-        console.log("WOW~~ done");
       }
     } else {
       console.log(response);
     }
   };
 
-   // checking status real-time every 5s
-  const checkresult_realtime = async () => {
-    if(invite.serverId !== ""){
-      const response = await axios.get(
-        `/api/invite/checkIsJoined?id=${invite.serverId}`
-      );
-      
-      console.log("Check result:", response);
-      if(response.status === 200) {
-        setResult(true);
-        clearInterval(cb);
-        console.log("WOW~~ done");
-      }
-    }
-  };
-
   // stoping timer at 0
   if (stopWatchT === 0) {
-    console.log("STOP HERE");
-
     checkresult();
     clearInterval(cb);
   }
@@ -101,9 +80,20 @@ function PageContent() {
   // fetching invitation
   const fetchServer = async () => {
     cb = 0;
-    const response = await axios.get("/api/invite/assign");
+    const response = await axios.get("/api/invite/getAvailableServers");
 
-    console.log("ASSIGN:", response);
+    if (response.status === 200) {
+      setServers(response.data);
+    } else {
+   
+    }
+  };
+
+  const joinToServer = async (_id) => {
+    cb = 0;
+    const response = await axios.get(`/api/invite/assign?id=${_id}`);
+
+    console.log(response);
 
     const { data } = response;
     
@@ -118,8 +108,6 @@ function PageContent() {
           name: data.invite?.serverName,
           linkId: data.joiner._id,
           time: data.joiner.expire_at,
-          serverId: data.invite?.serverId,
-          is_load: true
         });
 
         // if time in negative then allow user to join
@@ -131,57 +119,53 @@ function PageContent() {
           setProgressBar((prev) => {
             return data.joiner.remaining + prev;
           });
-          
           // running timer
           cb = setInterval(() => {
+            console.log("stop_watch: ", stopWatchT);
+            console.log("joiner.remaining: ", data.joiner.remaining);
             timer();
           }, 1000);
         } else {
           // clearInterval(cb);
           console.log("stop_watch: ", stopWatchT);
         }
+      } else {
+        setJoining(false);
       }
     } else if(response.status === 204){
       setInviteStatus(true);
-      cleanSurface();
     }
-  };
+  }
 
   // cleaning surface
   const cleanSurface = () => {
-    clearInterval(cb);
-    setInvite({
-      icon: serverImg,
-      server: "",
-      link: "",
-      name: "Server Comming...",
-    
-      linkId: "",
-      remaining: "",
-      is_load: false
-    });
-
-    setResult(false);
-    setProgressBar(60);
-    setStopWatchT(2);
+    // clearInterval(cb);
+    // setInvite({
+    //   icon: serverImg,
+    //   server: "",
+    //   link: "",
+    //   name: "Server Comming...",
+    //   linkId: "",
+    //   remaining: "",
+    // });
+    // setJoining(false);
+    // setResult(false);
+    // setProgressBar(60);
+    // setStopWatchT(2);
+    window.location.reload(false);
   };
 
-  // fetchServer();
+  const startjoining = async (_id, link) => {
+    // console.log(_id, link);
+    setJoining(true);
+    await joinToServer(_id);
+  };
 
   useEffect(async () => {
-    console.log("start");
     await fetchServer();
   }, []);
 
-  useEffect(() => {
-    if(stopWatchT % 12 === 0){
-      // checking if joined to current server for every 5s
-      console.log("checking ");
-      checkresult_realtime();
-    }
-  }, [stopWatchT])
-
-  if(invite.server){
+  if (joining) {
     return (
       <section id="server_joining">
         <div className="thumbnail">
@@ -242,18 +226,103 @@ function PageContent() {
         </div>
       </section>
     );
-  } else {
-    if(inviteStatus){
-      return (
+  }
+
+  if (!joining) {
+    return (
+      servers.length > 0 ?
+      (
+        <div className="table">
+          <Table list={servers} startjoining={startjoining} />
+        </div>
+      ) : (
         <>
           <p className="status">No Invite Available, try again later.</p>
         </>
       )
-    }
-    return (
-      <>
-        <p className="status">Loading servers...</p>
-      </>
     );
   }
+}
+
+// desktop table
+function Table({ list, startjoining }) {
+  let index = 0;
+  return (
+    <>
+      {list.length > 0 ? (
+        <table>
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Server Name</th>
+              <th>Started Date</th>
+              <th>Remaining seat</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {list.map((row, id) => {
+                index = index + 1;
+                return (
+                  <TableRow
+                    item={row}
+                    key={id}
+                    index={index}
+                    startjoining={startjoining}
+                  />
+                );
+              })}
+          </tbody>
+        </table>
+      ) : (
+        <div className="notdata">
+          <p>You dont have any Campaings</p>
+        </div>
+      )}
+    </>
+  );
+}
+
+function TableRow({ item, index, startjoining }) {
+  const icon = item.iconId ? `https://cdn.discordapp.com/icons/${item.serverId}/${item.iconId}.png?size=512` : false;
+    
+  // const joinToServer = async (link) => {
+  //   console.log(link);
+    
+  // }
+
+  return (
+    <tr>
+      <td>
+        <span>{index}</span>
+      </td>
+      <td>
+        { icon ? (<img src={icon} className="server-icon" />) : ("")}
+        {item.serverName}
+      </td>
+      <td>
+        {new Date(item.created_at).getFullYear() +
+          "/" +
+          new Date(item.created_at).getMonth() +
+          "/" +
+          new Date(item.created_at).getDay() +
+          "  " +
+          (new Date(item.created_at).getHours() > 12
+            ? new Date(item.created_at).getHours() - 13
+            : new Date(item.created_at).getHours()) +
+          "-" +
+          new Date(item.created_at).getMinutes()}
+      </td>
+      <td >
+          { item.target.total - item.target.achieved }
+      </td>
+
+      <td className="actions">
+        <button type="button" onClick={() => startjoining(item._id, item.link)}>
+          Join
+        </button>
+      </td>
+    </tr>
+  );
 }

@@ -249,60 +249,6 @@ async function GetLinks(req, res) {
   }
 }
 
-// // assigning link for 60 seconds
-// async function AssignInvite(req, res) {
-//   try {
-//     const oauthData = await req.cookies.access_token;
-//     // discrod userid from our db
-//     const discordUser = req.cookies.DiscordUser;
-//     const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
-//     const _id = userCookie.userid;
-
-//     // res.send(invite);
-//     const { message, invite, joiner } = await checkLink(_id, oauthData);
-
-//     if (message) {
-//       res.status(204).json({ message });
-//     } else {
-//       const achieved = await invite.target.achieved;
-//       const newAchieved = achieved + 1;
-//       const updateInvite = { "target.achieved": newAchieved };
-//       // increasing acheivment of campaign
-//       const inviteData = await Invite.findOneAndUpdate(
-//         { _id: invite._id },
-//         { $set: updateInvite },
-//         { new: true }
-//       );
-
-//       // assigning link to user for 60 sec
-//       const linking = await new Link({
-//         uid: _id,
-//         inviteId: invite._id,
-//         serverId: invite.serverId,
-//       });
-//       const response = await linking.save();
- 
-//       // callback to check user existence after 60 seconds
-//       new Cron("59 * * * * *", { maxRuns: 1 }, () => {
-//         checkAssigningStatus(
-//           _id,
-//           response._id,
-//           oauthData,
-//           invite.serverId,
-//           inviteData
-//         );
-//       });
-
-//       res.status(200).send({
-//         invite: inviteData,
-//         joiner: { ...response._doc, remaining: -59 },
-//       });
-//     }
-//   } catch (error) {
-//     res.status(401).json({ AssignInvite: error.message });
-//   }
-// }
-
 // assigning link for 60 seconds
 async function AssignInvite(req, res) {
   try {
@@ -312,50 +258,104 @@ async function AssignInvite(req, res) {
     const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
     const _id = userCookie.userid;
 
-    const id = req.query.id;
-    const invite = await Invite.findOne({  
-      _id: id.toString()
-    });
+    // res.send(invite);
+    const { message, invite, joiner } = await checkLink(_id, oauthData);
 
-    console.log(invite);
-  
-    const achieved = await invite.target.achieved;
-    const newAchieved = achieved + 1;
-    const updateInvite = { "target.achieved": newAchieved };
-    // increasing acheivment of campaign
-    const inviteData = await Invite.findOneAndUpdate(
-      { _id: invite._id },
-      { $set: updateInvite },
-      { new: true }
-    );
-
-    // assigning link to user for 60 sec
-    const linking = await new Link({
-      uid: _id,
-      inviteId: invite._id,
-      serverId: invite.serverId,
-    });
-    const response = await linking.save();
- 
-    // callback to check user existence after 60 seconds
-    new Cron("59 * * * * *", { maxRuns: 1 }, () => {
-      checkAssigningStatus(
-        _id,
-        response._id,
-        oauthData,
-        invite.serverId,
-        inviteData
+    if (message) {
+      res.status(204).json({ message });
+    } else {
+      const achieved = await invite.target.achieved;
+      const newAchieved = achieved + 1;
+      const updateInvite = { "target.achieved": newAchieved };
+      // increasing acheivment of campaign
+      const inviteData = await Invite.findOneAndUpdate(
+        { _id: invite._id },
+        { $set: updateInvite },
+        { new: true }
       );
-    });
 
-    res.status(200).send({
-      invite: inviteData,
-      joiner: { ...response._doc, remaining: -59 },
-    });
+      // assigning link to user for 60 sec
+      const linking = await new Link({
+        uid: _id,
+        inviteId: invite._id,
+        serverId: invite.serverId,
+      });
+      const response = await linking.save();
+ 
+      // callback to check user existence after 60 seconds
+      new Cron("59 * * * * *", { maxRuns: 1 }, () => {
+        checkAssigningStatus(
+          _id,
+          response._id,
+          oauthData,
+          invite.serverId,
+          inviteData
+        );
+      });
+
+      res.status(200).send({
+        invite: inviteData,
+        joiner: { ...response._doc, remaining: -59 },
+      });
+    }
   } catch (error) {
     res.status(401).json({ AssignInvite: error.message });
   }
 }
+
+// assigning link for 60 seconds
+// async function AssignInvite(req, res) {
+//   try {
+//     const oauthData = await req.cookies.access_token;
+//     // discrod userid from our db
+//     const discordUser = req.cookies.DiscordUser;
+//     const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+//     const _id = userCookie.userid;
+
+//     const id = req.query.id;
+//     const invite = await Invite.findOne({  
+//       _id: id.toString()
+//     });
+
+//     console.log(invite);
+  
+//     const achieved = await invite.target.achieved;
+//     const newAchieved = achieved + 1;
+//     const updateInvite = { "target.achieved": newAchieved };
+//     // increasing acheivment of campaign
+//     const inviteData = await Invite.findOneAndUpdate(
+//       { _id: invite._id },
+//       { $set: updateInvite },
+//       { new: true }
+//     );
+
+//     // assigning link to user for 60 sec
+//     const linking = await new Link({
+//       uid: _id,
+//       inviteId: invite._id,
+//       serverId: invite.serverId,
+//     });
+//     const response = await linking.save();
+ 
+//     // callback to check user existence after 60 seconds
+//     new Cron("59 * * * * *", { maxRuns: 1 }, () => {
+//       checkAssigningStatus(
+//         _id,
+//         response._id,
+//         oauthData,
+//         invite.serverId,
+//         inviteData
+//       );
+//     });
+
+//     res.status(200).send({
+//       invite: inviteData,
+//       joiner: { ...response._doc, remaining: -59 },
+//     });
+//   } catch (error) {
+//     res.status(401).json({ AssignInvite: error.message });
+//   }
+// }
 
 async function getAvailableServers(req, res) {
   try {
@@ -490,6 +490,7 @@ async function checkLink(_id, oauthData) {
 
 // check guild member existence
 async function checkGuildMember(oauthData, gid) {
+  console.log(oauthData, gid);
   try {
     if (!oauthData) {
       return null;
@@ -505,30 +506,32 @@ async function checkGuildMember(oauthData, gid) {
         }
       );
       const guild = await userResult.json();
-     
+      
+      console.log("GUILD:", guild);
       return guild;
     }
   } catch (error) {
     return { message: error.message };
   }
 }
+
 // checking join status after 60 seconds
 async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
   const isJoined = await checkGuildMember(oauthData, serverId);
 
   if (isJoined.user && isJoined !== null) {
     // if joined
-    const linkJoin = await Link.findOneAndUpdate(
-      { uid: _id, "_id": doc },
-      { $set: { status: "Complete", join_date: Date.now() } },
-      { new: true }
-    );
-    // giving reward to the user
-    const reward = await Earning.findOneAndUpdate(
-      { userid: _id },
-      { $inc: { "earned.stars": 1 } },
-      { new: true }
-    );
+    // const linkJoin = await Link.findOneAndUpdate(
+    //   { uid: _id, "_id": doc },
+    //   { $set: { status: "Complete", join_date: Date.now() } },
+    //   { new: true }
+    // );
+    // // giving reward to the user
+    // const reward = await Earning.findOneAndUpdate(
+    //   { userid: _id },
+    //   { $inc: { "earned.stars": 1 } },
+    //   { new: true }
+    // );
   } else {
     // failed to join
     const achieved = await inviteData.target.achieved;
@@ -548,6 +551,7 @@ async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
     );
   }
 }
+
 // getting server id from invite link
 async function getServerId(link) {
   try {
@@ -586,6 +590,35 @@ async function checkstatus(req, res) {
   }
 }
 
+async function checkIsJoined(req, res){
+  const oauthData = await req.cookies.access_token;
+  const serverId = req.query.id;
+  const isJoined = await checkGuildMember(oauthData, serverId);
+  
+  try {
+    if (isJoined.user && isJoined !== null) {
+      // if joined
+      const linkJoin = await Link.findOneAndUpdate(
+        { uid: _id, "_id": doc },
+        { $set: { status: "Complete", join_date: Date.now() } },
+        { new: true }
+      );
+      // giving reward to the user
+      const reward = await Earning.findOneAndUpdate(
+        { userid: _id },
+        { $inc: { "earned.stars": 1 } },
+        { new: true }
+      );
+      res.status(200).json({ message: "Joinded" });
+    } else {
+      res.status(201).json({ message: "Not Joinded" });
+    }
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+  
+}
+
 async function getJoinedServers(req, res){
   try {
     const discordUser = await req.cookies.DiscordUser;
@@ -617,7 +650,8 @@ const InviteController = {
   UpdateCampaignStatus,
   AssignInvite,
   checkstatus,
-  getJoinedServers
+  checkIsJoined,
+  getJoinedServers,
 };
 
 export default InviteController;

@@ -178,7 +178,7 @@ function TableRow({ item, index, index1}){
                 </span>
             </td>
             <td>
-                <span className="gray-span">USD</span> ${item.amount}
+                $ {item.amount}
             </td>
             <td>
                 {item.pakage}

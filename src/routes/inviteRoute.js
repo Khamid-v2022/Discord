@@ -12,6 +12,7 @@ router.get("/assign", InviteController.AssignInvite);
 
 router.get("/getAvailableServers", InviteController.getAvailableServers);
 router.get("/getJoinedServers", InviteController.getJoinedServers);
+router.get("/checkIsJoined", InviteController.checkIsJoined);
 
 
 
