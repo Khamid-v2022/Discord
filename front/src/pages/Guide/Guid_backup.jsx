@@ -15,9 +15,9 @@ export default function Guid() {
     <section id="guide">
       <Popup 
         open={open} 
-        closeOnDocumentClick={false}
+        closeOnDocumentClick="true" 
         className="guide"
-        >
+      >
         <div className="modal">
           <div className="head">
             <h3>Usage guide</h3>

@@ -1,6 +1,5 @@
 import Popup from "reactjs-popup";
 import "./popup.scss";
-import { useEffect, useState } from "react";
 
 
 export default function CheckPopup({open, closePopup, checkingJoin, disable, error}) {
@@ -16,7 +15,7 @@ export default function CheckPopup({open, closePopup, checkingJoin, disable, err
 
   return (
     <section id="guide">
-      <Popup open={open} className="guide" closeOnDocumentClick="false">
+      <Popup open={open} className="guide" closeOnDocumentClick={false}>
         <div className="modal">
           <div className="head">
             <h3>Checking</h3>
