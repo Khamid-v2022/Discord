@@ -6,6 +6,10 @@ import coinImg from "../../res/imgs/coin.png";
 import "./homepage.scss";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { updateBalance } from "../../redux/reducers/userBalance";
+
+import Popup from "./Popup.jsx";
 
 export default function Homepage() {
   return (
@@ -25,9 +29,15 @@ export default function Homepage() {
 
 let cb;
 function PageContent() {
+  const dispatch = useDispatch();
+
   let [progressBar, setProgressBar] = useState(60);
   let [stopWatchT, setStopWatchT] = useState(2);
   let [inviteStatus, setInviteStatus] = useState(false);
+  let [openPopup, setOpenPopup] = useState(false);
+
+  let [popupBtnDisable, setPoupBtnDisable] = useState(false);
+  let [popupError, setPoupError] = useState("");
 
   const [result, setResult] = useState(false);
   const [invite, setInvite] = useState({
@@ -40,6 +50,14 @@ function PageContent() {
     serverId: "",
     is_load: false
   });
+
+  const closePopup = () => {
+    setPoupError("");
+    setOpenPopup(false);
+    cb = setInterval(() => {
+      timer();
+    }, 1000);
+  }
 
   let timer = () => {
     if (stopWatchT > 1) {
@@ -57,22 +75,34 @@ function PageContent() {
 
   // checking status
   const checkresult = async () => {
-    const response = await axios.get(
-      `/api/invite/checkstatus?id=${invite.linkId}`
-    );
-    
-    if (response.status === 200) {
-      if (response.data.status === "Complete") {
-        setResult(true);
-        clearInterval(cb);
+    if(invite.linkId !== ""){
+      const response = await axios.get(
+        `/api/invite/checkstatus?id=${invite.linkId}`
+      );
+      
+      if (response.status === 200) {
+        if (response.data.status === "Complete") {
+          setResult(true);
+          clearInterval(cb);
+          
+        }
+      } else {
+        console.log(response);
       }
-    } else {
-      console.log(response);
     }
   };
 
+  const cancelJoin = async () => {
+    if(invite.linkId !== ""){
+      const response = await axios.get(
+        `/api/invite/cancelJoin?id=${invite.linkId}`
+      );
+    }
+  }
+
    // checking status real-time every 15s
-  const checkresult_realtime = async () => {
+  const checkingJoin = async () => {
+    setPoupBtnDisable(true);
     if(invite.serverId !== ""){
       const response = await axios.get(
         `/api/invite/checkIsJoined?id=${invite.serverId}`
@@ -84,6 +114,19 @@ function PageContent() {
         
         cleanSurface();
         fetchServer();
+
+        setPoupBtnDisable(false);
+        
+        setOpenPopup(false);
+
+        // 
+        const response2 = await axios.get("/api/user/getbalance");
+        if (response2.status !== 401) {
+          dispatch(updateBalance(response2.data));
+        } 
+      } else {
+        setPoupBtnDisable(false);
+        setPoupError("You are not joined to this server. Please make sure again!");
       }
     }
   };
@@ -162,18 +205,18 @@ function PageContent() {
     setStopWatchT(2);
   };
 
-  // fetchServer();
+  const joinToServer = (e) => {
+    setOpenPopup(true);
+    clearInterval(cb);
+    window.open(invite.link, '_blank', 'noopener,noreferrer');
+  }
+
+ 
 
   useEffect(async () => {
     await fetchServer();
   }, []);
 
-  useEffect(() => {
-    if(stopWatchT % 15 === 0){
-      // checking if joined to current server for every 15s
-      checkresult_realtime();
-    }
-  }, [stopWatchT])
 
   if(invite.server){
     return (
@@ -220,19 +263,21 @@ function PageContent() {
           {stopWatchT ? (
             <>
               <button className="skip" onClick={() => {
+                  cancelJoin();
                   cleanSurface(); 
                   fetchServer();
                 }}>
                 Skip to next one
               </button>
 
-              <a className="join" href={invite.link} target="_blank">
+              <a type="button" className="join" onClick={joinToServer}>
                 <img src={coinImg} alt="coin" />
                 <span>Join and earn 1 coin</span>
               </a>
             </>
           ) : (
             <button className="join" onClick={() => {
+              cancelJoin();
               cleanSurface();
               fetchServer();
             }}>
@@ -240,6 +285,13 @@ function PageContent() {
             </button>
           )}
         </div>
+        <Popup 
+          open={openPopup} 
+          closePopup={closePopup} 
+          checkingJoin={checkingJoin} 
+          disable = {popupBtnDisable}
+          error = {popupError}
+        />
       </section>
     );
   } else {

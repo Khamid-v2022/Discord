@@ -1,0 +1,109 @@
+@use "../../style/mixins/skew.scss" as *;
+
+#guide {
+}
+
+.guide-overlay {
+  background: rgba(0, 0, 0, 0.7);
+  padding: 16px;
+}
+.guide-content {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  padding: 0 32px 32px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 10px;
+  backdrop-filter: blur(5px);
+  width: 576px;
+
+  .modal {
+    width: 100%;
+    .head {
+      background: url("../../res/imgs/arc.svg");
+      background-size: cover;
+      padding: 24px;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 71px;
+      h3 {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 400;
+      }
+    }
+
+    .content {
+      margin-top: 20px;
+      .rows {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        .row {
+          padding: 5px 0px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          .indicator {
+            margin-right: 20px;
+            border: 2px solid #fcb500;
+            border-radius: 100%;
+            width: 32px;
+            height: 32px;
+            span {
+              background-color: #c68200;
+              padding: 4px 8px;
+              border-radius: 100%;
+              font-size: 12px;
+              display: inline-block;
+              margin: 2px;
+              width: 24px;
+              height: 24px;
+              font-size: 15px;
+            }
+          }
+          p{
+            font-size: 16px;
+            line-height: 24px;
+          }
+        }
+      }
+
+      .yellow {
+        color: #FFC633;
+      }
+      .purple {
+        color: #6B69DE;
+      }
+      .button-group {
+        display: flex;
+        button {
+            display: inline-block;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            @include skewBg(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.12));
+            font-family: "Russo One", sans-serif;
+            color: #fff;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin: 36px 10px 10px;
+            width: 100%;
+            text-align: center;
+            height: 54px;
+            font-size: 18px;
+            opacity:0.32;
+            &:hover {
+              opacity: 1;
+            }
+          }
+      }
+      .error-msg {
+        color: red;
+        text-align: center;
+        margin-top: 20px;
+      }
+      
+    }
+  }
+}

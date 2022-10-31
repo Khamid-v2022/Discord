@@ -2,7 +2,6 @@ import Invite from "../models/Invite.js";
 import Earning from "../models/Earning.js";
 import fetch from "node-fetch";
 import jwt from "jsonwebtoken";
-import User from "../models/User.js";
 import Link from "../models/Link.js";
 import Cron from "croner";
 
@@ -282,8 +281,8 @@ async function AssignInvite(req, res) {
       });
       const response = await linking.save();
  
-      // callback to check user existence after 60 seconds
-      new Cron("59 * * * * *", { maxRuns: 1 }, () => {
+      // callback to check user existence after 1 hour
+      new Cron("* 10 * * * *", { maxRuns: 1 }, () => {
         checkAssigningStatus(
           _id,
           response._id,
@@ -426,6 +425,7 @@ async function getInvite(lim, ski) {
     console.log({ getLink: error.message });
   }
 }
+
 // getting guild info from db
 async function checkLink(_id, oauthData) {
   let limit = 1;
@@ -490,7 +490,6 @@ async function checkLink(_id, oauthData) {
 
 // check guild member existence
 async function checkGuildMember(oauthData, gid) {
-  console.log(oauthData, gid);
   try {
     if (!oauthData) {
       return null;
@@ -515,7 +514,7 @@ async function checkGuildMember(oauthData, gid) {
   }
 }
 
-// checking join status after 60 seconds
+// checking join status after 1h seconds
 async function checkAssigningStatus(_id, doc, oauthData, serverId, inviteData) {
   const isJoined = await checkGuildMember(oauthData, serverId);
 
@@ -594,6 +593,30 @@ async function checkstatus(req, res) {
   }
 }
 
+async function cancelJoin(req, res) {
+  try {
+    const id = req.query.id;
+    console.log("Cancel Join:", id);
+    // cancel to join
+    const linkJoin = await Link.findOneAndUpdate(
+      { _id: id.toString() },
+      { $set: { status: "Expired" } },
+      { new: true }
+    );
+
+    const link = await Invite.findOneAndUpdate(
+      {_id: linkJoin.inviteId},
+      { $inc: { "target.achieved": -1 } }
+    )
+    console.log(link);
+
+    res.status(200).send(linkJoin);
+  } catch (error) {
+    res.status(401).json({ message: error.message });
+  }
+}
+
+
 async function checkIsJoined(req, res){
   const oauthData = await req.cookies.access_token;
   const discordUser = req.cookies.DiscordUser;
@@ -661,6 +684,7 @@ const InviteController = {
   checkstatus,
   checkIsJoined,
   getJoinedServers,
+  cancelJoin
 };
 
 export default InviteController;
