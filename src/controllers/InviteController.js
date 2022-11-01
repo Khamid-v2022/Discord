@@ -7,16 +7,27 @@ import Cron from "croner";
 
 // Start New Joining Compaign
 async function AddLink(req, res) {
-  try {
-    const { fast } = req.body;
-    // checking campaign type
-    if (fast) {
-      StarsCampain(req, res);
-    } else {
-      DiamondsCampain(req, res);
+
+  // checking Link is avalible or not
+  const { link, fast } = req.body;
+  const oauthData = await req.cookies.access_token;
+
+  const check = await checkInviteLink(link, oauthData);
+  if(!check){
+    res.status(200).json({
+      Message: "You entered invailid or expired invite link. Be sure the link is correct!",
+    });
+  } else {
+    try {
+      // checking campaign type
+      if (fast) {
+        StarsCampain(req, res);
+      } else {
+        DiamondsCampain(req, res);
+      }
+    } catch (error) {
+      res.json(error);
     }
-  } catch (error) {
-    res.json(error);
   }
 }
 // Running Stars Campaign
@@ -48,7 +59,6 @@ async function StarsCampain(req, res) {
       if (userStars >= target) {
         // check duplicate link
         const is_exist = await Invite.find({link:link, $or: [{status:{ $eq: "Active"}}, {status:{ $eq: "Inactive"}}, {status:{ $eq: "Paused"}}]});
-        console.log("EXIST:", is_exist);
 
         if(is_exist.length > 0){
           res.status(200).json({
@@ -468,8 +478,17 @@ async function checkLink(_id, oauthData) {
           skip = skip + 1;
           fLoop = true;
         } else {
-          fLoop = false;
-          return { message: false, invite: invite, joiner };
+          // Check Invite Link is avalible still or expire
+          const check = await checkInviteLink(invite.link, oauthData);
+          if(!check){
+            // Invite Link expired, so fetch another link
+            limit = limit + 1;
+            skip = skip + 1;
+            fLoop = true;
+          } else {
+            fLoop = false;
+            return { message: false, invite: invite, joiner };
+          }         
         }
       } else {
         // user exist in server fetch another link
@@ -486,6 +505,33 @@ async function checkLink(_id, oauthData) {
       };
     }
   } while (fLoop);
+}
+
+async function checkInviteLink(link, oauthData){
+  // get code from invitation link
+  let links = link.split("/");
+  let code = links[links.length - 1];
+  // Check Invite Link is avalible still or expire
+  const data = jwt.verify(oauthData, process.env.API_TOKEN);
+  try {
+    const invite_result = await fetch(
+      `https://discord.com/api/invites/${code}`,
+      {
+        headers: {
+          authorization: `${data.token_type} ${data.access_token}`,
+        },
+      }
+    );
+    const invite_obj = await invite_result.json();
+
+    if(invite_obj.code === 10006 || invite_obj.expires_at) {
+      return false;
+    } else {
+      return true;
+    }
+  } catch (error) {
+    return false;
+  }
 }
 
 // check guild member existence
@@ -561,12 +607,10 @@ async function getServerId(link) {
     // get id of invite link
     const pos = link.search("g/") + 2;
     let inviteLinkId = link.substr(pos, link.length);
-    // console.log("LinkId",inviteLinkId)
+
     const serverData = await fetch(
       `http://discord.com/api/invites/${inviteLinkId}`
     );
-
-    console.log("serverData", serverData);
 
     const discordServer = await serverData.json();
     const server = {
@@ -574,7 +618,7 @@ async function getServerId(link) {
       icon: discordServer.guild.icon,
       name: discordServer.guild.name,
     };
-    console.log("discordServer", discordServer);
+
     return server;
   } catch (error) {
     // link might be expired if it triggers errror
@@ -596,7 +640,6 @@ async function checkstatus(req, res) {
 async function cancelJoin(req, res) {
   try {
     const id = req.query.id;
-    console.log("Cancel Join:", id);
     // cancel to join
     const linkJoin = await Link.findOneAndUpdate(
       { _id: id.toString() },
@@ -608,7 +651,6 @@ async function cancelJoin(req, res) {
       {_id: linkJoin.inviteId},
       { $inc: { "target.achieved": -1 } }
     )
-    console.log(link);
 
     res.status(200).send(linkJoin);
   } catch (error) {
@@ -669,7 +711,7 @@ async function getJoinedServers(req, res){
     ]);
 
     res.status(200).send(result);
-    console.log("RESULT: ", result);
+
   } catch (error) {
     res.status(401).json({ message: error.message });
   }

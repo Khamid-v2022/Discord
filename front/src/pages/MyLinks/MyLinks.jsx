@@ -15,6 +15,9 @@ import leftArrowImg from "../../res/imgs/leftarrow.png";
 import rightArrowImg from "../../res/imgs/rightarrow.png";
 import diamondImg from "../../res/imgs/diamond.png";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 import "./mylinks.scss";
 import axios from "axios";
 // window size
@@ -502,26 +505,27 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
     e.preventDefault();
     
     if(data.link.includes("https://discord.gg/") && data.target > 0){
-      // if (data.link !== "" || data.target > 0) {
-        const response = await axios.post("/api/invite/add", data);
-        const resData = response.data;
+      const response = await axios.post("/api/invite/add", data);
 
-        if (response.status === 201) {
-          // updating balance
-          dispatch(updateBalance(resData.earning));
 
-          setRows((prev) => {
-            return [...prev, resData.invite];
-          });
-          setOpen((o) => !o);
-          setSubmit(false);
-        } else if(response.status === 200){
-          setError(response.data.Message);
-          setSubmit(false);
-        }
-    } else {
-        setError("Please try again with correct details.");
+      const resData = response.data;
+
+      if (response.status === 201) {
+        // updating balance
+        dispatch(updateBalance(resData.earning));
+
+        setRows((prev) => {
+          return [...prev, resData.invite];
+        });
+        setOpen((o) => !o);
         setSubmit(false);
+      } else if(response.status === 200){
+        setError(response.data.Message);
+        setSubmit(false);
+      }
+    } else {
+      setError("Please try again with correct details.");
+      setSubmit(false);
     }
   };
   
@@ -660,6 +664,7 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
 
               <button className="submit" type="submit" disabled={isSubmit ? true : false}>
                 Add Discord Link
+                {isSubmit ? ( <FontAwesomeIcon icon={faSpinner } /> ) : ""}
               </button>
             </div>
           </form>

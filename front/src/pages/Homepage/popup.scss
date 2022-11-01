@@ -36,45 +36,11 @@
     .content {
       margin-top: 20px;
       .rows {
-        display: flex;
-        flex-direction: column;
-        align-items: start;
-        .row {
-          padding: 5px 0px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          .indicator {
-            margin-right: 20px;
-            border: 2px solid #fcb500;
-            border-radius: 100%;
-            width: 32px;
-            height: 32px;
-            span {
-              background-color: #c68200;
-              padding: 4px 8px;
-              border-radius: 100%;
-              font-size: 12px;
-              display: inline-block;
-              margin: 2px;
-              width: 24px;
-              height: 24px;
-              font-size: 15px;
-            }
-          }
-          p{
-            font-size: 16px;
-            line-height: 24px;
-          }
-        }
+        font-size: 16px;
+        line-height: 24px;
+        text-align: center;
       }
 
-      .yellow {
-        color: #FFC633;
-      }
-      .purple {
-        color: #6B69DE;
-      }
       .button-group {
         display: flex;
         button {
@@ -82,7 +48,7 @@
             background-color: transparent;
             border: none;
             outline: none;
-            @include skewBg(rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.12));
+            @include skewBg(#c68200, #fcb500);
             font-family: "Russo One", sans-serif;
             color: #fff;
             padding: 10px 15px;
@@ -92,18 +58,30 @@
             text-align: center;
             height: 54px;
             font-size: 18px;
-            opacity:0.32;
+            opacity: 1;
             &:hover {
-              opacity: 1;
+              // opacity: 1;
+              &::before {
+                background-color: #fcb500;
+              }
             }
-          }
+            .fa-spinner {
+              margin-left: 10px;
+              animation: rotate 1.5s linear infinite; 
+            }
+        }
       }
       .error-msg {
         color: red;
         text-align: center;
         margin-top: 20px;
+        font-size: 16px;
       }
       
     }
   }
+}
+
+@keyframes rotate{
+  to{ transform: rotate(360deg); }
 }

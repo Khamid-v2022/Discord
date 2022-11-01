@@ -931,7 +931,17 @@
   text-align: center;
   height: 54px;
   font-size: 18px;
+  
+  .fa-spinner {
+    margin-left: 10px;
+    animation: rotate 1.5s linear infinite; 
+  }
 }
+
+@keyframes rotate{
+  to{ transform: rotate(360deg); }
+}
+
 .mylinks-content .modal .content .submit::before {
   z-index: -1;
   background-color: #c68200;

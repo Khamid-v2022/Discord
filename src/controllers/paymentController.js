@@ -8,9 +8,11 @@ import jwt from "jsonwebtoken";
 // setting dotenv
 import "dotenv/config";
 import Payment from "../models/Payments.js";
+
 let cb = "";
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
+
 if (process.env.ENVIRONMENT === "production") {
   cb = process.env.WEB_CALL_BACK;
 } else {

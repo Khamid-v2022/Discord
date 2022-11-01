@@ -54,9 +54,10 @@ function PageContent() {
   const closePopup = () => {
     setPoupError("");
     setOpenPopup(false);
-    cb = setInterval(() => {
-      timer();
-    }, 1000);
+
+    cancelJoin();
+    cleanSurface(); 
+    fetchServer();
   }
 
   let timer = () => {
@@ -126,15 +127,18 @@ function PageContent() {
         } 
       } else {
         setPoupBtnDisable(false);
-        setPoupError("You are not joined to this server. Please make sure again!");
+        setPoupError("You have not joined the server yet. Be sure to join the server.");
       }
     }
   };
 
   // stoping timer at 0
   if (stopWatchT === 0) {
-    checkresult();
-    clearInterval(cb);
+    // checkresult();
+    // clearInterval(cb);
+    cancelJoin();
+    cleanSurface(); 
+    fetchServer();
   }
 
   // fetching invitation

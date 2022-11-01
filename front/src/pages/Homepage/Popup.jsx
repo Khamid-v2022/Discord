@@ -1,10 +1,11 @@
 import Popup from "reactjs-popup";
 import "./popup.scss";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function CheckPopup({open, closePopup, checkingJoin, disable, error}) {
-//   const [open, setOpen] = useState(true);
-
   const closeModal = () => {
     closePopup();
   };
@@ -23,15 +24,14 @@ export default function CheckPopup({open, closePopup, checkingJoin, disable, err
 
           <div className="content">
             <div className="rows">
-              <div className="row">
-                <p>
-                    Please make sure you are joined up for Discord server.
-                </p>
-              </div>            
+              Please make sure you are joined up for Discord server.          
             </div>
             <div className="button-group">
                 <button onClick={closeModal}>No, I won't join</button>
-                <button onClick={checkJoin} disabled={disable}>Yes</button>
+                <button onClick={checkJoin} disabled={disable}>
+                  Yes
+                  {disable ? ( <FontAwesomeIcon icon={faSpinner } /> ) : ""}
+                </button>
             </div>
             <div className="error-msg">
                 {error}
