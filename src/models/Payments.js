@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const paymentSchema = new Schema({
   trxid: {
     type: String,
-    required: true,
+    // required: true,
   },
   userid: {
     type: String,

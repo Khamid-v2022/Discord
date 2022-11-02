@@ -254,11 +254,11 @@ function PageContent() {
             <h3>buy diamonds</h3>
             <img src={toplineImg} alt="topline" />
           </div>
-          {/* <form
+          <form
             className="content"
             action="/api/payment/diamond"
             method="POST"
-          > */}
+          >
             <div className="content">
               <div className="txt">
                 <span>Conversion:</span>
@@ -280,7 +280,7 @@ function PageContent() {
                 }}>
                   <img src={minusImg} alt="leftArrow" />
                 </button>
-                <input type="number" value={diamond} onChange={e => setDiamond(e.target.value)}/>
+                <input type="number" value={diamond} name="diamond" onChange={e => setDiamond(e.target.value)}/>
                 <button type="button" onClick={() => {
                   if(!parseInt(diamond)){
                     setDiamond(1);
@@ -297,7 +297,7 @@ function PageContent() {
                 <span>Buy ${diamond * 1.5}</span>
               </button>
             </div>
-          {/* </form> */}
+          </form>
         </div>
       </div>
 

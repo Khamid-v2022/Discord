@@ -11,5 +11,8 @@ router.post("/checkoutsession", PaymentController.checkoutSession);
 router.post("/success", PaymentController.successfullPayment);
 router.get("/getPaymentHistory", PaymentController.getPaymentHistory);
 router.post("/diamond", PaymentController.diamond);
+router.get("/paymentAfterPack", PaymentController.paymentAfterPack);
+router.get("/paymentAfterDiamond", PaymentController.paymentAfterDiamond);
+
 
 export default router;

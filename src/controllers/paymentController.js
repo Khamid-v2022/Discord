@@ -10,8 +10,8 @@ import "dotenv/config";
 import Payment from "../models/Payments.js";
 
 let cb = "";
-const clientId = process.env.CLIENT_ID;
-const clientSecret = process.env.CLIENT_SECRET;
+// const clientId = process.env.CLIENT_ID;
+// const clientSecret = process.env.CLIENT_SECRET;
 
 if (process.env.ENVIRONMENT === "production") {
   cb = process.env.WEB_CALL_BACK;
@@ -42,9 +42,11 @@ async function checkoutSession(req, res) {
         },
       ],
       mode: "payment",
-      success_url: `${cb}/checkout?success=${price_id}`,
+      success_url: `${cb}/checkout?type=pack&success=${price_id}`,
       cancel_url: `${cb}/checkout?canceled=${price_id}`,
     });
+
+    console.log(session);
 
     res.redirect(303, session.url);
   } catch (error) {
@@ -156,48 +158,148 @@ async function successfullPayment(req, res) {
 }
 // TODO: have to set it up for diamond purchase
 async function diamond(req, res) {
+
   try {
-    const { diamonds, amount } = req.body;
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100,
-      currency: "usd",
-      automatic_payment_methods: { enabled: true },
+    const { diamond } = req.body;
+
+    const discordUser = req.cookies.DiscordUser;
+    const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+
+    const session = await stripe.checkout.sessions.create({
+      client_reference_id: userCookie.userid,
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: "Diamond",
+            },
+            unit_amount: 150,
+          },
+          quantity: diamond,
+        },
+      ],
+      mode: "payment",
+      success_url: `${cb}/checkout?type=diamond&success=${diamond}`,
+      cancel_url: `${cb}/checkout?canceled=${diamond}`,
     });
 
-    // const discordUser = req.cookies.DiscordUser;
-    // const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
-    // try {
-    //   // assigning package amount
-    //   const reward = await Earning.findOneAndUpdate(
-    //     { userCookie.userid },
-    //     {
-    //       $inc: { "purchased.diamonds": diamonds },
-    //     },
-    //     { new: true }
-    //   );
-  
-    //   // storing data
-    //   const packageDetails = new Payment({
-    //     trxid: transactionid,
-    //     userid: userid,
-    //     amount: dollar,
-    //     package: pkg,
-    // stars: stars,
-    //   diamonds: diamonds
-    //   });
-    //   const paymentResponse = await packageDetails.save();
-  
-    //   console.log("paymentResponse: ", paymentResponse);
-    //   console.log("purchased: ", reward);
-    // } catch (error) {
-    //   console.log("Fulfilling order: ", error.message);
-    // }
+    res.redirect(303, session.url);
 
-    res.json({ client_secret: paymentIntent.client_secret });
+    // const { diamonds, amount } = req.body;
+    // const paymentIntent = await stripe.paymentIntents.create({
+    //   amount: amount * 100,
+    //   currency: "usd",
+    //   automatic_payment_methods: { enabled: true },
+    // });
+
+    // res.json({ client_secret: paymentIntent.client_secret });
   } catch (error) {
     res.send({ message: error.message });
   }
 }
+
+async function paymentAfterPack(req, res){
+  const pkg_id = req.query.pkg_id;
+ 
+  let pkg = "";
+  let stars = 0;
+  let diamonds = 0;
+  let dollar = 0;
+  if (pkg_id === "price_1KszAlEu7GyFTKQhdE3bM7on") {
+    stars = 100;
+    diamonds = 2;
+    dollar = 5;
+    pkg = "BASIC";
+  } else if (pkg_id === "price_1KszCqEu7GyFTKQh9uDgekrg") {
+    stars = 550;
+    diamonds = 11;
+    dollar = 25;
+    pkg = "STANDARD";
+  } else if (pkg_id === "price_1KszDsEu7GyFTKQhIlVmh4IQ") {
+    stars = 1200;
+    diamonds = 24;
+    dollar = 50;
+    pkg = "PREMIUM";
+  }
+
+  const discordUser = req.cookies.DiscordUser;
+  const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+
+  try {
+    // assigning package amount
+    const reward = await Earning.findOneAndUpdate(
+      { userid: userCookie.userid },
+      {
+        $inc: { "purchased.stars": stars, "purchased.diamonds": diamonds },
+      },
+      { new: true }
+    );
+
+    // storing data
+    const packageDetails = new Payment({
+      trxid: pkg,
+      userid: userCookie.userid,
+      amount: dollar,
+      package: pkg,
+      stars: stars,
+      diamonds: diamonds,
+      note: "paid by user"
+    });
+    const paymentResponse = await packageDetails.save();
+
+  } catch (error) {
+    console.log("Package Puchase: ", error.message);
+  }
+}
+
+async function  paymentAfterDiamond(req, res){
+ 
+  const count =  req.query.count;
+
+  const discordUser = req.cookies.DiscordUser;
+  const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
+
+  try {
+    // assigning package amount
+    const reward = await Earning.findOneAndUpdate(
+      { userid: userCookie.userid },
+      {
+        $inc: { "purchased.diamonds": count },
+      },
+      { new: true }
+    );
+
+    // storing data
+    const packageDetails = new Payment({
+      trxid: "Diamond",
+      userid: userCookie.userid,
+      amount: count * 1.5,
+      package: "Diamond",
+      stars: 0,
+      diamonds: count,
+      note: "paid by user"
+    });
+    const paymentResponse = await packageDetails.save();
+
+  } catch (error) {
+    console.log("Diamond Puchase: ", error.message);
+  }
+}
+// async function diamond(req, res) {
+//   try {
+//     const { diamonds, amount } = req.body;
+//     const paymentIntent = await stripe.paymentIntents.create({
+//       amount: amount * 100,
+//       currency: "usd",
+//       automatic_payment_methods: { enabled: true },
+//     });
+
+//     res.json({ client_secret: paymentIntent.client_secret });
+//   } catch (error) {
+//     res.send({ message: error.message });
+//   }
+// }
 
 async function getPaymentHistory(req, res){
   try {
@@ -221,7 +323,9 @@ const PaymentController = {
   successfullPayment,
   diamond,
   webhook,
-  getPaymentHistory
+  getPaymentHistory,
+  paymentAfterPack,
+  paymentAfterDiamond
 };
 
 export default PaymentController;

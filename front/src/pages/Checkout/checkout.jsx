@@ -7,13 +7,23 @@ import './checkout.scss';
 export default function Checkout() {
   const [message, setMessage] = useState("");
 
-  useEffect(() => {
+  useEffect(async () => {
     const query = new URLSearchParams(window.location.search);
 
     if (query.get("success")) {
       setMessage(
         "Order Placed, We will release your ordered Amount after payment confirmation."
       );
+
+      if(query.get("type") === "pack"){
+        let url = `/api/payment/paymentAfterPack?pkg_id=${query.get("success")}`;
+        const response = await axios.get(url);
+
+      } else if (query.get("type") === "diamond"){
+        let url = `/api/payment/paymentAfterDiamond?count=${query.get("success")}`;
+        const response = await axios.get(url);
+
+      }
     }
 
     if (query.get("canceled")) {
