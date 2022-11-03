@@ -8,16 +8,16 @@ import Cron from "croner";
 // Start New Joining Compaign
 async function AddLink(req, res) {
 
-  // checking Link is avalible or not
-  const { link, fast } = req.body;
-  const oauthData = await req.cookies.access_token;
+  // // checking Link is avalible or not
+  // const { link, fast } = req.body;
+  // const oauthData = await req.cookies.access_token;
 
-  const check = await checkInviteLink(link, oauthData);
-  if(!check){
-    res.status(200).json({
-      Message: "You entered invailid or expired invite link. Be sure the link is correct!",
-    });
-  } else {
+  // const check = await checkInviteLink(link, oauthData);
+  // if(!check){
+  //   res.status(200).json({
+  //     Message: "You entered invailid or expired invite link. Be sure the link is correct!",
+  //   });
+  // } else {
     try {
       // checking campaign type
       if (fast) {
@@ -28,7 +28,7 @@ async function AddLink(req, res) {
     } catch (error) {
       res.json(error);
     }
-  }
+  // }
 }
 // Running Stars Campaign
 async function StarsCampain(req, res) {
@@ -312,60 +312,6 @@ async function AssignInvite(req, res) {
   }
 }
 
-// assigning link for 60 seconds
-// async function AssignInvite(req, res) {
-//   try {
-//     const oauthData = await req.cookies.access_token;
-//     // discrod userid from our db
-//     const discordUser = req.cookies.DiscordUser;
-//     const userCookie = jwt.verify(discordUser, process.env.API_TOKEN);
-//     const _id = userCookie.userid;
-
-//     const id = req.query.id;
-//     const invite = await Invite.findOne({  
-//       _id: id.toString()
-//     });
-
-//     console.log(invite);
-  
-//     const achieved = await invite.target.achieved;
-//     const newAchieved = achieved + 1;
-//     const updateInvite = { "target.achieved": newAchieved };
-//     // increasing acheivment of campaign
-//     const inviteData = await Invite.findOneAndUpdate(
-//       { _id: invite._id },
-//       { $set: updateInvite },
-//       { new: true }
-//     );
-
-//     // assigning link to user for 60 sec
-//     const linking = await new Link({
-//       uid: _id,
-//       inviteId: invite._id,
-//       serverId: invite.serverId,
-//     });
-//     const response = await linking.save();
- 
-//     // callback to check user existence after 60 seconds
-//     new Cron("59 * * * * *", { maxRuns: 1 }, () => {
-//       checkAssigningStatus(
-//         _id,
-//         response._id,
-//         oauthData,
-//         invite.serverId,
-//         inviteData
-//       );
-//     });
-
-//     res.status(200).send({
-//       invite: inviteData,
-//       joiner: { ...response._doc, remaining: -59 },
-//     });
-//   } catch (error) {
-//     res.status(401).json({ AssignInvite: error.message });
-//   }
-// }
-
 async function getAvailableServers(req, res) {
   try {
     const oauthData = await req.cookies.access_token;
@@ -508,9 +454,11 @@ async function checkLink(_id, oauthData) {
 }
 
 async function checkInviteLink(link, oauthData){
+  
   // get code from invitation link
   let links = link.split("/");
   let code = links[links.length - 1];
+
   // Check Invite Link is avalible still or expire
   const data = jwt.verify(oauthData, process.env.API_TOKEN);
   try {
@@ -522,6 +470,8 @@ async function checkInviteLink(link, oauthData){
         },
       }
     );
+
+    console.log("RESULT:::::::::::::", invite_result);
     const invite_obj = await invite_result.json();
 
     if(invite_obj.code === 10006 || invite_obj.expires_at) {
@@ -530,6 +480,7 @@ async function checkInviteLink(link, oauthData){
       return true;
     }
   } catch (error) {
+    console.log("RESULT:::::::::::::ERROR:", error)
     return false;
   }
 }

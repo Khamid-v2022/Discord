@@ -34,9 +34,11 @@ export default function Header() {
 
       if(session){
         const user_info = JSON.parse(session);
-        setUser({
-          avtar: `https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
-        });
+        if(user_info.userInfo.avatar){
+          setUser({
+            avtar: `https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
+          });
+        }
         setIsLogin(true);
       }
     }

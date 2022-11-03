@@ -36,17 +36,20 @@ export default function Sidebar() {
       if(!userInfo){
         const response1 = await axios.get("/api/user/getuser");
 
-        if (response1.status !== 401) {
+        if (response1.status !== 401) {      
           userInfo = {
             isLogin: true,
             userInfo: response1.data
           };
 
           sessionStorage.setItem("userInfo", JSON.stringify(userInfo));
-
-          setUser({
-            avtar: `https://cdn.discordapp.com/avatars/${response1.data?.userid}/${response1.data?.avatar}.png?size=128`,
-          });
+          
+          if(response1.data.avatar) {
+            setUser({
+              avtar: `https://cdn.discordapp.com/avatars/${response1.data?.userid}/${response1.data?.avatar}.png?size=128`,
+            });
+          }
+          
           setIsLogin(true);
         } else {
           navigate("/");
@@ -54,9 +57,12 @@ export default function Sidebar() {
       } 
       else {
           const user_info = JSON.parse(userInfo);
-          setUser({
-            avtar: `https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
-          });
+          if(user_info.userInfo.avatar){
+            setUser({
+              avtar: `https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
+            });
+          }
+         
           setIsLogin(true);
       }
       
