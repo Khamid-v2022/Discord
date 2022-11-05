@@ -7,8 +7,10 @@ import GuidSvg from "../../res/svg/Guide";
 import FaqSvg from "../../res/svg/Faq";
 import logoutImg from "../../res/imgs/logout.png";
 import loginImg from "../../res/imgs/login.png";
+
 import Dollar from "../../res/svg/Dollar";
 import User from "../../res/svg/User";
+import History from "../../res/svg/History";
 
 import "./sidebar.scss";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -112,12 +114,9 @@ export default function Sidebar() {
 }
 
 function LoggedIn({user}) {
-  let navigate = useNavigate();
-
   const logout = () => {
     sessionStorage.removeItem('userInfo');
     window.location.href = '/logout';
-    // navigate("/logout");
   }
 
   return (
@@ -140,6 +139,9 @@ function LoggedIn({user}) {
           </a>
           <a className="dollar" href="/billing">
             <Dollar />
+          </a>
+          <a className="dollar" href="/history">
+            <History />
           </a>
           {/* <a href="/logout" className="logout">
             <img src={logoutImg} alt="logout" />

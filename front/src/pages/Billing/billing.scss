@@ -206,6 +206,8 @@
         
         table {
             margin-top: 20px;
+            margin-left: 0px;
+            margin-bottom: 50px;
             width: 100%;
             tr {
                 grid-template-columns: 20% 21% 13% 13% 15% 20%;
@@ -236,6 +238,7 @@
 
                         a.download-btn {
                             font-size: 12px;
+                            width: 60px;
                         }
                     }
                 }

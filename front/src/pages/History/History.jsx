@@ -52,7 +52,7 @@ function PageContent() {
 }
 
 function Table({ data, loading}) {
-    let index = data.length + 1;
+    let index = 0;
     return (
         <>
         {   loading ? (
@@ -61,11 +61,11 @@ function Table({ data, loading}) {
                 </div>
             ) : (
                 data.length > 0 ? (
-                    <table>
+                    <table className="">
                         <thead>
                             <tr>
-                                <th></th>
-                                <th>Server Name</th>
+                                <th>ID</th>
+                                <th>Server Joined</th>
                                 <th>Link</th>
                                 <th>Joined Date</th>
                             </tr>
@@ -73,7 +73,7 @@ function Table({ data, loading}) {
                         <tbody>
                             {
                                 data.map((row, id) => {
-                                    index = index - 1;
+                                    index++;
                                     return (
                                         <TableRow
                                             item = {row}
@@ -99,33 +99,32 @@ function Table({ data, loading}) {
 function TableRow({ item, index}){
     if(item.invite.length === 0)
         return;
-    let date = new Date(item.join_date);
-    let options = {  
-        year: "numeric", month: "short", day: "numeric" 
-    };  
+    // let date = new Date(item.join_date);
+    // let options = {  
+    //     year: "numeric", month: "short", day: "numeric" 
+    // };  
     
     const icon = item.invite[0].iconId ? `https://cdn.discordapp.com/icons/${item.invite[0]?.serverId}/${item.invite[0]?.iconId}.png?size=512` : false;
     
     return (
         <tr>
-            <td>
-                { icon ? (<img src={icon} className="server-icon" />) : ("")}
-            </td>
-            <td>
-                { item.invite[0].serverName} 
+            <td><span>{ index }</span></td>
+            <td className="server-info">
+                { icon ? (<img src={icon} className="server-icon" />) : ("")}  
+                <span className="server-name">{ item.invite[0].serverName} </span>
             </td>
             <td>
                 <a href={ item.invite[0].link } target="_blank">{ item.invite[0].link }</a>
             </td>
             <td>
-                {date.toDateString("en-us", options)}
+                {item.join_date ? item.join_date.split("T")[0] : ""}
             </td>
         </tr>
     )
 }
 
 function MTable({ data, loading}) {
-    let index = data.length + 1;
+    let index = 0;
     return (
         <>
         {   loading ? (
@@ -134,10 +133,10 @@ function MTable({ data, loading}) {
                 </div>
             ) : (
                 data.length > 0 ? (
-                    <table>
+                    <table className="mobile-table">
                         <thead>
                             <tr>
-                                <th></th>
+                                <th>ID</th>
                                 <th>Server Name</th>
                                 <th>Joined Date</th>
                             </tr>
@@ -145,7 +144,7 @@ function MTable({ data, loading}) {
                         <tbody>
                             {
                                 data.map((row, id) => {
-                                    index = index - 1;
+                                    index++;
                                     return (
                                         <MTableRow
                                             item = {row}
@@ -169,25 +168,21 @@ function MTable({ data, loading}) {
 }
 
 function MTableRow({ item, index}){
+
     if(item.invite.length === 0)
         return;
-    let date = new Date(item.join_date);
-    let options = {  
-        year: "numeric", month: "short", day: "numeric" 
-    };  
-    
+
     const icon = item.invite[0].iconId ? `https://cdn.discordapp.com/icons/${item.invite[0]?.serverId}/${item.invite[0]?.iconId}.png?size=512` : false;
     
     return (
         <tr>
-            <td>
+            <td><span>{ index }</span></td>
+            <td className="server-info">
                 { icon ? (<img src={icon} className="server-icon" />) : ("")}
+                <span className="server-name"><a href={ item.invite[0].link } target="_blank">{ item.invite[0].serverName} </a></span>
             </td>
             <td>
-                <a href={ item.invite[0].link } target="_blank">{ item.invite[0].serverName} </a>
-            </td>
-            <td>
-                {date.toDateString("en-us", options)}
+                {item.join_date ? item.join_date.split("T")[0] : ""}
             </td>
         </tr>
     )

@@ -70,16 +70,29 @@ function PageContent() {
         let session = sessionStorage.getItem("userInfo");
         if(session){
             const user_info = JSON.parse(session);
-            setUser((prevState) => ({
-                ...prevState,
-                id: user_info.userInfo._id,
-                avatar:`https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
-                name: user_info.userInfo.username,
-                discriminator: user_info.userInfo.discriminator,
-                email: user_info.userInfo.email,
-                notify_email: user_info.userInfo.notify_email,
-                marketing_email: user_info.userInfo.marketing_email
-            }))
+            
+            if(user_info.userInfo.avatar){
+                setUser((prevState) => ({
+                    ...prevState,
+                    id: user_info.userInfo._id,
+                    avatar:`https://cdn.discordapp.com/avatars/${user_info.userInfo?.userid}/${user_info.userInfo?.avatar}.png?size=128`,
+                    name: user_info.userInfo.username,
+                    discriminator: user_info.userInfo.discriminator,
+                    email: user_info.userInfo.email,
+                    notify_email: user_info.userInfo.notify_email,
+                    marketing_email: user_info.userInfo.marketing_email
+                }))
+            } else {
+                setUser((prevState) => ({
+                    ...prevState,
+                    id: user_info.userInfo._id,
+                    name: user_info.userInfo.username,
+                    discriminator: user_info.userInfo.discriminator,
+                    email: user_info.userInfo.email,
+                    notify_email: user_info.userInfo.notify_email,
+                    marketing_email: user_info.userInfo.marketing_email
+                }))
+            }
             
             // get Joined Server count
 

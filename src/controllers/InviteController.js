@@ -9,7 +9,7 @@ import Cron from "croner";
 async function AddLink(req, res) {
 
   // // checking Link is avalible or not
-  // const { link, fast } = req.body;
+  const { link, fast } = req.body;
   // const oauthData = await req.cookies.access_token;
 
   // const check = await checkInviteLink(link, oauthData);
@@ -52,7 +52,7 @@ async function StarsCampain(req, res) {
       userStars = parseInt(earnedStars);
       inviteType = "earned";
     }
-
+    console.log(userStars, inviteType);
     const server = await getServerId(link);
     
     if(server){
