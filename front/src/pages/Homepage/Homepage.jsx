@@ -36,6 +36,8 @@ function PageContent() {
   let [inviteStatus, setInviteStatus] = useState(false);
   let [openPopup, setOpenPopup] = useState(false);
 
+  let [startTimer, setStartTimer] = useState(false);
+
   let [popupBtnDisable, setPoupBtnDisable] = useState(false);
   let [popupError, setPoupError] = useState("");
 
@@ -68,7 +70,6 @@ function PageContent() {
       setProgressBar((pb) => {
         return pb + 1;
       });
-   
     } else {
       clearInterval(cb);
     }
@@ -132,19 +133,11 @@ function PageContent() {
     }
   };
 
-  // stoping timer at 0
-  if (stopWatchT === 0) {
-    // checkresult();
-    // clearInterval(cb);
-    cancelJoin();
-    cleanSurface(); 
-    fetchServer();
-  }
-
   // fetching invitation
   const fetchServer = async () => {
-    setInviteStatus(false);
 
+    setInviteStatus(false);
+    
     cb = 0;
     const response = await axios.get("/api/invite/assign");
 
@@ -169,16 +162,15 @@ function PageContent() {
         if (data.joiner.remaining < 0) {
           setStopWatchT(() => {
             return data.joiner.remaining * -1;
-          });
+          }, );
 
           setProgressBar((prev) => {
             return data.joiner.remaining + prev;
           });
           
           // running timer
-          cb = setInterval(() => {
-            timer();
-          }, 1000);
+          setStartTimer(true);
+         
         } else {
           // clearInterval(cb);
           console.log("stop_watch: ", stopWatchT);
@@ -213,13 +205,28 @@ function PageContent() {
     setOpenPopup(true);
     clearInterval(cb);
     window.open(invite.link, '_blank', 'noopener,noreferrer');
-  }
-
- 
+  } 
 
   useEffect(async () => {
     await fetchServer();
   }, []);
+
+  useEffect(async () => {
+    if (stopWatchT === 0) {
+      // checkresult();
+      // clearInterval(cb);
+  
+      cancelJoin();
+      await cleanSurface(); 
+      await fetchServer();
+    }
+    else if(startTimer) {
+      setStartTimer(false);
+      cb = setInterval(() => {
+        timer();
+      }, 1000);
+    }
+  }, [stopWatchT, startTimer]);
 
 
   if(invite.server){

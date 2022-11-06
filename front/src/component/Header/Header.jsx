@@ -6,13 +6,15 @@ import coinImg from "../../res/imgs/coin.png";
 import diamondImg from "../../res/imgs/diamond.png";
 import plusImg from "../../res/imgs/plus.png";
 import logoImg from "../../res/imgs/Logo.png";
+
 import User from "../../res/svg/User";
 import Dollar from "../../res/svg/Dollar";
+import History from "../../res/svg/History";
+
 import logoutImg from "../../res/imgs/logout.png";
 import loginImg from "../../res/imgs/login.png";
 import arrowImg from "../../res/imgs/arrowdown.png";
 import avatarImg from "../../res/imgs/avatar.png";
-import axios from "axios";
 import Popup from "reactjs-popup";
 import "./header.scss";
 
@@ -146,6 +148,9 @@ function LoggedIn({ user }) {
           <button className="dollar">
             <Dollar />
           </button>
+          <a className="dollar" href="/history">
+            <History />
+          </a>
           <a href="/logout" className="logout">
             <img src={logoutImg} alt="logout" />
           </a>

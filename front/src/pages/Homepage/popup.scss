@@ -1,13 +1,10 @@
 @use "../../style/mixins/skew.scss" as *;
 
-#guide {
-}
-
-.guide-overlay {
+.checkingpopup-overlay {
   background: rgba(0, 0, 0, 0.7);
   padding: 16px;
 }
-.guide-content {
+.checkingpopup-content {
   background-color: rgba(255, 255, 255, 0.08);
   border: 2px solid rgba(255, 255, 255, 0.16);
   padding: 0 32px 32px;
@@ -38,7 +35,8 @@
       .rows {
         font-size: 16px;
         line-height: 24px;
-        text-align: center;
+        text-align: center!important;
+        align-items: center!important;
       }
 
       .button-group {
@@ -84,4 +82,11 @@
 
 @keyframes rotate{
   to{ transform: rotate(360deg); }
+}
+
+@media all and (max-width: 426px) {
+
+  .modal .content .button-group button {
+    font-size: 12px!important;
+  }
 }

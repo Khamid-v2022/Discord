@@ -15,8 +15,8 @@ export default function CheckPopup({open, closePopup, checkingJoin, disable, err
   }
 
   return (
-    <section id="guide">
-      <Popup open={open} className="guide" closeOnDocumentClick={false}>
+    <section>
+      <Popup open={open} className="checkingpopup" closeOnDocumentClick={false}>
         <div className="modal">
           <div className="head">
             <h3>Checking</h3>

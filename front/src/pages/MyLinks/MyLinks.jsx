@@ -506,8 +506,6 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
     
     if(data.link.includes("https://discord.gg/") && data.target > 0){
       const response = await axios.post("/api/invite/add", data);
-
-
       const resData = response.data;
 
       if (response.status === 201) {
@@ -527,6 +525,13 @@ function NewCampaign({ setOpen, open, closeModal, setRows }) {
       setError("Please try again with correct details.");
       setSubmit(false);
     }
+    
+    setData({
+      link: "",
+      target: 1,
+      fast: true,
+    });
+
   };
   
   return (

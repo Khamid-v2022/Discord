@@ -419,6 +419,7 @@ async function checkLink(_id, oauthData) {
         const isExist = await checkGuildMember(oauthData, invite.serverId);
 
         if (isExist.user && isExist !== null) {
+          console.log("User already joined in this server");
           // user exist in server fetch another link
           limit = limit + 1;
           skip = skip + 1;
@@ -471,7 +472,6 @@ async function checkInviteLink(link, oauthData){
       }
     );
 
-    console.log("RESULT:::::::::::::", invite_result);
     const invite_obj = await invite_result.json();
 
     if(invite_obj.code === 10006 || invite_obj.expires_at) {
@@ -480,7 +480,6 @@ async function checkInviteLink(link, oauthData){
       return true;
     }
   } catch (error) {
-    console.log("RESULT:::::::::::::ERROR:", error)
     return false;
   }
 }
